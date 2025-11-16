@@ -1,5 +1,6 @@
-import { Button, Checkbox, Divider, Group, Popover, Radio, RangeSlider, Text } from '@mantine/core';
+import { Button, Checkbox, Chip, Divider, Group, Popover, RangeSlider, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { FiFilter } from 'react-icons/fi';
 
@@ -10,28 +11,66 @@ interface FilterBarProps {
 
 interface FilterValues {
     priceRange: [number, number];
-    rating: string;
     brands: string[];
-    inStock: boolean;
+    colors: string[];
+    sizes: string[];
+    origins: string[];
+    rating: string;
 }
+
+// Dataset constants
+const PRICE_SUGGESTIONS = [
+    { value: [0, 100000], label: 'Dưới 100K' },
+    { value: [100000, 500000], label: '100K - 500K' },
+    { value: [500000, 1000000], label: '500K - 1Tr' },
+    { value: [1000000, 5000000], label: '1Tr - 5Tr' },
+    { value: [5000000, 10000000], label: 'Trên 5Tr' },
+];
+
+const BRANDS = [
+    { value: 'nike', label: 'Nike' },
+    { value: 'adidas', label: 'Adidas' },
+    { value: 'puma', label: 'Puma' },
+    { value: 'uniqlo', label: 'Uniqlo' },
+    { value: 'zara', label: 'Zara' },
+];
+
+const COLORS = [
+    { value: 'black', label: 'Đen', hex: '#000000' },
+    { value: 'white', label: 'Trắng', hex: '#FFFFFF' },
+    { value: 'red', label: 'Đỏ', hex: '#FF0000' },
+    { value: 'blue', label: 'Xanh dương', hex: '#0000FF' },
+    { value: 'green', label: 'Xanh lá', hex: '#00FF00' },
+];
+
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+const ORIGINS = [
+    { value: 'vn', label: 'Việt Nam' },
+    { value: 'us', label: 'Mỹ' },
+    { value: 'kr', label: 'Hàn Quốc' },
+    { value: 'jp', label: 'Nhật Bản' },
+    { value: 'cn', label: 'Trung Quốc' },
+];
+
+const RATING_OPTIONS = [
+    { value: '5', label: '5 sao' },
+    { value: '4', label: 'Từ 4 sao' },
+    { value: '3', label: 'Từ 3 sao' },
+];
 
 const FilterBar = ({ totalProducts, onApplyFilters }: FilterBarProps) => {
     const [scrolled, setScrolled] = useState(false);
     const [opened, { open, close }] = useDisclosure(false);
     const filterBarRef = useRef<HTMLDivElement>(null);
 
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000]);
-    const [selectedRating, setSelectedRating] = useState<string>('all');
-    const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-    const [inStockOnly, setInStockOnly] = useState(false);
-
-    const brands = [
-        { value: 'nike', label: 'Nike' },
-        { value: 'adidas', label: 'Adidas' },
-        { value: 'puma', label: 'Puma' },
-        { value: 'uniqlo', label: 'Uniqlo' },
-        { value: 'zara', label: 'Zara' },
-    ];
+    // Local state for filters
+    const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([0, 10000000]);
+    const [localSelectedBrands, setLocalSelectedBrands] = useState<string[]>([]);
+    const [localSelectedColors, setLocalSelectedColors] = useState<string[]>([]);
+    const [localSelectedSizes, setLocalSelectedSizes] = useState<string[]>([]);
+    const [localSelectedOrigins, setLocalSelectedOrigins] = useState<string[]>([]);
+    const [localSelectedRating, setLocalSelectedRating] = useState<string>('');
 
     useEffect(() => {
         const handleScroll = () => {
@@ -62,19 +101,23 @@ const FilterBar = ({ totalProducts, onApplyFilters }: FilterBarProps) => {
 
     const handleApply = () => {
         onApplyFilters({
-            priceRange,
-            rating: selectedRating,
-            brands: selectedBrands,
-            inStock: inStockOnly
+            priceRange: localPriceRange,
+            brands: localSelectedBrands,
+            colors: localSelectedColors,
+            sizes: localSelectedSizes,
+            origins: localSelectedOrigins,
+            rating: localSelectedRating
         });
         close();
     };
 
     const handleReset = () => {
-        setPriceRange([0, 5000000]);
-        setSelectedRating('all');
-        setSelectedBrands([]);
-        setInStockOnly(false);
+        setLocalPriceRange([0, 10000000]);
+        setLocalSelectedBrands([]);
+        setLocalSelectedColors([]);
+        setLocalSelectedSizes([]);
+        setLocalSelectedOrigins([]);
+        setLocalSelectedRating('');
     };
 
     const formatPrice = (value: number) => {
@@ -84,10 +127,22 @@ const FilterBar = ({ totalProducts, onApplyFilters }: FilterBarProps) => {
         }).format(value);
     };
 
+    const handlePriceSuggestionClick = (range: [number, number]) => {
+        setLocalPriceRange(range);
+    };
+
+    const handleSizesChange = (value: string | string[]) => {
+        setLocalSelectedSizes(Array.isArray(value) ? value : [value]);
+    };
+
+    const handleRatingChange = (value: string | string[]) => {
+        setLocalSelectedRating(typeof value === 'string' ? value : value[0] || '');
+    };
+
     return (
         <div
             ref={filterBarRef}
-            className={`sticky top-0 z-20 mb-6 rounded-lg shadow-sm py-2 px-4 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-white'
+            className={`sticky top-0 z-20 mb-6 rounded-lg shadow-sm py-2 px-4 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-lg' : 'bg-white'
                 }`}
         >
             <Group justify="space-between" align="center">
@@ -100,12 +155,17 @@ const FilterBar = ({ totalProducts, onApplyFilters }: FilterBarProps) => {
                     position="bottom-end"
                     width="auto"
                     shadow="xl"
-                    offset={10}
+                    offset={15}
                     withArrow
+                    transitionProps={{
+                        transition: 'pop-top-right',
+                        duration: 300,
+                        timingFunction: 'ease-out'
+                    }}
                 >
                     <Popover.Target>
                         <Button
-                            leftSection={<FiFilter size={16} />}
+                            leftSection={<FiFilter size={14} />}
                             variant="light"
                             size="sm"
                             onClick={handleFilterClick}
@@ -113,112 +173,218 @@ const FilterBar = ({ totalProducts, onApplyFilters }: FilterBarProps) => {
                             Bộ lọc
                         </Button>
                     </Popover.Target>
-                    <Popover.Dropdown className="p-6 !bg-white/95 backdrop-blur-lg" style={{ minWidth: '900px', maxWidth: '1100px' }}>
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between mb-4">
-                                <Text fw={600} size="lg">
-                                    Bộ lọc sản phẩm
-                                </Text>
-                            </div>
-
-                            {/* Horizontal Layout */}
-                            <div className="grid grid-cols-4 gap-6">
-                                {/* Price Range */}
-                                <div className="col-span-1">
-                                    <Text fw={500} size="sm" mb="md">
-                                        Khoảng giá
+                    <Popover.Dropdown
+                        className="p-4 bg-white/90 backdrop-blur-md border border-gray-200 overflow-hidden"
+                        style={{
+                            minWidth: '280px',
+                            maxWidth: '90vw',
+                            width: 'clamp(280px, 85vw, 900px)',
+                            transformOrigin: 'top right'
+                        }}
+                    >
+                        <AnimatePresence>
+                            {opened && (
+                                <motion.div
+                                    initial={{
+                                        opacity: 0,
+                                        y: -20,
+                                        x: 20,
+                                        scale: 0.95
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        y: 0,
+                                        x: 0,
+                                        scale: 1
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        y: -10,
+                                        x: 10,
+                                        scale: 0.98
+                                    }}
+                                    transition={{
+                                        duration: 0.3,
+                                        ease: [0.4, 0, 0.2, 1]
+                                    }}
+                                    className="space-y-3"
+                                >
+                                    <Text fw={600} size="md" mb="sm">
+                                        Bộ lọc sản phẩm
                                     </Text>
-                                    <RangeSlider
-                                        min={0}
-                                        max={5000000}
-                                        step={100000}
-                                        value={priceRange}
-                                        onChange={setPriceRange}
-                                        marks={[
-                                            { value: 0, label: '0đ' },
-                                            { value: 5000000, label: '5tr' },
-                                        ]}
-                                        mb="xs"
-                                    />
-                                    <Group justify="space-between" mt="md">
-                                        <Text size="xs" c="dimmed">
-                                            {formatPrice(priceRange[0])}
-                                        </Text>
-                                        <Text size="xs" c="dimmed">
-                                            {formatPrice(priceRange[1])}
-                                        </Text>
+
+                                    {/* Layout Grid */}
+                                    <div className="space-y-4">
+                                        {/* Khoảng giá - Full width */}
+                                        <div>
+                                            <Text fw={500} size="xs" mb="xs">
+                                                Khoảng giá
+                                            </Text>
+                                            <Group gap="xs" mb="sm" className="flex-wrap">
+                                                {PRICE_SUGGESTIONS.map((suggestion) => (
+                                                    <Chip
+                                                        key={suggestion.label}
+                                                        size="xs"
+                                                        checked={
+                                                            localPriceRange[0] === suggestion.value[0] &&
+                                                            localPriceRange[1] === suggestion.value[1]
+                                                        }
+                                                        onChange={() => handlePriceSuggestionClick(suggestion.value as [number, number])}
+                                                    >
+                                                        {suggestion.label}
+                                                    </Chip>
+                                                ))}
+                                            </Group>
+                                            <RangeSlider
+                                                min={0}
+                                                max={10000000}
+                                                step={100000}
+                                                value={localPriceRange}
+                                                onChange={setLocalPriceRange}
+                                                size="xs"
+                                            />
+                                            <Group justify="space-between" mt="xs">
+                                                <Text size="xs" c="dimmed">
+                                                    {formatPrice(localPriceRange[0])}
+                                                </Text>
+                                                <Text size="xs" c="dimmed">
+                                                    {formatPrice(localPriceRange[1])}
+                                                </Text>
+                                            </Group>
+                                        </div>
+
+                                        <Divider />
+
+                                        {/* Thương hiệu | Xuất xứ | Màu sắc */}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            {/* Thương hiệu */}
+                                            <div>
+                                                <Text fw={500} size="xs" mb="xs">
+                                                    Thương hiệu
+                                                </Text>
+                                                <Checkbox.Group value={localSelectedBrands} onChange={setLocalSelectedBrands}>
+                                                    <div className="space-y-1">
+                                                        {BRANDS.slice(0, 4).map((brand) => (
+                                                            <Checkbox
+                                                                key={brand.value}
+                                                                value={brand.value}
+                                                                label={brand.label}
+                                                                size="xs"
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </Checkbox.Group>
+                                            </div>
+
+                                            {/* Xuất xứ */}
+                                            <div>
+                                                <Text fw={500} size="xs" mb="xs">
+                                                    Xuất xứ
+                                                </Text>
+                                                <Checkbox.Group value={localSelectedOrigins} onChange={setLocalSelectedOrigins}>
+                                                    <div className="space-y-1">
+                                                        {ORIGINS.slice(0, 4).map((origin) => (
+                                                            <Checkbox
+                                                                key={origin.value}
+                                                                value={origin.value}
+                                                                label={origin.label}
+                                                                size="xs"
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </Checkbox.Group>
+                                            </div>
+
+                                            {/* Màu sắc */}
+                                            <div>
+                                                <Text fw={500} size="xs" mb="xs">
+                                                    Màu sắc
+                                                </Text>
+                                                <Checkbox.Group value={localSelectedColors} onChange={setLocalSelectedColors}>
+                                                    <div className="space-y-1">
+                                                        {COLORS.map((color) => (
+                                                            <Checkbox
+                                                                key={color.value}
+                                                                value={color.value}
+                                                                label={
+                                                                    <Group gap={4}>
+                                                                        <div
+                                                                            className="w-3 h-3 rounded-full border border-gray-300"
+                                                                            style={{ backgroundColor: color.hex }}
+                                                                        />
+                                                                        <span className="text-xs">{color.label}</span>
+                                                                    </Group>
+                                                                }
+                                                                size="xs"
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </Checkbox.Group>
+                                            </div>
+                                        </div>
+
+                                        <Divider />
+
+                                        {/* Kích thước */}
+                                        <div>
+                                            <Text fw={500} size="xs" mb="xs">
+                                                Kích thước
+                                            </Text>
+                                            <Chip.Group
+                                                multiple
+                                                value={localSelectedSizes}
+                                                onChange={handleSizesChange}
+                                            >
+                                                <Group gap={6}>
+                                                    {SIZES.map((size) => (
+                                                        <Chip key={size} value={size} size="xs">
+                                                            {size}
+                                                        </Chip>
+                                                    ))}
+                                                </Group>
+                                            </Chip.Group>
+                                        </div>
+
+                                        <Divider />
+
+                                        {/* Đánh giá */}
+                                        <div>
+                                            <Text fw={500} size="xs" mb="xs">
+                                                Đánh giá
+                                            </Text>
+                                            <Chip.Group
+                                                value={localSelectedRating}
+                                                onChange={handleRatingChange}
+                                            >
+                                                <Group gap={6}>
+                                                    {RATING_OPTIONS.map((rating) => (
+                                                        <Chip key={rating.value} value={rating.value} size="xs">
+                                                            {rating.label}
+                                                        </Chip>
+                                                    ))}
+                                                </Group>
+                                            </Chip.Group>
+                                        </div>
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <Divider my="sm" />
+                                    <Group justify="space-between" mt="sm">
+                                        <Button variant="subtle" onClick={handleReset} size="xs">
+                                            Xóa bộ lọc
+                                        </Button>
+                                        <Group gap="xs">
+                                            <Button variant="light" onClick={close} size="xs">
+                                                Hủy
+                                            </Button>
+                                            <Button onClick={handleApply} size="xs">
+                                                Áp dụng
+                                            </Button>
+                                        </Group>
                                     </Group>
-                                </div>
-
-                                <Divider orientation="vertical" className="h-auto" />
-
-                                {/* Rating Filter */}
-                                <div className="col-span-1">
-                                    <Text fw={500} size="sm" mb="md">
-                                        Đánh giá
-                                    </Text>
-                                    <Radio.Group value={selectedRating} onChange={setSelectedRating}>
-                                        <div className="space-y-2">
-                                            <Radio value="all" label="Tất cả" size="sm" />
-                                            <Radio value="4" label="Từ 4 sao" size="sm" />
-                                            <Radio value="3" label="Từ 3 sao" size="sm" />
-                                        </div>
-                                    </Radio.Group>
-                                </div>
-
-                                <Divider orientation="vertical" className="h-auto" />
-
-                                {/* Brands Filter */}
-                                <div className="col-span-1">
-                                    <Text fw={500} size="sm" mb="md">
-                                        Thương hiệu
-                                    </Text>
-                                    <Checkbox.Group value={selectedBrands} onChange={setSelectedBrands}>
-                                        <div className="space-y-2">
-                                            {brands.map((brand) => (
-                                                <Checkbox
-                                                    key={brand.value}
-                                                    value={brand.value}
-                                                    label={brand.label}
-                                                    size="sm"
-                                                />
-                                            ))}
-                                        </div>
-                                    </Checkbox.Group>
-                                </div>
-
-                                <Divider orientation="vertical" className="h-auto" />
-
-                                {/* Stock Filter */}
-                                <div className="col-span-1">
-                                    <Text fw={500} size="sm" mb="md">
-                                        Khác
-                                    </Text>
-                                    <Checkbox
-                                        checked={inStockOnly}
-                                        onChange={(e) => setInStockOnly(e.currentTarget.checked)}
-                                        label="Còn hàng"
-                                        size="sm"
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Action Buttons - Horizontal */}
-                            <Divider my="md" />
-                            <Group justify="space-between" mt="lg">
-                                <Button variant="subtle" onClick={handleReset} size="sm">
-                                    Xóa bộ lọc
-                                </Button>
-                                <Group gap="sm">
-                                    <Button variant="light" onClick={close} size="sm">
-                                        Hủy
-                                    </Button>
-                                    <Button onClick={handleApply} size="sm">
-                                        Áp dụng
-                                    </Button>
-                                </Group>
-                            </Group>
-                        </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </Popover.Dropdown>
                 </Popover>
             </Group>

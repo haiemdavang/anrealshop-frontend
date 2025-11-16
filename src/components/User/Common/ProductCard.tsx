@@ -1,5 +1,5 @@
-import { ActionIcon, Badge, Button, Card, Group, Image, Rating, Text } from '@mantine/core';
-import { FiHeart, FiShoppingCart } from 'react-icons/fi';
+import { ActionIcon, Badge, Card, Group, Image, Rating, Text } from '@mantine/core';
+import { FiHeart } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import type { UserProductDto } from '../../../types/ProductType';
 import { formatPrice } from '../../../untils/Untils';
@@ -76,17 +76,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact = false }) =
             </ActionIcon>
           </div>
 
-          <div className="absolute bottom-3 left-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-            <Button
-              fullWidth
-              size="sm"
-              radius="md"
-              leftSection={<FiShoppingCart size={14} />}
-              className=" text-white shadow-lg"
-            >
-              Thêm vào giỏ
-            </Button>
-          </div>
         </div>
 
         {/* Content Section */}

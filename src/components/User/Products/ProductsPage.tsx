@@ -61,7 +61,7 @@ export const ProductsPage = () => {
           <BannerFlowCategory category={selectedCategory} />
 
           {/* Content Container */}
-          <Container size="xl" className="py-8">
+          <Container size="xl" className="py-6">
             {/* Filter Bar */}
             <FilterBar
               totalProducts={products.length}
