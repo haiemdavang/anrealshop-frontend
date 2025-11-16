@@ -6,19 +6,19 @@ import {
   Grid,
   LoadingOverlay,
   Stack,
-  Title,
-  Text
+  Text,
+  Title
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { getCategoryData, getCategoryProducts } from '../../../data/CategoryPageData';
 import type { Product } from '../../../data/FilterData';
-import ModalFilter from '../FilterProduct/ModalFilter';
+import Filter from '../Products/Filter';
+import ModalFilter from '../Products/ModalFilter';
 import CategoryMain from './CategoryMain';
 import CategorySidebar from './CategorySidebar';
 import ProductList from './ProductList';
-import Filter from '../FilterProduct/Filter';
 
 // Định nghĩa kiểu dữ liệu
 interface SubCategory {
@@ -69,7 +69,7 @@ const CategoryPage = () => {
     if (!slug) return;
 
     setLoading(true);
-    getCategoryData(slug) 
+    getCategoryData(slug)
       .then(data => {
         setCategory(data);
         loadProducts(data ? data.id : '');
@@ -101,8 +101,8 @@ const CategoryPage = () => {
       // Giả sử getCategoryProducts trả về { data: Product[], total: number }
       // setProducts(response.data);
       // setTotalProducts(response.total);
-        setProducts(response);
-        setTotalProducts(10);
+      setProducts(response);
+      setTotalProducts(10);
     } catch (error) {
       console.error("Error loading products:", error);
     } finally {

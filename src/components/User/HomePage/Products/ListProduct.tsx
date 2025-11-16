@@ -4,7 +4,7 @@ import ProductCard from '../../Common/ProductCard';
 import type { UserProductDto } from '../../../../types/ProductType';
 
 interface ListProductProps {
-    products: UserProductDto[];
+    products: UserProductDto[] | [];
 }
 
 const ListProduct = ( {products}: ListProductProps ) => {

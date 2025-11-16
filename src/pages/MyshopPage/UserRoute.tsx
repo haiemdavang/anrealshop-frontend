@@ -6,12 +6,13 @@ import showErrorNotification from '../../components/Toast/NotificationError';
 import LandingPage from '../../components/User/LandingPage/LandingPage';
 import { APP_ROUTES } from '../../constant';
 import { useAppSelector } from '../../hooks/useAppRedux';
+import { ProductsPage } from '../../components/User/Products/ProductsPage';
 
 
 const CartPage = lazy(() => import('../../components/User/Cart/CartPage'));
 const CategoryPage = lazy(() => import('../../components/User/CategoryPage/CategoryPage'));
 const CheckoutPage = lazy(() => import('../../components/User/Checkout/CheckoutPage'));
-const FilterProductPage = lazy(() => import('../../components/User/FilterProduct/FilterProductPage'));
+// const FilterProductPage = lazy(() => import('../../components/User/Products/FilterProductPage'));
 // const HomePage = lazy(() => import('../../components/User/HomePage/HomePage'));
 // const ListProduct = lazy(() => import('../../components/User/HomePage/Products/ListProduct'));
 const ProductDetailPage = lazy(() => import('../../components/User/ProductDetail/ProductDetailPage'));
@@ -40,12 +41,12 @@ const UserRoute = () => {
         <Routes>
           <Route index element={<LandingPage />} />
           {/* <Route path={APP_ROUTES.HOME} element={<HomePage />} /> */}
-          {/* <Route path="/products" element={<ListProduct />} /> */}
+          <Route path="/products" element={<ProductsPage />} />
           <Route path={APP_ROUTES.PRODUCT_DETAIL} element={<ProductDetailPage />} />
           <Route path={APP_ROUTES.CHECKOUT} element={<CheckoutPage />} />
           <Route path={APP_ROUTES.CART} element={<CartPage />} />
           <Route path={APP_ROUTES.USER_SETTINGS} element={<SettingPage />} />
-          <Route path="/search" element={<FilterProductPage />} />
+          {/* <Route path="/search" element={<FilterProductPage />} /> */}
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/shop/:slug" element={<ShopPage />} />
           <Route path={APP_ROUTES.PAYMENT_RESULT(':orderId')} element={<PaymentResultPage />} />
