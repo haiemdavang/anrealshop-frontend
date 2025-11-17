@@ -114,10 +114,14 @@ export const useCategory = ({ autoFetch = false }: UseCategoryParams = {}) => {
         }
     }, [fetchCategories, fetchDisabledCategories]);
 
-    const getCategoriesDisplay = useCallback(async (position?: 'HOMEPAGE' | 'SIDEBAR') => {
+    const getCategoriesDisplay = useCallback(async (position?: 'HOMEPAGE' | 'SIDEBAR', mode: 'admin' | 'public' = 'admin') => {
         setIsLoading(true);
         try {
-            const response = await CategoryService.getCategoriesDisplay(position);
+            const response = mode === 'admin'
+                ? await CategoryService.getCategoriesDisplay(position)
+                : await CategoryService.getPublicCategoriesDisplay(position);
+                
+                console.log(response)
             setCategoriesDisplay(response);
             return response;
         } catch (error) {

@@ -1,13 +1,9 @@
 import { ActionIcon, Text, Transition } from '@mantine/core';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-
-interface Category {
-    id: string;
-    name: string;
-    count: number;
-    icon?: string;
-}
+import { useCategory } from '../../../hooks/useCategory';
+import type { CategoryDisplayDto } from '../../../types/CategoryType';
 
 interface SidebarCategoryProps {
     selectedCategory: string;
@@ -22,16 +18,75 @@ const SidebarCategory = ({
     collapsed,
     onToggleCollapse
 }: SidebarCategoryProps) => {
-    const categories: Category[] = [
-        { id: 'all', name: 'Tất cả', count: 1250 },
-        { id: 'ao-thun', name: 'Áo Thun', count: 120 },
-        { id: 'giay-the-thao', name: 'Giày Thể Thao', count: 85 },
-        { id: 'quan-jeans', name: 'Quần Jeans', count: 64 },
-        { id: 'ao-khoac', name: 'Áo Khoác', count: 42 },
-        { id: 'vay-dam', name: 'Váy Đầm', count: 76 },
-        { id: 'phu-kien', name: 'Phụ Kiện', count: 93 },
-        { id: 'do-the-thao', name: 'Đồ Thể Thao', count: 58 },
-    ];
+    const { categoriesDisplay, getCategoriesDisplay, isLoading } = useCategory();
+
+    useEffect(() => {
+        getCategoriesDisplay('SIDEBAR', 'public');
+    }, [getCategoriesDisplay]);
+
+    const renderCategory = (category: CategoryDisplayDto, index: number, level: number = 0) => (
+        <div key={category.id} className={level > 0 ? 'ml-4' : ''}>
+            <motion.button
+                onClick={() => onCategoryChange(category.categoryId)}
+                className={`w-full text-left p-3 rounded-lg transition-colors mb-1 ${selectedCategory === category.categoryId
+                        ? 'bg-primary text-white'
+                        : 'hover:bg-gray-100 text-gray-700'
+                    }`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.2, delay: index * 0.05 }}
+                title={collapsed ? category.categoryName : undefined}
+            >
+                <div className="flex items-center gap-2">
+                    {/* Category Image */}
+                    {!collapsed && category.thumbnailUrl && (
+                        <div className="flex-shrink-0 w-8 h-8 rounded-md overflow-hidden bg-gray-100">
+                            <img
+                                src={category.thumbnailUrl}
+                                alt={category.categoryName}
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                }}
+                            />
+                        </div>
+                    )}
+
+                    {/* Category Info */}
+                    <div className="flex-1 flex items-center justify-between min-w-0">
+                        <Transition mounted={!collapsed} transition="fade" duration={200}>
+                            {(styles) => (
+                                <Text
+                                    size="sm"
+                                    fw={level === 0 ? 500 : 400}
+                                    style={styles}
+                                    className="truncate"
+                                >
+                                    {category.categoryName}
+                                </Text>
+                            )}
+                        </Transition>
+
+                        {collapsed && (
+                            <div
+                                className={`w-2 h-2 rounded-full mx-auto ${selectedCategory === category.categoryId ? 'bg-white' : 'bg-gray-400'
+                                    }`}
+                            />
+                        )}
+                    </div>
+                </div>
+            </motion.button>
+
+            {/* Render children categories if exist */}
+            {!collapsed && Array.isArray((category as any).children) && (category as any).children.length > 0 && (
+                <div className="mt-1">
+                    {(category as any).children.map((child: CategoryDisplayDto, childIndex: number) =>
+                        renderCategory(child, index + childIndex + 1, level + 1)
+                    )}
+                </div>
+            )}
+        </div>
+    );
 
     return (
         <div
@@ -58,45 +113,50 @@ const SidebarCategory = ({
 
             {/* Categories List - Scrollable */}
             <div className="p-2 overflow-y-auto max-h-[calc(100vh-200px)]">
-                {categories.map((category, index) => (
-                    <motion.button
-                        key={category.id}
-                        onClick={() => onCategoryChange(category.id)}
-                        className={`w-full text-left p-3 rounded-lg transition-colors mb-1 ${selectedCategory === category.id
-                            ? 'bg-primary text-white'
-                            : 'hover:bg-gray-100 text-gray-700'
-                            }`}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.2, delay: index * 0.05 }}
-                        title={collapsed ? category.name : undefined}
-                    >
-                        <div className="flex items-center justify-between">
-                            <Transition mounted={!collapsed} transition="fade" duration={200}>
-                                {(styles) => (
-                                    <Text size="sm" fw={500} style={styles} className="truncate">
-                                        {category.name}
-                                    </Text>
+                {isLoading ? (
+                    <div className="text-center py-8">
+                        <Text size="sm" c="dimmed">Đang tải...</Text>
+                    </div>
+                ) : categoriesDisplay.length > 0 ? (
+                    <>
+                        {/* "Tất cả" option */}
+                        <motion.button
+                            onClick={() => onCategoryChange('all')}
+                            className={`w-full text-left p-3 rounded-lg transition-colors mb-1 ${selectedCategory === 'all'
+                                    ? 'bg-primary text-white'
+                                    : 'hover:bg-gray-100 text-gray-700'
+                                }`}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <div className="flex items-center justify-between">
+                                <Transition mounted={!collapsed} transition="fade" duration={200}>
+                                    {(styles) => (
+                                        <Text size="sm" fw={500} style={styles}>
+                                            Tất cả
+                                        </Text>
+                                    )}
+                                </Transition>
+                                {collapsed && (
+                                    <div
+                                        className={`w-2 h-2 rounded-full mx-auto ${selectedCategory === 'all' ? 'bg-white' : 'bg-gray-400'
+                                            }`}
+                                    />
                                 )}
-                            </Transition>
-                            <Transition mounted={!collapsed} transition="fade" duration={200}>
-                                {(styles) => (
-                                    <Text
-                                        size="xs"
-                                        c={selectedCategory === category.id ? 'white' : 'dimmed'}
-                                        style={styles}
-                                        className="flex-shrink-0 ml-2"
-                                    >
-                                        {category.count}
-                                    </Text>
-                                )}
-                            </Transition>
-                            {collapsed && (
-                                <div className={`w-2 h-2 rounded-full mx-auto ${selectedCategory === category.id ? 'bg-white' : 'bg-gray-400'}`} />
-                            )}
-                        </div>
-                    </motion.button>
-                ))}
+                            </div>
+                        </motion.button>
+
+                        {/* Category list */}
+                        {categoriesDisplay.map((category, index) =>
+                            renderCategory(category, index + 1)
+                        )}
+                    </>
+                ) : (
+                    <div className="text-center py-8">
+                        <Text size="sm" c="dimmed">Không có danh mục</Text>
+                    </div>
+                )}
             </div>
         </div>
     );

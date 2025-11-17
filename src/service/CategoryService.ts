@@ -1,6 +1,6 @@
 import { API_ENDPOINTS } from '../constant';
 import type { AdminCategoryDto, BaseCategoryDto, CategoryDisplayDto, CategoryDisplayRequestDto, CategoryRequestDto } from '../types/CategoryType';
-import { axiosInstance } from './AxiosInstant';
+import { axiosInstance, axiosNoAuthInstance } from './AxiosInstant';
 
 const getCategorySuggestions = async (keyword: string): Promise<BaseCategoryDto[]> => {
     const response = await axiosInstance.get(API_ENDPOINTS.CATEGORIES.GET_MY_SHOP_SUGGEST_CATEGORIES, {
@@ -61,6 +61,13 @@ const getCategoriesDisplay = async (position?: 'HOMEPAGE' | 'SIDEBAR'): Promise<
     return response.data;
 };
 
+const getPublicCategoriesDisplay = async (position?: 'HOMEPAGE' | 'SIDEBAR'): Promise<CategoryDisplayDto[]> => {
+    const response = await axiosNoAuthInstance.get(API_ENDPOINTS.CATEGORIES.GET_PUBLIC_DISPLAY, {
+        params: { position }
+    });
+    return response.data;
+};
+
 const updateCategoryDisplay = async (categoryDisplayRequestDtos: CategoryDisplayRequestDto[]): Promise<void> => {
     await axiosInstance.put(API_ENDPOINTS.ADMIN.CATEGORY_DISPLAY, categoryDisplayRequestDtos);
 };
@@ -82,6 +89,7 @@ export const CategoryService = {
     deleteCategory,
     toggleCategoryStatus,
     getCategoriesDisplay,
+    getPublicCategoriesDisplay,
     updateCategoryDisplay,
     deleteCategoryDisplay
 };

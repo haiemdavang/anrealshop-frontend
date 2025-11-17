@@ -1,4 +1,4 @@
-import { ActionIcon, Badge, Box, Group, Menu, Text } from '@mantine/core';
+import { ActionIcon, Badge, Box, Group, Menu, Text, Tooltip } from '@mantine/core';
 import { useState } from 'react';
 import { FiChevronDown, FiChevronRight, FiHome, FiLayers, FiSidebar } from 'react-icons/fi';
 import type { AdminCategoryDto } from '../../../types/CategoryType';
@@ -68,7 +68,7 @@ export const CategorySourceTree = ({
                     <Box
                         className={`rounded-md border border-gray-200 hover:bg-gray-50`}
                     >
-                        <Group justify="space-between" p="xs" align="center">
+                        <Group justify="space-between" p="xs" align="center" className='!flex-nowrap'>
                             <Group gap="xs">
                                 {hasChildren ? (
                                     <ActionIcon
@@ -88,7 +88,10 @@ export const CategorySourceTree = ({
                                     </ActionIcon>
                                 )}
 
-                                <Text size="sm" fw={500}>{category.name}</Text>
+                                <Tooltip label={category.name} position="top-start" withArrow>
+                                    <Text size="sm" className='flex-1' lineClamp={1} fw={500}>{category.name}</Text>
+                                </Tooltip>
+                                    
 
                                 {isFullyAdded && (
                                     <Badge size="xs" color="gray">Đã thêm đầy đủ</Badge>

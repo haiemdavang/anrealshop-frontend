@@ -23,6 +23,16 @@ export interface UseProductParams {
     categoryId?: string;
     sortBy?: string;
     dateRange?: [Date | null, Date | null];
+    // ---- user product specific ----
+    minPrice?: number;
+    maxPrice?: number;
+    brands?: string[];
+    rating?: number;
+    colors?: string[];
+    sizes?: string[];
+    origins?: string[];
+    genders?: string[];
+    
 }
 interface UseProductOptions {
     mode?: TypeMode;
