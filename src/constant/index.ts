@@ -77,6 +77,7 @@ export const API_ENDPOINTS = {
     GET_FOR_SHOP: '/categories/my-shop',
     GET_MY_SHOP_SUGGEST_CATEGORIES: '/categories/suggest',
     GET_SUGGEST_BY_NAME_PRODUCT: '/categories/suggest-by-product-name',
+    GET_PUBLIC_DISPLAY: '/public/categories',
   },
 
   CART: {

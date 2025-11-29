@@ -3,10 +3,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { FiSave } from 'react-icons/fi';
 import { useCategory } from '../../../hooks/useCategory';
 import type { AdminCategoryDto, CategoryDisplayDto } from '../../../types/CategoryType';
-import { CategoryDisplayList } from './CategoryDisplayList';
-import { CategorySourceTree } from './CategorySourceTree';
 import showErrorNotification from '../../Toast/NotificationError';
 import PaginationCustom from '../../common/PaginationCustom';
+import { CategoryDisplayList } from './CategoryDisplayList';
+import { CategorySourceTree } from './CategorySourceTree';
+import { CategorySourceTreeSideBar } from './CategorySourceTreeSideBar';
 
 export const CategoryDisplayPage = () => {
     const {
@@ -68,21 +69,72 @@ export const CategoryDisplayPage = () => {
             showErrorNotification('Thông báo lỗi', 'Đã đạt đến số lượng danh mục tối đa cho trang chủ (7 danh mục).');
             return;
         }
-        const order = position === 'HOMEPAGE' ? localHomepageCategories.length + 1 : localSidebarCategories.length + 1;
+        const findAllChildren = (parentCategory: AdminCategoryDto): AdminCategoryDto[] => {
+            const children = categories.filter(cat => cat.parentId === parentCategory.id);
+            const allDescendants: AdminCategoryDto[] = [...children];
 
-        const categoryDisplayToAdd: CategoryDisplayDto = {
-            id: '',
-            categoryId: category.id,
-            categoryName: category.name,
-            position: position,
-            order
+            children.forEach(child => {
+                const descendants = findAllChildren(child);
+                allDescendants.push(...descendants);
+            });
+
+            return allDescendants;
         };
+
         if (position === 'HOMEPAGE') {
+            const order = localHomepageCategories.length + 1;
+            const categoryDisplayToAdd: CategoryDisplayDto = {
+                id: '',
+                categoryId: category.id,
+                categoryName: category.name,
+                position: position,
+                order,
+                slug: category.slug,
+                parentId: category.parentId,
+                level: category.level,
+            };
             setLocalHomepageCategories(prev => [...prev, categoryDisplayToAdd]);
             setHasHomepageChanges(true);
         } else {
-            setLocalSidebarCategories(prev => [...prev, categoryDisplayToAdd]);
-            setHasSidebarChanges(true);
+            const categoriesToAdd: CategoryDisplayDto[] = [];
+            let currentOrder = localSidebarCategories.length + 1;
+
+            categoriesToAdd.push({
+                id: '',
+                categoryId: category.id,
+                categoryName: category.name,
+                position: position,
+                order: currentOrder++,
+                slug: category.slug,
+                parentId: category.parentId,
+                level: category.level,
+            });
+            if (category.hasChildren) {
+                const allChildren = findAllChildren(category);
+                allChildren.forEach(child => {
+                    const isAlreadyAdded = localSidebarCategories.some(c => c.categoryId === child.id);
+                    if (!isAlreadyAdded) {
+                        categoriesToAdd.push({
+                            id: '',
+                            categoryId: child.id,
+                            categoryName: child.name,
+                            position: position,
+                            order: currentOrder++,
+                            slug: child.slug,
+                            parentId: child.parentId,
+                            level: child.level,
+                        });
+                    }
+                });
+            }
+            const newCategories = categoriesToAdd.filter(
+                newCat => !localSidebarCategories.some(existingCat => existingCat.categoryId === newCat.categoryId)
+            );
+
+            if (newCategories.length > 0) {
+                setLocalSidebarCategories(prev => [...prev, ...newCategories]);
+                setHasSidebarChanges(true);
+            }
         }
     };
 
@@ -119,7 +171,7 @@ export const CategoryDisplayPage = () => {
             if (removedHomepageIds.length > 0) {
                 await deleteCategoryDisplay(removedHomepageIds);
             }
-            const otherCategories = categoriesDisplay.filter(c => c.position !== 'HOMEPAGE');
+            const otherCategories = categoriesDisplay.filter(c => c.position === 'HOMEPAGE');
             const categoriesToUpdate = [...otherCategories, ...localHomepageCategories].map(cat => ({
                 id: cat.id,
                 categoryId: cat.categoryId,
@@ -142,7 +194,7 @@ export const CategoryDisplayPage = () => {
                 await deleteCategoryDisplay(removedSidebarIds);
             }
 
-            const otherCategories = categoriesDisplay.filter(c => c.position !== 'SIDEBAR');
+            const otherCategories = categoriesDisplay.filter(c => c.position === 'SIDEBAR');
             const categoriesToUpdate = [...otherCategories, ...localSidebarCategories].map(cat => ({
                 id: cat.id,
                 categoryId: cat.categoryId,
@@ -236,7 +288,7 @@ export const CategoryDisplayPage = () => {
                                         </Button>
                                     )}
                                 </Group>
-                                <CategoryDisplayList
+                                <CategorySourceTreeSideBar
                                     categories={paginatedSidebarCategories}
                                     setCategories={(updater) => {
                                         setLocalSidebarCategories(prev => {
@@ -248,7 +300,7 @@ export const CategoryDisplayPage = () => {
                                     position="SIDEBAR"
                                     onRemove={handleRemove}
                                     onReorder={handleReorder}
-                                    maxItems={10}
+                                    maxItems={100}
                                 />
                                 {localSidebarCategories.length > sidebarItemsPerPage && (
                                     <PaginationCustom

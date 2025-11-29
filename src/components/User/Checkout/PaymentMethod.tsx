@@ -1,8 +1,17 @@
-import { Box, Collapse, Group, Paper, Radio, Stack, Text, Button } from '@mantine/core';
-import { FiCreditCard, FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { useState } from 'react';
-import type { PaymentMethodInfo } from '../../../data/CheckoutData';
-import type { PaymentGatewayType } from '../../../types/CheckoutType';
+import {
+  Box,
+  Button,
+  Collapse,
+  Group,
+  Paper,
+  Radio,
+  Stack,
+  Text,
+} from "@mantine/core";
+import { useState } from "react";
+import { FiChevronDown, FiChevronUp, FiCreditCard } from "react-icons/fi";
+import type { PaymentMethodInfo } from "../../../data/CheckoutData";
+import type { PaymentGatewayType } from "../../../types/CheckoutType";
 
 interface PaymentMethodProps {
   paymentMethods: PaymentMethodInfo[];
@@ -16,20 +25,26 @@ const PaymentMethod = ({
   setSelectedPaymentMethod,
 }: PaymentMethodProps) => {
   const [expanded, setExpanded] = useState(false);
-  
-  const selectedMethod = paymentMethods.find(method => method.id === selectedPaymentMethod);
-  
+
+  const selectedMethod = paymentMethods.find(
+    (method) => method.id === selectedPaymentMethod
+  );
+
   const getIconBgColor = (methodId: PaymentGatewayType) => {
     switch (methodId) {
-      case 'cash_on_delivery': return 'bg-amber-100';
-      case 'momo': return 'bg-blue-100';
-      case 'vnpay': return 'bg-blue-50';
-      case 'momo': return 'bg-pink-100';
-      case 'credit_card': return 'bg-purple-100';
-      default: return 'bg-gray-100';
+      case "cash_on_delivery":
+        return "bg-amber-100";
+      case "vnpay":
+        return "bg-blue-50";
+      case "momo":
+        return "bg-pink-100";
+      case "credit_card":
+        return "bg-purple-100";
+      default:
+        return "bg-gray-100";
     }
   };
-  
+
   return (
     <Paper radius="md" shadow="sm" p="md" className="bg-white">
       <Group justify="space-between" className="mb-2">
@@ -37,14 +52,16 @@ const PaymentMethod = ({
           <FiCreditCard className="inline-block mr-2" size={18} />
           Phương thức thanh toán
         </Text>
-        
+
         {/* Nút ẩn/hiện */}
         <Button
           variant="subtle"
           color="gray"
           size="xs"
           onClick={() => setExpanded(!expanded)}
-          rightSection={expanded ? <FiChevronUp size={14} /> : <FiChevronDown size={14} />}
+          rightSection={
+            expanded ? <FiChevronUp size={14} /> : <FiChevronDown size={14} />
+          }
         >
           {expanded ? "Thu gọn" : "Xem tất cả"}
         </Button>
@@ -61,19 +78,16 @@ const PaymentMethod = ({
           onClick={() => setExpanded(true)}
         >
           <Group gap={10}>
-            <Radio
-              size='xs'
-              checked={true}
-              readOnly
-              className="!mr-1"
-            />
+            <Radio size="xs" checked={true} readOnly className="!mr-1" />
             <Box
-              className={`w-10 h-10 flex items-center justify-center rounded-md ${getIconBgColor(selectedMethod.id)}`}
+              className={`w-10 h-10 flex items-center justify-center rounded-md ${getIconBgColor(
+                selectedMethod.id
+              )}`}
             >
               {selectedMethod.icon}
             </Box>
             <Box>
-              <Text fw={600} size='sm' className="text-slate-800">
+              <Text fw={600} size="sm" className="text-slate-800">
                 {selectedMethod.name}
               </Text>
               <Text size="sm" c="dimmed">
@@ -96,10 +110,13 @@ const PaymentMethod = ({
               radius="md"
               className={`transition-all cursor-pointer border-2 ${
                 selectedPaymentMethod === method.id
-                  ? 'border-primary bg-picton-blue-50'
-                  : 'border-transparent hover:bg-gray-50'
+                  ? "border-primary bg-picton-blue-50"
+                  : "border-transparent hover:bg-gray-50"
               }`}
-              onClick={() => {setSelectedPaymentMethod(method.id); setExpanded(false);}}
+              onClick={() => {
+                setSelectedPaymentMethod(method.id);
+                setExpanded(false);
+              }}
             >
               <Group gap={10}>
                 <Radio
@@ -108,12 +125,14 @@ const PaymentMethod = ({
                   className="!mr-1"
                 />
                 <Box
-                  className={`w-10 h-10 flex items-center justify-center rounded-md ${getIconBgColor(method.id)}`}
+                  className={`w-10 h-10 flex items-center justify-center rounded-md ${getIconBgColor(
+                    method.id
+                  )}`}
                 >
                   {method.icon}
                 </Box>
                 <Box>
-                  <Text fw={600} size='sm' className="text-slate-800">
+                  <Text fw={600} size="sm" className="text-slate-800">
                     {method.name}
                   </Text>
                   <Text size="xs" c="dimmed">

@@ -38,15 +38,20 @@ export interface CategoryRequestDto {
     visible: boolean;
 }
 
+
 export interface CategoryDisplayDto {
     id: string;
     categoryId: string;
     categoryName: string;
     position: 'HOMEPAGE' | 'SIDEBAR';
     order: number;
+    slug: string;
+    parentId?: string | null;
+    level: number;
     thumbnailUrl?: string;
     mediaType?: MediaType;
 }
+
 
 
 export interface CategoryDisplayRequestDto {
