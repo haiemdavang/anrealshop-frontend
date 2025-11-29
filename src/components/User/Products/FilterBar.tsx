@@ -3,10 +3,12 @@ import { useDisclosure } from '@mantine/hooks';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { FiFilter } from 'react-icons/fi';
+import { BRANDS, COLORS, ORIGINS, PRICE_SUGGESTIONS, RATING_OPTIONS, SIZES } from './DataDefault';
 
 interface FilterBarProps {
     totalProducts: number;
     onApplyFilters: (filters: FilterValues) => void;
+    initialValues?: FilterValues;
 }
 
 interface FilterValues {
@@ -18,59 +20,42 @@ interface FilterValues {
     rating: string;
 }
 
-// Dataset constants
-const PRICE_SUGGESTIONS = [
-    { value: [0, 100000], label: 'Dưới 100K' },
-    { value: [100000, 500000], label: '100K - 500K' },
-    { value: [500000, 1000000], label: '500K - 1Tr' },
-    { value: [1000000, 5000000], label: '1Tr - 5Tr' },
-    { value: [5000000, 10000000], label: 'Trên 5Tr' },
-];
-
-const BRANDS = [
-    { value: 'nike', label: 'Nike' },
-    { value: 'adidas', label: 'Adidas' },
-    { value: 'puma', label: 'Puma' },
-    { value: 'uniqlo', label: 'Uniqlo' },
-    { value: 'zara', label: 'Zara' },
-];
-
-const COLORS = [
-    { value: 'black', label: 'Đen', hex: '#000000' },
-    { value: 'white', label: 'Trắng', hex: '#FFFFFF' },
-    { value: 'red', label: 'Đỏ', hex: '#FF0000' },
-    { value: 'blue', label: 'Xanh dương', hex: '#0000FF' },
-    { value: 'green', label: 'Xanh lá', hex: '#00FF00' },
-];
-
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-
-const ORIGINS = [
-    { value: 'vn', label: 'Việt Nam' },
-    { value: 'us', label: 'Mỹ' },
-    { value: 'kr', label: 'Hàn Quốc' },
-    { value: 'jp', label: 'Nhật Bản' },
-    { value: 'cn', label: 'Trung Quốc' },
-];
-
-const RATING_OPTIONS = [
-    { value: '5', label: '5 sao' },
-    { value: '4', label: 'Từ 4 sao' },
-    { value: '3', label: 'Từ 3 sao' },
-];
-
-const FilterBar = ({ totalProducts, onApplyFilters }: FilterBarProps) => {
+const FilterBar = ({ totalProducts, onApplyFilters, initialValues }: FilterBarProps) => {
     const [scrolled, setScrolled] = useState(false);
     const [opened, { open, close }] = useDisclosure(false);
     const filterBarRef = useRef<HTMLDivElement>(null);
 
-    // Local state for filters
-    const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([0, 10000000]);
-    const [localSelectedBrands, setLocalSelectedBrands] = useState<string[]>([]);
-    const [localSelectedColors, setLocalSelectedColors] = useState<string[]>([]);
-    const [localSelectedSizes, setLocalSelectedSizes] = useState<string[]>([]);
-    const [localSelectedOrigins, setLocalSelectedOrigins] = useState<string[]>([]);
-    const [localSelectedRating, setLocalSelectedRating] = useState<string>('');
+    // Initialize state with URL params or defaults
+    const [localPriceRange, setLocalPriceRange] = useState<[number, number]>(
+        initialValues?.priceRange || [0, 10000000]
+    );
+    const [localSelectedBrands, setLocalSelectedBrands] = useState<string[]>(
+        initialValues?.brands || []
+    );
+    const [localSelectedColors, setLocalSelectedColors] = useState<string[]>(
+        initialValues?.colors || []
+    );
+    const [localSelectedSizes, setLocalSelectedSizes] = useState<string[]>(
+        initialValues?.sizes || []
+    );
+    const [localSelectedOrigins, setLocalSelectedOrigins] = useState<string[]>(
+        initialValues?.origins || []
+    );
+    const [localSelectedRating, setLocalSelectedRating] = useState<string>(
+        initialValues?.rating || ''
+    );
+
+    // Sync state when initialValues change (URL params change)
+    useEffect(() => {
+        if (initialValues) {
+            setLocalPriceRange(initialValues.priceRange);
+            setLocalSelectedBrands(initialValues.brands);
+            setLocalSelectedColors(initialValues.colors);
+            setLocalSelectedSizes(initialValues.sizes);
+            setLocalSelectedOrigins(initialValues.origins);
+            setLocalSelectedRating(initialValues.rating);
+        }
+    }, [initialValues]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -93,7 +78,7 @@ const FilterBar = ({ totalProducts, onApplyFilters }: FilterBarProps) => {
             });
             setTimeout(() => {
                 open();
-            }, 300);
+            }, 100);
         } else {
             open();
         }

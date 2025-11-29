@@ -327,9 +327,11 @@ export const useGetProduct = () => {
     const getListRecommended = useCallback(async (params?: UseProductParams) => {
         setIsLoading(true);
         try {
+            console.log('getListRecommended params:', params);
             const result: UserProductDto[] = await ProductsService.getListRecommended(params);
             console.log('getListRecommended result:', result);
             return result;
+            return [];
         } catch (err: any) {
             const errorMessage = getErrorMessage(err);
             showErrorNotification('Lỗi tải sản phẩm', errorMessage);

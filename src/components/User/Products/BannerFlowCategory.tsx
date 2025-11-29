@@ -25,7 +25,6 @@ const BannerFlowCategory = ({ category }: BannerFlowCategoryProps) => {
             title: 'Thời trang',
             description: 'Phong cách mới nhất cho bạn'
         },
-        // Thêm các danh mục khác...
     };
 
     const banner = categoryBanners[category] || categoryBanners.all;

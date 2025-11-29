@@ -51,20 +51,20 @@ export const setupAxiosInterceptors = (
   logoutAction: () => { type: string }
 ) => {
   const redirectToLoginWithDelay = () => {
-    // store.dispatch(logoutAction());
+    store.dispatch(logoutAction());
 
-    // const currentPath = window.location.pathname.split('/');
-    // if (APP_ROUTES_PUBLIC.includes(currentPath[1] ? `/${currentPath[1]}` : '/')) {
-    //   return;
-    // }
+    const currentPath = window.location.pathname.split('/');
+    if (APP_ROUTES_PUBLIC.includes(currentPath[1] ? `/${currentPath[1]}` : '/')) {
+      return;
+    }
 
-    // const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+    const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
 
-    // showErrorNotification("Thông báo", "Phiên đăng nhập của bạn đã hết hạn. Đăng nhập lại trong giây lát...");
+    showErrorNotification("Thông báo", "Phiên đăng nhập của bạn đã hết hạn. Đăng nhập lại trong giây lát...");
 
-    // setTimeout(() => {
-    //   window.location.href = `/login?redirect=${returnUrl}`;
-    // }, 3000);
+    setTimeout(() => {
+      window.location.href = `/login?redirect=${returnUrl}`;
+    }, 3000);
   };
   axiosInstance.interceptors.response.use(
     response => response,
