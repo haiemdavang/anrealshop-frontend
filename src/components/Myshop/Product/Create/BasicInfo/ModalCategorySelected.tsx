@@ -25,6 +25,7 @@ const ModalCategorySelected = memo(({ opened, onClose, onSelect, selectedCategor
     const [categories, setCategories] = useState<BaseCategoryDto[]>([]);
 
     useEffect(() => {
+        if (!opened && categories.length > 0) return;
         const fetchAllCategories = async () => {
             const categories = await CategoryService.getCategoryForShop();
             setCategories(categories);
