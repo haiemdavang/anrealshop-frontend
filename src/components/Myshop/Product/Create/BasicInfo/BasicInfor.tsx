@@ -32,7 +32,7 @@ interface BasicInforProps {
     categoryIdProps: SelectProps;
     categoryPathProps: AutocompleteProps;
     descriptionProps: TextInputProps;
-    quantityProps: NumberInputProps;
+    quantityProps: NumberInputProps; 
 }
 
 const BasicInfor = memo(({
@@ -165,9 +165,12 @@ const BasicInfor = memo(({
                     />
 
                     <RichTextEditor
-                        descriptionProps={{
-                            ...descriptionProps
+                        value={descriptionProps.value as string}
+                        onChange={(val) => {
+                            const onChangeAny = descriptionProps.onChange as any;
+                            onChangeAny?.(val);
                         }}
+                        error={descriptionProps.error}
                     />
                 </Stack>
             )}
