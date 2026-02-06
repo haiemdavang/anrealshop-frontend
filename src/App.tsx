@@ -13,6 +13,7 @@ import { connectWs, disconnectWs } from './service/websocketClient';
 import { fetchCurrentUser } from './store/authSlice';
 import { useWakeWord } from './hooks/useWakeWord';
 import OverlayVoice from './components/common/OverlayVoice';
+import ChatBtn from './components/User/Chatbox/ChatBtn';
 
 const AuthoPage = lazy(() => import('./pages/Auth/AuthoPage'));
 const MyshopPage = lazy(() => import('./pages/MyshopPage/MyshopRoute'));
@@ -105,6 +106,9 @@ function App() {
         message={isRecognizing ? 'Đang nghe lệnh...' : `Wake word: ${detectedLabel}`}
         isRecording={isRecognizing}
       />
+
+      {/* Chat Button */}
+      <ChatBtn />
 
       <BrowserRouter>
         <div className="min-h-screen flex flex-col">
