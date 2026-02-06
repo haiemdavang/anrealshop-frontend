@@ -7,6 +7,7 @@ export const BASE_FE_URL = import.meta.env.VITE_BASE_FE_URL
 export const GOOGLE_LOGIN_URL = `${BASE_BE_URL}/oauth2/authorize/google`
 export const CLOUNDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 export const CLOUNDINARY_NAME = import.meta.env.VITE_CLOUDINARY_NAME
+export const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY
 
 
 

@@ -11,6 +11,8 @@ import { APP_ROUTES } from './constant';
 import { useAppDispatch, useAppSelector } from './hooks/useAppRedux';
 import { connectWs, disconnectWs } from './service/websocketClient';
 import { fetchCurrentUser } from './store/authSlice';
+import { useWakeWord } from './hooks/useWakeWord';
+import OverlayVoice from './components/common/OverlayVoice';
 
 const AuthoPage = lazy(() => import('./pages/Auth/AuthoPage'));
 const MyshopPage = lazy(() => import('./pages/MyshopPage/MyshopRoute'));
@@ -56,6 +58,15 @@ function App() {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
+  const {
+    isWakeWordDetected,
+    detectedLabel,
+    isRecognizing,
+    isLoaded,
+    initWakeWord,
+    startListening,
+  } = useWakeWord();
+
   useEffect(() => {
     
     if (!user && !isAuthenticated) {
@@ -71,11 +82,30 @@ function App() {
     return () => {
       disconnectWs();
     };
-  }, [user]);
+  }, [user, isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    const setupWakeWord = async () => {
+      await initWakeWord();
+      if (isLoaded) {
+        await startListening();
+      }
+    };
+
+    setupWakeWord();
+  }, [initWakeWord, startListening, isLoaded]);
 
   return (
     <MantineProvider theme={theme}>
       <Notifications position="bottom-right" zIndex={1000} />
+
+      {/* Voice Overlay */}
+      <OverlayVoice 
+        visible={isWakeWordDetected}
+        message={isRecognizing ? 'Đang nghe lệnh...' : `Wake word: ${detectedLabel}`}
+        isRecording={isRecognizing}
+      />
+
       <BrowserRouter>
         <div className="min-h-screen flex flex-col">
           <main className="flex-1">

@@ -64,7 +64,7 @@ const ProductDetailPage = () => {
           }
         })
     }
-  }, [slug, getProductById]);
+  }, [slug, getProductById, getParam]);
 
   const getOrderImageActive = useCallback((url: string) => {
     if (!url) return 0;
