@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Group, Image, LoadingOverlay, ScrollArea, Stack } from '@mantine/core';
+import { ActionIcon, Box, Group, Image, LoadingOverlay, ScrollArea, Stack, Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
@@ -9,6 +9,7 @@ interface ImageProductProps {
   productName: string;
   selectedImage: number;
   setSelectedImage: (image: number) => void;
+  onTryProduct?: () => void;
 }
 
 const ImageProduct = ({
@@ -16,7 +17,8 @@ const ImageProduct = ({
   thumbnailUrl,
   productName,
   selectedImage,
-  setSelectedImage
+  setSelectedImage,
+  onTryProduct
 }: ImageProductProps) => {
   const [loading, setLoading] = useState(false);
   const [preloadedImages, setPreloadedImages] = useState<string[]>([]);
@@ -126,6 +128,19 @@ const ImageProduct = ({
               <Box className="absolute bottom-3 left-3 bg-black/60 text-white px-2 py-1 rounded-full text-xs">
                 {selectedImage + 1}/{media.length}
               </Box>
+            )}
+
+            {/* Try-on button overlay */}
+            {typeof onTryProduct === 'function' && (
+              <div className="absolute bottom-3 right-3 z-20">
+                <Button
+                  size="xs"
+                  onClick={(e) => { e.stopPropagation(); onTryProduct(); }}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  Thử sản phẩm
+                </Button>
+              </div>
             )}
           </Box>
           

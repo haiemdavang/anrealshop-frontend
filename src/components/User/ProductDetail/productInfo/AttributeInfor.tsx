@@ -1,4 +1,4 @@
-import {
+                                                                                                                                                                                                                                                                                                                                                            import {
     Button,
     Divider,
     Group,
@@ -14,7 +14,7 @@ import {
     FiInfo
 } from 'react-icons/fi';
 import type { ProductAttribute } from '../../../../types/AttributeType';
-
+                                                                                                                                            
 interface AttributeInforProps {
     attributes: ProductAttribute[];
     selectedAttributes: Record<string, string>;
