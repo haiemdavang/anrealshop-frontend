@@ -18,6 +18,7 @@ import PageNotFound from '../../common/PageNotFound';
 import Breadcrumbs from './Breadcrumbs';
 import ImageProduct from './ImageProduct';
 import InforProduct from './productInfo/InforProduct';
+import TryOn from './Try-onInfo/Try-on';
 
 
 
@@ -30,6 +31,7 @@ const ProductDetailPage = () => {
   const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
   const [selectedSku, setSelectedSku] = useState<MyShopProductSkuDto | null>(null);
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [showTryOn, setShowTryOn] = useState(false);
 
   const { isLoading, getProductById } = useGetProduct();
 
@@ -204,6 +206,7 @@ const ProductDetailPage = () => {
                 productName={product.name}
                 selectedImage={selectedImage}
                 setSelectedImage={setSelectedImage}
+                onTryProduct={() => setShowTryOn(true)}
               />
             </div>
           </Paper>
@@ -212,13 +215,17 @@ const ProductDetailPage = () => {
         <Grid.Col span={{ base: 12, md: 7.4 }}>
           <Paper radius="md" className="!mb-8 !bg-white !shadow-sm">
             <div className="p-4">
-              <InforProduct
-                product={product}
-                selectedAttributes={selectedAttributes}
-                selectedSku={selectedSku}
-                onAttributeSelect={handleAttributeSelect}
-                groupedAttributes={groupedAttributes}
-              />
+              {showTryOn ? (
+                <TryOn />
+              ) : (
+                <InforProduct
+                  product={product}
+                  selectedAttributes={selectedAttributes}
+                  selectedSku={selectedSku}
+                  onAttributeSelect={handleAttributeSelect}
+                  groupedAttributes={groupedAttributes}
+                />
+              )}
             </div>
           </Paper>
         </Grid.Col>
