@@ -5,6 +5,7 @@ import ChatUser from './ChatUser';
 import { useChatRooms } from '../../../hooks/useChat';
 import type { ChatMessageResponse, ChatRoomResponse } from '../../../types/ChatType';
 import { onChatMessage } from '../../../service/websocketClient';
+import { sendRead } from '../../../service/websocketClient';
 import showSuccessNotification from '../../Toast/NotificationSuccess';
 
 interface ChatboxPaneProps {
@@ -55,6 +56,7 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                 // Message for active room → push to ChatUser (skip sender's own echo)
                 if (!msg.me) {
                     incomingMsgHandler.current?.(msg);
+                    sendRead(roomId);
                 }
             } else {
                 // Not the active room → increment unread + show toast notification
@@ -150,7 +152,10 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                                             key={conv.id}
                                             onClick={() => {
                                                 setSelectedConversation(conv.id);
-                                                if (conv.type === 'user') clearUnread(conv.id);
+                                                if (conv.type === 'user') {
+                                                    clearUnread(conv.id);
+                                                    sendRead(conv.id);
+                                                }
                                             }}
                                             className={`w-full p-3 flex items-start gap-3 hover:bg-white transition-colors border-b ${
                                                 selectedConversation === conv.id ? 'bg-white border-l-2 border-l-primary' : ''

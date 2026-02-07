@@ -1,7 +1,7 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect, useCallback, type MutableRefObject } from 'react';
 import { useChatMessages } from '../../../hooks/useChat';
-import { sendMessage } from '../../../service/websocketClient';
+import { sendMessage, sendTyping, sendRead, onTyping } from '../../../service/websocketClient';
 import type { ChatMessageResponse } from '../../../types/ChatType';
 
 interface ChatUserProps {
@@ -24,15 +24,55 @@ const ChatUser = ({ roomId, conversationName, participantAvatar, onIncomingMessa
     const messagesContainerRef = useRef<HTMLDivElement>(null);
     const isFirstLoad = useRef(true);
 
+    const [isPartnerTyping, setIsPartnerTyping] = useState(false);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const typingDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
     // Register handler for receiving WS messages from ChatboxPane
     useEffect(() => {
         if (onIncomingMessage) {
             onIncomingMessage.current = (msg: ChatMessageResponse) => {
                 addMessage(msg);
+                // Clear typing indicator when a real message arrives
+                setIsPartnerTyping(false);
             };
             return () => { onIncomingMessage.current = null; };
         }
     }, [onIncomingMessage, addMessage]);
+
+    // Mark messages as read when entering a room
+    useEffect(() => {
+        if (roomId) {
+            sendRead(roomId);
+        }
+    }, [roomId]);
+
+    // Subscribe to typing events from partner
+    useEffect(() => {
+        const unsubscribe = onTyping((payload) => {
+            if (payload.roomId === roomId) {
+                setIsPartnerTyping(true);
+                // Auto-hide typing after 3s of no new typing event
+                if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+                typingTimeoutRef.current = setTimeout(() => setIsPartnerTyping(false), 3000);
+            }
+        });
+        return () => {
+            unsubscribe();
+            if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+        };
+    }, [roomId]);
+
+    // Send typing event with debounce when user types
+    const handleInputChange = useCallback((value: string) => {
+        setInputValue(value);
+        if (!value.trim()) return;
+        if (typingDebounceRef.current) return; // Already sent recently
+        sendTyping(roomId);
+        typingDebounceRef.current = setTimeout(() => {
+            typingDebounceRef.current = null;
+        }, 2000);
+    }, [roomId]);
 
     // Scroll to bottom on first load and new messages
     useEffect(() => {
@@ -149,6 +189,33 @@ const ChatUser = ({ roomId, conversationName, participantAvatar, onIncomingMessa
                         </div>
                     </motion.div>
                 ))}
+                {/* Typing indicator */}
+                <AnimatePresence>
+                    {isPartnerTyping && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 5 }}
+                            className="flex items-center gap-2 mb-2"
+                        >
+                            <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 overflow-hidden">
+                                {participantAvatar ? (
+                                    <img src={participantAvatar} alt={conversationName} className="w-full h-full object-cover" />
+                                ) : (
+                                    conversationName.charAt(0)
+                                )}
+                            </div>
+                            <div className="bg-white rounded-2xl rounded-tl-sm px-3 py-2 shadow-sm">
+                                <div className="flex gap-1">
+                                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 <div ref={messagesEndRef} />
             </div>
 
@@ -158,7 +225,7 @@ const ChatUser = ({ roomId, conversationName, participantAvatar, onIncomingMessa
                     <input
                         type="text"
                         value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
+                        onChange={(e) => handleInputChange(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                         placeholder={`Nhập tin nhắn với ${conversationName}...`}
                         className="flex-1 px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:border-primary"
