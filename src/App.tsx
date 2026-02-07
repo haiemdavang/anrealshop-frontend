@@ -93,8 +93,9 @@ function App() {
       }
     };
 
-    setupWakeWord();
-  }, [initWakeWord, startListening, isLoaded]);
+    if(user && isAuthenticated)
+      setupWakeWord();
+  }, [initWakeWord, startListening, isLoaded, user, isAuthenticated]);
 
   return (
     <MantineProvider theme={theme}>
@@ -108,7 +109,7 @@ function App() {
       />
 
       {/* Chat Button */}
-      <ChatBtn />
+      {user && isAuthenticated && <ChatBtn />}
 
       <BrowserRouter>
         <div className="min-h-screen flex flex-col">

@@ -1,52 +1,102 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import ChatAI from './ChatAI';
 import ChatUser from './ChatUser';
-
-interface Conversation {
-    id: string;
-    type: 'ai' | 'user';
-    name: string;
-    avatar?: string;
-    lastMessage: string;
-    timestamp: string;
-    unread?: number;
-}
+import { useChatRooms } from '../../../hooks/useChat';
+import type { ChatMessageResponse, ChatRoomResponse } from '../../../types/ChatType';
+import { onChatMessage } from '../../../service/websocketClient';
+import showSuccessNotification from '../../Toast/NotificationSuccess';
 
 interface ChatboxPaneProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+const formatTime = (dateStr: string | null) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+    if (diffDays === 1) return 'Hôm qua';
+    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+};
+
 const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
-    const [conversations] = useState<Conversation[]>([
-        {
-            id: 'ai-1',
-            type: 'ai',
-            name: 'AI Assistant',
-            lastMessage: 'Tôi có thể giúp gì cho bạn?',
-            timestamp: '10:30',
-            unread: 1,
-        },
-        {
-            id: 'user-1',
-            type: 'user',
-            name: 'Admin Support',
-            lastMessage: 'Chúng tôi sẽ hỗ trợ bạn ngay',
-            timestamp: '09:15',
-        },
-        {
-            id: 'user-2',
-            type: 'user',
-            name: 'Nguyễn Văn A',
-            lastMessage: 'Cảm ơn bạn!',
-            timestamp: 'Hôm qua',
-        },
-    ]);
+    const { rooms, isLoading: isLoadingRooms, updateRoomLastMessage, incrementUnread, clearUnread } = useChatRooms();
 
     const [selectedConversation, setSelectedConversation] = useState<string>('ai-1');
 
+    // Ref to pass incoming WS messages to active ChatUser
+    const incomingMsgHandler = useRef<((msg: ChatMessageResponse) => void) | null>(null);
+
+    // Track state in refs for WS callback (avoid stale closures)
+    const isOpenRef = useRef(isOpen);
+    const selectedConvRef = useRef(selectedConversation);
+    useEffect(() => { isOpenRef.current = isOpen; }, [isOpen]);
+    useEffect(() => { selectedConvRef.current = selectedConversation; }, [selectedConversation]);
+
+    // Get partner name by roomId for notification
+    const getPartnerName = useCallback((roomId: string) => {
+        const room = rooms.find(r => r.roomId === roomId);
+        return room?.partnerName || 'Tin nhắn mới';
+    }, [rooms]);
+
+    // Subscribe to WebSocket chat messages
+    useEffect(() => {
+        const unsubscribe = onChatMessage((msg: ChatMessageResponse) => {
+            const roomId = msg.roomId;
+            const isActiveRoom = isOpenRef.current && selectedConvRef.current === roomId;
+
+            // Always update room list sidebar (last message + sort)
+            updateRoomLastMessage(roomId, msg);
+
+            if (isActiveRoom) {
+                // Message for active room → push to ChatUser (skip sender's own echo)
+                if (!msg.me) {
+                    incomingMsgHandler.current?.(msg);
+                }
+            } else {
+                // Not the active room → increment unread + show toast notification
+                if (!msg.me) {
+                    incrementUnread(roomId);
+                    const partnerName = getPartnerName(roomId);
+                    showSuccessNotification({
+                        title: `Bạn có một tin nhắn mới từ ${partnerName}`,
+                        message: msg.content.length > 80 ? msg.content.substring(0, 80) + '...' : msg.content,
+                    });
+                }
+            }
+        });
+
+        return unsubscribe;
+    }, [updateRoomLastMessage, incrementUnread, getPartnerName]);
+
+    // Merge AI + real rooms
+    const conversations = useMemo(() => {
+        const ai = {
+            id: 'ai-1',
+            type: 'ai' as const,
+            name: 'AI Assistant',
+            lastMessage: 'Tôi có thể giúp gì cho bạn?',
+            timestamp: '',
+            unread: 0,
+        };
+        const userConvs = rooms.map((room: ChatRoomResponse) => ({
+            id: room.roomId,
+            type: 'user' as const,
+            name: room.partnerName,
+            avatar: room.partnerAvatar,
+            lastMessage: room.lastMessage?.content || '',
+            timestamp: formatTime(room.lastActive),
+            unread: room.unreadCount,
+            roomData: room,
+        }));
+        return [ai, ...userConvs];
+    }, [rooms]);
+
     const currentConversation = conversations.find(c => c.id === selectedConversation);
+    const totalConversations = conversations.length;
 
     return (
         <AnimatePresence>
@@ -65,7 +115,7 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-sm">Tin nhắn</h3>
-                                <p className="text-[10px] text-white/80">{conversations.length} cuộc hội thoại</p>
+                                <p className="text-[10px] text-white/80">{totalConversations} cuộc hội thoại</p>
                             </div>
                         </div>
                         <button
@@ -90,37 +140,48 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                                 />
                             </div>
                             <div className="flex-1 overflow-y-auto">
-                                {conversations.map((conv) => (
-                                    <button
-                                        key={conv.id}
-                                        onClick={() => setSelectedConversation(conv.id)}
-                                        className={`w-full p-3 flex items-start gap-3 hover:bg-white transition-colors border-b ${
-                                            selectedConversation === conv.id ? 'bg-white border-l-2 border-l-primary' : ''
-                                        }`}
-                                    >
-                                        <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden">
-                                            {conv.type === 'ai' ? (
-                                                <img src="/gif/gemini.gif" alt={conv.name} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <span className="text-white text-sm font-bold">{conv.name.charAt(0)}</span>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 text-left overflow-hidden">
-                                            <div className="flex items-center justify-between mb-1">
-                                                <h4 className="text-sm font-semibold text-gray-800 truncate flex-1">{conv.name}</h4>
-                                                {conv.unread && (
-                                                    <span className="w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center ml-2 flex-shrink-0">
-                                                        {conv.unread}
-                                                    </span>
+                                {isLoadingRooms && rooms.length === 0 ? (
+                                    <div className="flex items-center justify-center py-8">
+                                        <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                                    </div>
+                                ) : (
+                                    conversations.map((conv) => (
+                                        <button
+                                            key={conv.id}
+                                            onClick={() => {
+                                                setSelectedConversation(conv.id);
+                                                if (conv.type === 'user') clearUnread(conv.id);
+                                            }}
+                                            className={`w-full p-3 flex items-start gap-3 hover:bg-white transition-colors border-b ${
+                                                selectedConversation === conv.id ? 'bg-white border-l-2 border-l-primary' : ''
+                                            }`}
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                                {conv.type === 'ai' ? (
+                                                    <img src="/gif/gemini.gif" alt={conv.name} className="w-full h-full object-cover" />
+                                                ) : conv.avatar ? (
+                                                    <img src={conv.avatar} alt={conv.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <span className="text-white text-sm font-bold">{conv.name.charAt(0)}</span>
                                                 )}
                                             </div>
-                                            <div className="flex items-center justify-between gap-2">
-                                                <p className="text-xs text-gray-500 truncate flex-1">{conv.lastMessage}</p>
-                                                <p className="text-[10px] text-gray-400 flex-shrink-0">{conv.timestamp}</p>
+                                            <div className="flex-1 text-left overflow-hidden">
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <h4 className="text-sm font-semibold text-gray-800 truncate flex-1">{conv.name}</h4>
+                                                    {conv.unread ? (
+                                                        <span className="w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center ml-2 flex-shrink-0">
+                                                            {conv.unread}
+                                                        </span>
+                                                    ) : null}
+                                                </div>
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <p className="text-xs text-gray-500 truncate flex-1">{conv.lastMessage}</p>
+                                                    <p className="text-[10px] text-gray-400 flex-shrink-0">{conv.timestamp}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </button>
-                                ))}
+                                        </button>
+                                    ))
+                                )}
                             </div>
                         </div>
 
@@ -130,7 +191,15 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                                 currentConversation.type === 'ai' ? (
                                     <ChatAI />
                                 ) : (
-                                    <ChatUser conversationId={currentConversation.id} conversationName={currentConversation.name} />
+                                    <ChatUser
+                                        roomId={currentConversation.id}
+                                        conversationName={currentConversation.name}
+                                        participantAvatar={currentConversation.avatar}
+                                        onIncomingMessage={incomingMsgHandler}
+                                        onNewMessage={(msg) => {
+                                            updateRoomLastMessage(currentConversation.id, msg);
+                                        }}
+                                    />
                                 )
                             ) : (
                                 <div className="flex-1 flex items-center justify-center text-gray-400">

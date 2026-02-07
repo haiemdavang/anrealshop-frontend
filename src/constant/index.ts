@@ -139,7 +139,13 @@ export const API_ENDPOINTS = {
     USER_ORDERS: '/user/orders',
     USER_ORDER_DETAILS: (orderId: string) => `/user/orders/${orderId}`,
     USER_REJECT_ORDER: (orderId: string) => `/user/orders/reject/${orderId}`,
-  }
+  },
+
+  CHAT: {
+    ROOMS: '/chat/rooms',
+    ROOM_MESSAGES: (roomId: string) => `/chat/rooms/${roomId}/messages`,
+    INIT_ROOM: '/chat/rooms/init',
+  },
 };
 
 

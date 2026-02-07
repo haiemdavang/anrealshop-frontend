@@ -3,12 +3,26 @@ import SockJS from 'sockjs-client';
 import { BASE_API_URL } from '../constant';
 import showErrorNotification from '../components/Toast/NotificationError';
 import NoticeService from './NoticeService';
+import type { ChatMessageResponse } from '../types/ChatType';
 
 const WS_URL = `${BASE_API_URL}/ws_drew`;
 const DESTINATION_NOTICE = '/user/queue/notifications';
-const DESTINATION_CHAT = '/user/queue/chat';
+const DESTINATION_CHAT = '/user/queue/chats';
 
 let stompClient: Client | null = null;
+
+// ========== Chat message listener system ==========
+type ChatMessageListener = (message: ChatMessageResponse) => void;
+const chatListeners = new Set<ChatMessageListener>();
+
+export function onChatMessage(listener: ChatMessageListener): () => void {
+  chatListeners.add(listener);
+  return () => { chatListeners.delete(listener); };
+}
+
+function notifyChatListeners(message: ChatMessageResponse) {
+  chatListeners.forEach(listener => listener(message));
+}
 
 function ensureClient(): Client {
   if (stompClient) return stompClient;
@@ -34,7 +48,12 @@ function ensureClient(): Client {
     });
 
     stompClient!.subscribe(DESTINATION_CHAT, (msg: IMessage) => {
-      console.log('Chat message:', msg.body);
+      try {
+        const chatMsg: ChatMessageResponse = JSON.parse(msg.body);
+        notifyChatListeners(chatMsg);
+      } catch (e) {
+        console.error('Failed to parse chat message:', e);
+      }
     });
 
 
