@@ -7,6 +7,7 @@ export const BASE_FE_URL = import.meta.env.VITE_BASE_FE_URL
 export const GOOGLE_LOGIN_URL = `${BASE_BE_URL}/oauth2/authorize/google`
 export const CLOUNDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 export const CLOUNDINARY_NAME = import.meta.env.VITE_CLOUDINARY_NAME
+export const PORCUPINE_ACCESS_KEY = import.meta.env.VITE_PORCUPINE_ACCESS_KEY
 
 
 
@@ -138,7 +139,15 @@ export const API_ENDPOINTS = {
     USER_ORDERS: '/user/orders',
     USER_ORDER_DETAILS: (orderId: string) => `/user/orders/${orderId}`,
     USER_REJECT_ORDER: (orderId: string) => `/user/orders/reject/${orderId}`,
-  }
+  },
+
+  CHAT: {
+    ROOMS: '/chat/rooms',
+    ROOM_MESSAGES: (roomId: string) => `/chat/rooms/${roomId}/messages`,
+    INIT_ROOM: '/chat/rooms/init',
+    BOT: '/chat/bot',
+    BOT_HISTORY: '/chat/bot/history',
+  },
 };
 
 

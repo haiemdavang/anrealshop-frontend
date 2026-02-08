@@ -11,6 +11,9 @@ import { APP_ROUTES } from './constant';
 import { useAppDispatch, useAppSelector } from './hooks/useAppRedux';
 import { connectWs, disconnectWs } from './service/websocketClient';
 import { fetchCurrentUser } from './store/authSlice';
+import { useWakeWord } from './hooks/useWakeWord';
+import OverlayVoice from './components/common/OverlayVoice';
+import ChatBtn from './components/User/Chatbox/ChatBtn';
 
 const AuthoPage = lazy(() => import('./pages/Auth/AuthoPage'));
 const MyshopPage = lazy(() => import('./pages/MyshopPage/MyshopRoute'));
@@ -56,6 +59,15 @@ function App() {
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
+  const {
+    isWakeWordDetected,
+    detectedLabel,
+    isRecognizing,
+    isLoaded,
+    initWakeWord,
+    startListening,
+  } = useWakeWord();
+
   useEffect(() => {
     
     if (!user && !isAuthenticated) {
@@ -71,11 +83,34 @@ function App() {
     return () => {
       disconnectWs();
     };
-  }, [user]);
+  }, [user, isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    const setupWakeWord = async () => {
+      await initWakeWord();
+      if (isLoaded) {
+        await startListening();
+      }
+    };
+
+    if(user && isAuthenticated)
+      setupWakeWord();
+  }, [initWakeWord, startListening, isLoaded, user, isAuthenticated]);
 
   return (
     <MantineProvider theme={theme}>
       <Notifications position="bottom-right" zIndex={1000} />
+
+      {/* Voice Overlay */}
+      <OverlayVoice 
+        visible={isWakeWordDetected}
+        message={isRecognizing ? 'Đang nghe lệnh...' : `Wake word: ${detectedLabel}`}
+        isRecording={isRecognizing}
+      />
+
+      {/* Chat Button */}
+      {user && isAuthenticated && <ChatBtn />}
+
       <BrowserRouter>
         <div className="min-h-screen flex flex-col">
           <main className="flex-1">

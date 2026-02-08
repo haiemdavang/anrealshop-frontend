@@ -18,6 +18,8 @@
     "@mantine/hooks": "^7.17.7",
     "@mantine/notifications": "^7.17.1",
     "@mantine/tiptap": "^7.17.7",
+    "@picovoice/porcupine-react": "^4.0.0",
+    "@picovoice/web-voice-processor": "^4.0.9",
     "@react-oauth/google": "^0.12.2",
     "@reduxjs/toolkit": "^2.8.2",
     "@stomp/stompjs": "^7.2.0",
@@ -40,7 +42,7 @@
     "react-number-format": "^5.4.4",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.1",
-    "slugify": "^1.6.6", 
+    "slugify": "^1.6.6",
     "sockjs-client": "^1.6.1"
   },
   "devDependencies": {
