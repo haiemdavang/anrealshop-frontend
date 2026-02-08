@@ -62,8 +62,8 @@ import { usePorcupine } from '@picovoice/porcupine-react';
         await init(
           ACCESS_KEY,
           { 
-            publicPath: '/voice/hey-bot_en_wasm_v4_0_0.ppn', 
-            label: 'hey bot' 
+            publicPath: '/voice/hey-Jerry_en_wasm_v4_0_0.ppn', 
+            label: 'hey Jerry' 
           },
           { 
             publicPath: '/voice/porcupine_params.pv'
@@ -114,8 +114,7 @@ import { usePorcupine } from '@picovoice/porcupine-react';
         }, 3000);
       };
 
-      recognition.onerror = (event) => {
-        console.error("Speech recognition error:", event);
+      recognition.onerror = () => {
         setIsRecognizing(false);
         
         // Đóng modal ngay nếu có lỗi
@@ -127,7 +126,8 @@ import { usePorcupine } from '@picovoice/porcupine-react';
     };
 
     const sendToBackend = async (text: string) => {
-      console.log("Gửi câu lệnh đến backend:", text);
+      // Dispatch custom event so ChatBtn/ChatboxPane/ChatAI can react
+      window.dispatchEvent(new CustomEvent('voice-command', { detail: { text } }));
     };
 
     useEffect(() => {

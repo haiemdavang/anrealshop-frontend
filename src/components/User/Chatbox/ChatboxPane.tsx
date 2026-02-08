@@ -27,6 +27,13 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
 
     const [selectedConversation, setSelectedConversation] = useState<string>('ai-1');
 
+    // Auto-select AI conversation on voice command
+    useEffect(() => {
+        const handleVoice = () => setSelectedConversation('ai-1');
+        window.addEventListener('voice-command', handleVoice);
+        return () => window.removeEventListener('voice-command', handleVoice);
+    }, []);
+
     // Ref to pass incoming WS messages to active ChatUser
     const incomingMsgHandler = useRef<((msg: ChatMessageResponse) => void) | null>(null);
 

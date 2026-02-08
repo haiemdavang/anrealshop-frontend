@@ -1,8 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ChatboxPane from './ChatboxPane';
 
 const ChatBtn = () => {
     const [isChatboxOpen, setIsChatboxOpen] = useState(false);
+
+    // Auto-open chatbox on voice command
+    useEffect(() => {
+        const handleVoice = () => setIsChatboxOpen(true);
+        window.addEventListener('voice-command', handleVoice);
+        return () => window.removeEventListener('voice-command', handleVoice);
+    }, []);
 
     return (
         <>

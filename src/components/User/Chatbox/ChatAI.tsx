@@ -91,10 +91,11 @@ const ChatAI = () => {
         }
     }, [hasMore, isLoadingHistory, currentPage, fetchHistory]);
 
-    const handleSend = async () => {
-        if (!inputValue.trim() || isTyping) return;
+    // Core send logic (reusable for both keyboard input and voice command)
+    const sendMessage = useCallback(async (text: string) => {
+        if (!text.trim() || isTyping) return;
 
-        const chatInput = inputValue.trim();
+        const chatInput = text.trim();
         const userMsg: Message = {
             id: `user-${Date.now()}`,
             type: 'user',
@@ -129,7 +130,21 @@ const ChatAI = () => {
         } finally {
             setIsTyping(false);
         }
+    }, [isTyping]);
+
+    const handleSend = () => {
+        sendMessage(inputValue);
     };
+
+    // Listen for voice command and auto-send
+    useEffect(() => {
+        const handleVoice = (e: Event) => {
+            const text = (e as CustomEvent<{ text: string }>).detail.text;
+            if (text) sendMessage(text);
+        };
+        window.addEventListener('voice-command', handleVoice);
+        return () => window.removeEventListener('voice-command', handleVoice);
+    }, [sendMessage]);
 
     return (
         <>
