@@ -49,3 +49,28 @@ export interface ChatTypingPayload {
 export interface ChatReadPayload {
     roomId: string;
 }
+
+// ========== Chatbot ==========
+export interface ChatbotRequest {
+    chatInput: string;
+}
+
+export interface ChatbotResponse {
+    message: string;
+    type: string;
+    queryType: string;
+    imageUrl: string;
+    imageUrls: string[];
+    productLink: string;
+}
+
+export interface ChatbotHistoryResponse {
+    id: string;
+    question: string;
+    answer: string;
+    type: string;
+    queryType: string;
+    imageUrl: string;
+    productLink: string;
+    createdAt: string;
+}

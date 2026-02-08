@@ -145,6 +145,8 @@ export const API_ENDPOINTS = {
     ROOMS: '/chat/rooms',
     ROOM_MESSAGES: (roomId: string) => `/chat/rooms/${roomId}/messages`,
     INIT_ROOM: '/chat/rooms/init',
+    BOT: '/chat/bot',
+    BOT_HISTORY: '/chat/bot/history',
   },
 };
 

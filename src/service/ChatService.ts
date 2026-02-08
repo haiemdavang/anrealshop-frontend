@@ -2,6 +2,9 @@ import { API_ENDPOINTS } from "../constant";
 import type {
     ChatMessageResponse,
     ChatRoomResponse,
+    ChatbotRequest,
+    ChatbotResponse,
+    ChatbotHistoryResponse,
     InitRoomRequest,
     InitRoomResponse,
 } from "../types/ChatType";
@@ -37,8 +40,25 @@ const initRoom = async (request: InitRoomRequest): Promise<InitRoomResponse> => 
     return response.data;
 };
 
+const askChatbot = async (request: ChatbotRequest): Promise<ChatbotResponse> => {
+    const response = await axiosInstance.post(API_ENDPOINTS.CHAT.BOT, request);
+    return response.data;
+};
+
+const getChatbotHistory = async (
+    page: number = 0,
+    size: number = 20
+): Promise<PageResponse<ChatbotHistoryResponse>> => {
+    const response = await axiosInstance.get(API_ENDPOINTS.CHAT.BOT_HISTORY, {
+        params: { page, size },
+    });
+    return response.data;
+};
+
 export const ChatService = {
     getCurrentUserRooms,
     getRoomMessages,
     initRoom,
+    askChatbot,
+    getChatbotHistory,
 };

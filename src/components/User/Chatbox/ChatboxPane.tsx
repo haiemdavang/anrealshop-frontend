@@ -4,8 +4,7 @@ import ChatAI from './ChatAI';
 import ChatUser from './ChatUser';
 import { useChatRooms } from '../../../hooks/useChat';
 import type { ChatMessageResponse, ChatRoomResponse } from '../../../types/ChatType';
-import { onChatMessage } from '../../../service/websocketClient';
-import { sendRead } from '../../../service/websocketClient';
+import { onChatMessage, sendRead } from '../../../service/websocketClient';
 import showSuccessNotification from '../../Toast/NotificationSuccess';
 
 interface ChatboxPaneProps {
