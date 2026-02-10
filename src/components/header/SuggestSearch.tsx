@@ -3,6 +3,8 @@ import { Paper, Group, Text, Divider, Skeleton, Box } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { SearchService } from '../../service/SearchService';
 import type { ProductSuggestDto, CategorySuggestDto } from '../../types/SearchType';
+import showErrorNotification from '../Toast/NotificationError';
+import { getErrorMessage } from '../../untils/ErrorUntils';
 
 interface SuggestSearchProps {
   searchTerm: string;
@@ -43,8 +45,8 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
       try {
         const data = await SearchService.suggestSearch(searchTerm, productLimit, categoryLimit);
         setResults(data);
-      } catch (error) {
-        console.error('Error fetching search results:', error);
+      } catch (error: unknown) {
+        showErrorNotification('Đã có lỗi xảy ra.', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -58,7 +60,6 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
 
   // Define blur class based on withBlur prop
   const blurClass = !withBlur ? '!backdrop-blur-md !bg-white/80' : '!bg-white';
-  console.log('blurClass', withBlur);
 
   // Loading state
   if (loading) {
