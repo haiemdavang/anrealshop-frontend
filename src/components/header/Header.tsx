@@ -126,6 +126,7 @@ const Header: React.FC = () => {
         duration: 0.5,
         ease: "easeOut",
       }}
+      style={{ zIndex: 9999 }}
     >
       <Container size="xl">
         {/* Main header row */}

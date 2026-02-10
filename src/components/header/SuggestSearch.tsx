@@ -67,7 +67,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
       <Paper
         shadow="md"
         radius="md"
-        className={`absolute mt-1 w-full z-50 px-3 py-3 ${blurClass} ${className}`}
+        className={`absolute mt-1 w-full z-[9999] px-3 py-3 ${blurClass} ${className}`}
       >
         <Box mb="md">
           <Skeleton height={16} mb={8} />
@@ -104,7 +104,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
     <Paper
       shadow="md"
       radius="md"
-      className={`absolute mt-1 w-full z-50 px-3 py-3 ${blurClass} ${className}`}
+      className={`absolute mt-1 w-full z-[9999] px-3 py-3 ${blurClass} ${className}`}
     >
       {/* Categories */}
       {results.categories.length > 0 && (
@@ -114,7 +114,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
             {results.categories.map((category) => (
               <Link
                 key={category.id}
-                to={`/category/${category.urlSlug}`}
+                to={`/products?ct=${category.urlSlug}`}
                 className="no-underline"
                 onClick={onSelect}
               >
@@ -167,8 +167,8 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
 
       {/* See all results */}
       <Link
-        to={`/search?q=${encodeURIComponent(searchTerm)}`}
-        className="block text-center text-blue-600 no-underline hover:underline py-1"
+        to={`/products?q=${encodeURIComponent(searchTerm)}`}
+        className="block text-center text-primary no-underline hover:underline py-1"
         onClick={onSelect}
       >
         <Text size="sm">Xem tất cả kết quả cho "{searchTerm}"</Text>
