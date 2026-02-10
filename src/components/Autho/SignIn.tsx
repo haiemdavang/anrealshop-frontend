@@ -123,7 +123,7 @@ export function SignIn() {
 
   return (
     <motion.div
-      className="w-1/2 bg-white flex items-center justify-center p-8"
+      className="w-screen md:w-1/2 bg-white flex items-center justify-center px-4 py-6 sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -134,7 +134,7 @@ export function SignIn() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Title order={1} className="text-3xl font-bold mb-6 text-center text-slate-800">
+        <Title order={1} className="text-2xl sm:text-3xl font-bold mb-6 text-center text-slate-800">
           Đăng nhập
         </Title>
 
