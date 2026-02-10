@@ -1,6 +1,6 @@
 import type { ErrorResponseDto } from "../types/CommonType";
 
-export const getErrorMessage = (error: any): string => {
+export const getErrorMessage = (error: eny): string => {
   const errorResponse = error as ErrorResponseDto;
   if (errorResponse?.details && errorResponse.details.length > 0) {
     const firstDetail = errorResponse.details[0];

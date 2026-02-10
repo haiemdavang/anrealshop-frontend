@@ -53,9 +53,9 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
-    useDisclosure(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+
 
   // Responsive breakpoints
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -89,6 +89,17 @@ const Header: React.FC = () => {
     setShowSuggestions(true);
   };
 
+  const handleClearSearch = () => {
+    setSearchValue("");
+    setShowSuggestions(false);
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.has("q")) {
+      searchParams.delete("q");
+      const newSearch = searchParams.toString();
+      navigate(`${location.pathname}${newSearch ? `?${newSearch}` : ""}`, { replace: true });
+    }
+  };
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
@@ -103,7 +114,7 @@ const Header: React.FC = () => {
       }
 
       // Chuyển đến trang kết quả tìm kiếm
-      window.location.href = `/search?q=${encodeURIComponent(searchValue)}`;
+      navigate(`/products?q=${encodeURIComponent(searchValue)}`);
     }
     setShowSuggestions(false);
   };
@@ -126,7 +137,7 @@ const Header: React.FC = () => {
         duration: 0.5,
         ease: "easeOut",
       }}
-      style={{ zIndex: 9999 }}
+      style={{zIndex: 1}}
     >
       <Container size="xl">
         {/* Main header row */}
@@ -185,10 +196,7 @@ const Header: React.FC = () => {
                               searchValue ? "visible" : "invisible"
                             }`}
                             aria-label="Clear input"
-                            onClick={() => {
-                              setSearchValue("");
-                              setShowSuggestions(false);
-                            }}
+                            onClick={handleClearSearch}
                           />
                           <Divider size={"2"} orientation="vertical" />
                           <Button
@@ -468,10 +476,7 @@ const Header: React.FC = () => {
                   searchValue && (
                     <CloseButton
                       size="sm"
-                      onClick={() => {
-                        setSearchValue("");
-                        setShowSuggestions(false);
-                      }}
+                      onClick={handleClearSearch}
                     />
                   )
                 }
