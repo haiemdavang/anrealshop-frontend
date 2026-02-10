@@ -152,6 +152,10 @@ export const API_ENDPOINTS = {
   TRYON: {
     DETECT: '/tryon/detect',
   },
+
+  SEARCH: {
+    SUGGEST: '/public/search/suggest',
+  },
 };
 
 
