@@ -1,4 +1,5 @@
 import { ActionIcon, Box, Group, Image, LoadingOverlay, ScrollArea, Stack, Button } from '@mantine/core';
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
@@ -10,6 +11,7 @@ interface ImageProductProps {
   selectedImage: number;
   setSelectedImage: (image: number) => void;
   onTryProduct?: () => void;
+  showTryOn?: boolean;
 }
 
 const ImageProduct = ({
@@ -18,7 +20,8 @@ const ImageProduct = ({
   productName,
   selectedImage,
   setSelectedImage,
-  onTryProduct
+  onTryProduct,
+  showTryOn = false
 }: ImageProductProps) => {
   const [loading, setLoading] = useState(false);
   const [preloadedImages, setPreloadedImages] = useState<string[]>([]);
@@ -131,8 +134,14 @@ const ImageProduct = ({
             )}
 
             {/* Try-on button overlay */}
-            {typeof onTryProduct === 'function' && (
-              <div className="absolute bottom-3 right-3 z-20">
+            {typeof onTryProduct === 'function' && !showTryOn && (
+              <motion.div 
+                className="absolute bottom-3 right-3 z-20"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   size="xs"
                   onClick={(e) => { e.stopPropagation(); onTryProduct(); }}
@@ -140,7 +149,7 @@ const ImageProduct = ({
                 >
                   Thử sản phẩm
                 </Button>
-              </div>
+              </motion.div>
             )}
           </Box>
           

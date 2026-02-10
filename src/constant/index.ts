@@ -148,6 +148,10 @@ export const API_ENDPOINTS = {
     BOT: '/chat/bot',
     BOT_HISTORY: '/chat/bot/history',
   },
+
+  TRYON: {
+    DETECT: '/tryon/detect',
+  },
 };
 
 

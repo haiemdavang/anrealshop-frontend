@@ -1,18 +1,26 @@
-import { Box, Button, Container, Grid, Group, LoadingOverlay, Paper, Text } from '@mantine/core';
-import { useState } from 'react';
-import { FiRefreshCw, FiStar } from 'react-icons/fi';
-import type { UserProductDto } from '../../../../types/ProductType';
+import { Box, Container, Grid, Group, LoadingOverlay, Paper, Text } from '@mantine/core';
+import { useEffect, useRef, useState } from 'react';
+import TryOnService from '../../../../service/TryOnService';
 import showErrorNotification from '../../../Toast/NotificationError';
 import showSuccessNotification from '../../../Toast/NotificationSuccess';
 import CameraPicture from './CameraPicture';
-import { MOCK_TRYON_PRODUCTS } from './DataDefault';
-import SuggestCloth from './SuggestCloth';
 
-const TryOn = () => {
+interface TryOnProps {
+  productImageUrl: string;
+  onBack?: () => void;
+}
+
+const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
   const [userImage, setUserImage] = useState<string>('');
-  const [selectedProduct, setSelectedProduct] = useState<UserProductDto | null>(null);
   const [tryOnResult, setTryOnResult] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (tryOnResult && resultRef.current) {
+      resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [tryOnResult]);
 
   const handleImageCapture = (imageData: string) => {
     setUserImage(imageData);
@@ -24,27 +32,52 @@ const TryOn = () => {
       showErrorNotification('Lỗi', 'Vui lòng chụp hoặc tải ảnh lên');
       return;
     }
-    if (!selectedProduct) {
-      showErrorNotification('Lỗi', 'Vui lòng chọn sản phẩm để thử');
+    if (!productImageUrl) {
+      showErrorNotification('Lỗi', 'Không tìm thấy ảnh sản phẩm');
       return;
     }
 
     setIsLoading(true);
     try {
-      await new Promise(res => setTimeout(res, 1500));
-      setTryOnResult(userImage);
-      showSuccessNotification('Thành công', 'Thử đồ thành công!');
-    } catch {
-      showErrorNotification('Lỗi', 'Có lỗi xảy ra khi thử đồ');
+      // Ảnh từ camera/upload làm ảnh human
+      const personImageBase64 = userImage.replace(/^data:image\/\w+;base64,/, '');
+      
+      // Ảnh selected từ ImageProduct làm ảnh fashion
+      const productImageResponse = await fetch(productImageUrl);
+      const productImageBlob = await productImageResponse.blob();
+      const productImageBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = (reader.result as string).replace(/^data:image\/\w+;base64,/, '');
+          resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(productImageBlob);
+      });
+
+      const response = await TryOnService.tryOn({
+        personImageBase64,
+        productImageBase64,
+        baseSteps: 25,
+      });
+
+      if (response.success && response.resultImageBase64) {
+        // Add proper base64 prefix if not present
+        const resultImage = response.resultImageBase64.startsWith('data:')
+          ? response.resultImageBase64
+          : `data:${response.mimeType || 'image/jpeg'};base64,${response.resultImageBase64}`;
+        
+        setTryOnResult(resultImage);
+        showSuccessNotification('Thành công', response.message || 'Thử đồ thành công!');
+      } else {
+        showErrorNotification('Lỗi', response.message || 'Có lỗi xảy ra khi thử đồ');
+      }
+    } catch (error) {
+      console.error('Try-on error:', error);
+      showErrorNotification('Lỗi', 'Có lỗi xảy ra khi thử đồ. Vui lòng thử lại.');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleReset = () => {
-    setUserImage('');
-    setSelectedProduct(null);
-    setTryOnResult('');
   };
 
   return (
@@ -55,65 +88,36 @@ const TryOn = () => {
             onImageCapture={handleImageCapture}
             capturedImage={userImage || null}
             onTryOn={handleTryOn}
-            canTryOn={!!userImage && !!selectedProduct && !isLoading}
+            canTryOn={!!userImage && !!productImageUrl && !isLoading}
+            onBack={onBack}
           />
         </Grid.Col>
 
         {/* Result section - full width */}
-        <Grid.Col span={12}>
-          <Paper withBorder p="md" radius="md" className="h-full">
+        <Grid.Col span={12} ref={resultRef}>
+          <Paper withBorder p="md" radius="md" className="">
             <Group justify="space-between" className="mb-4">
               <Text fw={600} size="lg">Kết quả</Text>
-              {tryOnResult && (
-                <Button variant="subtle" size="xs" leftSection={<FiRefreshCw size={16} />} onClick={handleReset}>
-                  Thử lại
-                </Button>
-              )}
             </Group>
 
-            <Box className="relative bg-gray-100 rounded-lg overflow-hidden" style={{ aspectRatio: '3/4', minHeight: '400px' }}>
+            <Box 
+              className="relative bg-gray-100 rounded-lg overflow-hidden w-full" 
+              style={tryOnResult ? { minHeight: '400px' } : { minHeight: '150px' }}
+            >
               <LoadingOverlay visible={isLoading} />
               {tryOnResult ? (
-                <img src={tryOnResult} alt="Try On Result" className="w-full h-full object-cover" />
+                <img src={tryOnResult} alt="Try On Result" className="w-full h-auto object-contain" />
               ) : (
-                <Box className="flex items-center justify-center h-full">
+                <Box className="flex items-center justify-center h-[150px]">
                   <Text c="dimmed">Kết quả sẽ hiển thị ở đây</Text>
                 </Box>
               )}
             </Box>
-
-            <Group justify="center" className="mt-4">
-              <Button leftSection={<FiStar size={18} />} onClick={handleTryOn} disabled={!userImage || !selectedProduct || isLoading} fullWidth size="md">
-                Thử đồ ngay
-              </Button>
-            </Group>
-
-            {tryOnResult && selectedProduct && (
-              <Box className="mt-4 p-3 bg-gray-50 rounded-lg">
-                <Text size="sm" fw={500} className="mb-2">Sản phẩm đã thử:</Text>
-                <Group>
-                  <img src={selectedProduct.thumbnailUrl} alt={selectedProduct.name} className="w-12 h-12 object-cover rounded" />
-                  <Box className="flex-1">
-                    <Text size="sm" lineClamp={1}>{selectedProduct.name}</Text>
-                    <Text size="xs" c="dimmed">{selectedProduct.shopName}</Text>
-                  </Box>
-                </Group>
-              </Box>
-            )}
           </Paper>
-        </Grid.Col>
-
-        {/* Product selection - full width */}
-        <Grid.Col span={12}>
-          <SuggestCloth
-            products={MOCK_TRYON_PRODUCTS}
-            selectedProduct={selectedProduct}
-            onSelectProduct={setSelectedProduct}
-          />
         </Grid.Col>
       </Grid>
     </Container>
   );
 };
 
-export default TryOn;
+export default TryOn;      

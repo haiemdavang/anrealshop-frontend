@@ -1,15 +1,16 @@
 import { ActionIcon, Box, Button, Group, Paper, Text } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
-import { FiCamera, FiUpload, FiX } from 'react-icons/fi';
+import { FiCamera, FiUpload, FiX, FiArrowLeft } from 'react-icons/fi';
 
 interface CameraPictureProps {
   onImageCapture: (imageData: string) => void;
   capturedImage: string | null;
   onTryOn?: () => void;
   canTryOn?: boolean;
+  onBack?: () => void;
 }
 
-const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn }: CameraPictureProps) => {
+const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBack }: CameraPictureProps) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -160,6 +161,22 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn }: Cam
   return (
     <Paper withBorder radius="md" className="bg-white shadow-sm relative">
       <Box className="relative bg-gray-100 rounded-lg overflow-hidden border border-gray-100 w-full" style={{ height: '450px' }}>
+        {/* Back button */}
+        {onBack && (
+          <Box className="absolute top-3 left-3 z-20">
+            <ActionIcon 
+              variant="filled" 
+              onClick={onBack} 
+              size="md" 
+              className="bg-white hover:bg-white text-gray-800"
+              style={{ color: '#000' }}
+              title="Quay lại"
+            >
+              <FiArrowLeft size={20} />
+            </ActionIcon>
+          </Box>
+        )}
+
         <Box className="absolute top-3 right-3 z-20 flex items-center gap-2">
           <Text fw={600} size="sm" className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md shadow-sm">
             Ảnh của bạn

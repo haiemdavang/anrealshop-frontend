@@ -1,31 +1,19 @@
-// import axios from 'axios';
+import { API_ENDPOINTS } from '../constant';
+import { axiosInstance } from './AxiosInstant';
+import type { TryOnRequest, TryOnResponse } from '../types/TryOnType';
 
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+class TryOnService {
+  async tryOn(request: TryOnRequest): Promise<TryOnResponse> {
+    const response = await axiosInstance.post<TryOnResponse>(
+      API_ENDPOINTS.TRYON.DETECT,
+      {
+        personImageBase64: request.personImageBase64,
+        productImageBase64: request.productImageBase64,
+        baseSteps: request.baseSteps || 25,
+      }
+    );
+    return response.data;
+  }
+}
 
-// export interface TryOnRequest {
-//   userImage: string; // Base64 or URL
-//   productId: string;
-//   productImageUrl: string;
-// }
-
-// export interface TryOnResponse {
-//   resultImageUrl: string;
-//   processingTime: number;
-// }
-
-// export const TryOnService = {
-//   async tryOnCloth(request: TryOnRequest): Promise<TryOnResponse> {
-//     const response = await axios.post<TryOnResponse>(
-//       `${API_BASE_URL}/try-on`,
-//       request
-//     );
-//     return response.data;
-//   },
-
-//   async getRecommendedProducts(userId?: string): Promise<any[]> {
-//     const response = await axios.get(`${API_BASE_URL}/try-on/recommended`, {
-//       params: { userId }
-//     });
-//     return response.data;
-//   }
-// };
+export default new TryOnService();

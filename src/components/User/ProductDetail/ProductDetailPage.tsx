@@ -207,6 +207,7 @@ const ProductDetailPage = () => {
                 selectedImage={selectedImage}
                 setSelectedImage={setSelectedImage}
                 onTryProduct={() => setShowTryOn(true)}
+                showTryOn={showTryOn}
               />
             </div>
           </Paper>
@@ -216,7 +217,10 @@ const ProductDetailPage = () => {
           <Paper radius="md" className="!mb-8 !bg-white !shadow-sm">
             <div className="p-4">
               {showTryOn ? (
-                <TryOn />
+                <TryOn 
+                  productImageUrl={media[selectedImage] || product.thumbnailUrl}
+                  onBack={() => setShowTryOn(false)}
+                />
               ) : (
                 <InforProduct
                   product={product}
