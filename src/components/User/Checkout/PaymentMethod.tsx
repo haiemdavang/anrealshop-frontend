@@ -74,23 +74,23 @@ const PaymentMethod = ({
           p="sm"
           py="xs"
           radius="md"
-          className="border-2 border-transparent cursor-pointer transition-all hover:!bg-gray-50"
+          className="border-2 border-transparent cursor-pointer transition-all hover:!bg-gray-50 overflow-hidden"
           onClick={() => setExpanded(true)}
         >
-          <Group gap={10}>
-            <Radio size="xs" checked={true} readOnly className="!mr-1" />
+          <Group gap={10} wrap="nowrap">
+            <Radio size="xs" checked={true} readOnly className="!mr-1 shrink-0" />
             <Box
-              className={`w-10 h-10 flex items-center justify-center rounded-md ${getIconBgColor(
+              className={`w-10 h-10 min-w-[2.5rem] flex items-center justify-center rounded-md shrink-0 ${getIconBgColor(
                 selectedMethod.id
               )}`}
             >
               {selectedMethod.icon}
             </Box>
-            <Box>
-              <Text fw={600} size="sm" className="text-slate-800">
+            <Box className="min-w-0">
+              <Text fw={600} size="sm" className="text-slate-800" truncate>
                 {selectedMethod.name}
               </Text>
-              <Text size="sm" c="dimmed">
+              <Text size="sm" c="dimmed" truncate>
                 {selectedMethod.description}
               </Text>
             </Box>
@@ -108,7 +108,7 @@ const PaymentMethod = ({
               p="sm"
               py="xs"
               radius="md"
-              className={`transition-all cursor-pointer border-2 ${
+              className={`transition-all cursor-pointer border-2 overflow-hidden ${
                 selectedPaymentMethod === method.id
                   ? "border-primary bg-picton-blue-50"
                   : "border-transparent hover:bg-gray-50"
@@ -118,24 +118,24 @@ const PaymentMethod = ({
                 setExpanded(false);
               }}
             >
-              <Group gap={10}>
+              <Group gap={10} wrap="nowrap">
                 <Radio
                   checked={selectedPaymentMethod === method.id}
                   onChange={() => setSelectedPaymentMethod(method.id)}
-                  className="!mr-1"
+                  className="!mr-1 shrink-0"
                 />
                 <Box
-                  className={`w-10 h-10 flex items-center justify-center rounded-md ${getIconBgColor(
+                  className={`w-10 h-10 min-w-[2.5rem] flex items-center justify-center rounded-md shrink-0 ${getIconBgColor(
                     method.id
                   )}`}
                 >
                   {method.icon}
                 </Box>
-                <Box>
-                  <Text fw={600} size="sm" className="text-slate-800">
+                <Box className="min-w-0">
+                  <Text fw={600} size="sm" className="text-slate-800" truncate>
                     {method.name}
                   </Text>
-                  <Text size="xs" c="dimmed">
+                  <Text size="xs" c="dimmed" truncate>
                     {method.description}
                   </Text>
                 </Box>

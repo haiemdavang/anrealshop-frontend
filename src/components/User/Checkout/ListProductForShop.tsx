@@ -90,9 +90,9 @@ const ListProduct = ({
 
                 {/* Shipping Info */}
                 <Box className="py-2 pl-3 pr-4 bg-gray-50 border-t border-gray-200">
-                  <Group justify="space-between" align="flex-start">
+                  <Group justify="space-between" align="flex-start" wrap="nowrap">
                     {/* Shipping Method */}
-                    <Box p={4}>
+                    <Box p={4} className="min-w-0 flex-1">
                       {isSuccessShipping === false ? (
                         <Alert
                           icon={<FiAlertTriangle size={16} />}
@@ -107,23 +107,23 @@ const ListProduct = ({
                         </Alert>
                       ) : (
                         <>
-                          <Group gap={4} mb={6}>
-                            <FiTruck size={14} className="text-blue-600" />
-                            <Text size="sm" fw={500} className="text-slate-800">
+                          <Group gap={4} mb={6} wrap="nowrap">
+                            <FiTruck size={14} className="text-primary shrink-0" />
+                            <Text size="sm" fw={500} className="text-slate-800" truncate>
                               Phương thức vận chuyển:
                             </Text>
-                            <Text size="sm" className="text-slate-800">
+                            <Text size="sm" className="text-slate-800" truncate>
                               {shopGroup.serviceName || 'Tiêu chuẩn'}
                             </Text>
                           </Group>
 
-                          <Text size="xs" c="dimmed" mb={4}>
+                          <Text size="xs" c="dimmed" mb={4} truncate>
                             Đảm bảo nhận hàng từ <span className='text-primary'>{getMessageDate(currentLeadTime).toLocaleLowerCase()}</span>
                           </Text>
-                          <Text size="xs" c="dimmed" mb={4}>
+                          <Text size="xs" c="dimmed" mb={4} lineClamp={2}>
                             Nhận Voucher trị giá ₫15.000 nếu đơn hàng được giao đến bạn sau {getMessageDate(currentLeadTime).toLocaleLowerCase()}.
                           </Text>
-                          <Text size="xs" c="dimmed" fw={500}>
+                          <Text size="xs" c="dimmed" fw={500} truncate>
                             Lưu ý: Sử dụng địa chỉ mua hàng trước sáp nhập
                           </Text>
                         </>
@@ -131,9 +131,9 @@ const ListProduct = ({
                     </Box>
 
                     {/* Shipping Fee with loading state */}
-                    <Box>
+                    <Box className="shrink-0 whitespace-nowrap">
                       {feeLoading ? (
-                        <Group gap={8}>
+                        <Group gap={8} wrap="nowrap">
                           <Loader size="xs" />
                           <Text size="xs" fw={700} className="text-gray-500">
                             Đang tính...
