@@ -33,6 +33,7 @@ import {
 } from "react-router-dom";
 import { AddressPage } from "./Address/AddressPage";
 import Breadcrumbs from "./Breadcrumbs";
+import Favorite from "./Favorite/Favorite";
 import Notification from "./Notification";
 import { OrderDetail } from "./OrderDetail/OrderDetailPage";
 import OrderHistory from "./OrderHistory/OrderHistoryPage";
@@ -90,7 +91,7 @@ const SettingPage = () => {
       path: "/wishlist",
       label: "Sản phẩm yêu thích",
       icon: <FiHeart size={16} />,
-      component: <div>Sản phẩm yêu thích</div>, // Placeholder component
+      component: <Favorite />,
     },
     {
       path: "/payment",

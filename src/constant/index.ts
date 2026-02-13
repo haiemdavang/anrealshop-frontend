@@ -156,6 +156,15 @@ export const API_ENDPOINTS = {
   SEARCH: {
     SUGGEST: '/public/search/suggest',
   },
+
+  FAVORITES: {
+    BASE: '/favorites',
+    REMOVE_BY_PRODUCT: (productId: string) => `/favorites/product/${productId}`,
+    REMOVE_BY_ID: (favoriteId: string) => `/favorites/${favoriteId}`,
+    CHECK: (productId: string) => `/favorites/check/${productId}`,
+    COUNT: '/favorites/count',
+    PRODUCT_IDS: '/favorites/product-ids',
+  },
 };
 
 

@@ -1,6 +1,8 @@
 import { ActionIcon, Badge, Card, Group, Image, Rating, Text } from '@mantine/core';
+import { FaHeart } from 'react-icons/fa';
 import { FiHeart } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useFavorite } from '../../../hooks/useFavorite';
 import type { UserProductDto } from '../../../types/ProductType';
 import { formatPrice } from '../../../untils/Untils';
 
@@ -10,6 +12,8 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, compact = false }) => {
+  const { isFavorite, toggleFavorite } = useFavorite();
+  const favorite = isFavorite(product.id);
   const discountPercentage = product.discountPrice ? Math.round(((product.price - product.discountPrice) / product.price) * 100) : 0;
 
   return (
@@ -64,15 +68,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact = false }) =
             )}
           </div>
 
-          <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className={`absolute top-3 right-3 z-10 flex flex-col gap-2 transition-opacity duration-300 ${favorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
             <ActionIcon
               variant="filled"
               color="white"
               size="md"
               radius="xl"
-              className="shadow-lg hover:scale-110 transition-transform duration-200 !bg-white !text-gray-700 hover:!text-red-500"
+              className={`shadow-lg hover:scale-110 transition-transform duration-200 !bg-white ${
+                favorite ? '!text-red-500' : '!text-gray-700 hover:!text-red-500'
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleFavorite(product.id);
+              }}
             >
-              <FiHeart size={16} />
+              {favorite ? <FaHeart size={16} /> : <FiHeart size={16} />}
             </ActionIcon>
           </div>
 
