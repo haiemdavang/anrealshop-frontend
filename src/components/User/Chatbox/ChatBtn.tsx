@@ -14,7 +14,9 @@ const ChatBtn = () => {
     return (
         <>
             {/* Chatbox */}
-            <ChatboxPane isOpen={isChatboxOpen} onClose={() => setIsChatboxOpen(false)} />
+            {isChatboxOpen && (
+                <ChatboxPane isOpen={isChatboxOpen} onClose={() => setIsChatboxOpen(false)} />
+            )}
 
             {/* Floating Chat Button */}
             {!isChatboxOpen && (
