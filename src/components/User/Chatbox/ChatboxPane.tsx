@@ -6,6 +6,7 @@ import { useChatRooms } from '../../../hooks/useChat';
 import type { ChatMessageResponse, ChatRoomResponse } from '../../../types/ChatType';
 import { onChatMessage, sendRead } from '../../../service/websocketClient';
 import showSuccessNotification from '../../Toast/NotificationSuccess';
+import { FiArrowLeft } from 'react-icons/fi';
 
 interface ChatboxPaneProps {
     isOpen: boolean;
@@ -26,10 +27,15 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
     const { rooms, isLoading: isLoadingRooms, updateRoomLastMessage, incrementUnread, clearUnread } = useChatRooms();
 
     const [selectedConversation, setSelectedConversation] = useState<string>('ai-1');
+    // Mobile: toggle between list view and chat view
+    const [showChatOnMobile, setShowChatOnMobile] = useState(false);
 
     // Auto-select AI conversation on voice command
     useEffect(() => {
-        const handleVoice = () => setSelectedConversation('ai-1');
+        const handleVoice = () => {
+            setSelectedConversation('ai-1');
+            setShowChatOnMobile(true);
+        };
         window.addEventListener('voice-command', handleVoice);
         return () => window.removeEventListener('voice-command', handleVoice);
     }, []);
@@ -113,16 +119,30 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                    className="fixed bottom-6 right-6 w-[700px] h-[500px] bg-white rounded-2xl shadow-2xl z-[9998] flex flex-col overflow-hidden"
+                    className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[700px] sm:h-[500px] w-full h-full bg-white sm:rounded-2xl shadow-2xl z-[9998] flex flex-col overflow-hidden"
                 >
                     {/* Header */}
                     <div className="bg-primary text-white px-4 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-2">
+                            {/* Back button on mobile when in chat view */}
+                            {showChatOnMobile && (
+                                <button
+                                    onClick={() => setShowChatOnMobile(false)}
+                                    className="sm:hidden w-7 h-7 rounded-full hover:bg-white/20 transition-colors flex items-center justify-center"
+                                >
+                                    <FiArrowLeft size={16} />
+                                </button>
+                            )}
                             <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden">
                                 <img src="/gif/gemini.gif" alt="Chat" className="w-full h-full object-cover" />
                             </div>
                             <div>
-                                <h3 className="font-semibold text-sm">Tin nhắn</h3>
+                                <h3 className="font-semibold text-sm">
+                                    {showChatOnMobile && currentConversation ? (
+                                        <span className="sm:hidden">{currentConversation.name}</span>
+                                    ) : null}
+                                    <span className={showChatOnMobile ? 'hidden sm:inline' : ''}>Tin nhắn</span>
+                                </h3>
                                 <p className="text-[10px] text-white/80">{totalConversations} cuộc hội thoại</p>
                             </div>
                         </div>
@@ -139,7 +159,7 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                     {/* Two Panel Layout */}
                     <div className="flex flex-1 overflow-hidden">
                         {/* Left Panel - Conversation List */}
-                        <div className="w-64 border-r bg-gray-50 flex flex-col">
+                        <div className={`w-full sm:w-64 border-r bg-gray-50 flex flex-col sm:flex ${showChatOnMobile ? 'hidden sm:flex' : 'flex'}`}>
                             <div className="p-3 border-b bg-white">
                                 <input
                                     type="text"
@@ -158,6 +178,7 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                                             key={conv.id}
                                             onClick={() => {
                                                 setSelectedConversation(conv.id);
+                                                setShowChatOnMobile(true);
                                                 if (conv.type === 'user') {
                                                     clearUnread(conv.id);
                                                     sendRead(conv.id);
@@ -197,7 +218,7 @@ const ChatboxPane = ({ isOpen, onClose }: ChatboxPaneProps) => {
                         </div>
 
                         {/* Right Panel - Chat Content */}
-                        <div className="flex-1 flex flex-col">
+                        <div className={`flex-1 flex flex-col ${showChatOnMobile ? 'flex' : 'hidden sm:flex'}`}>
                             {currentConversation ? (
                                 currentConversation.type === 'ai' ? (
                                     <ChatAI />
