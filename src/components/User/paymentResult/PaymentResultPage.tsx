@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from 'react';
 import { FiAlertTriangle, FiHome, FiPackage } from 'react-icons/fi';
 import { Link, useParams } from 'react-router-dom';
+import { APP_ROUTES } from '../../../constant';
 import { CheckoutService } from '../../../service/CheckoutService';
 import type { PaymentResultData } from '../../../types/PaymentResultType';
 import { getErrorMessage } from '../../../untils/ErrorUntils';
@@ -74,7 +75,7 @@ const PaymentResultPage = () => {
                             </Button>
                             <Button
                                 component={Link}
-                                to="/settings/orders"
+                                to={APP_ROUTES.USER_ORDERS}
                                 leftSection={<FiPackage size={16} />}
                                 color="blue"
                                 className="bg-primary"

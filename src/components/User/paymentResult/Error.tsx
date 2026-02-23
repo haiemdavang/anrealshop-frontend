@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { FiAlertTriangle, FiArrowLeft, FiShoppingBag } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { APP_ROUTES } from '../../../constant';
 import type { PaymentResultData } from '../../../types/PaymentResultType';
 import { formatPrice } from '../../../untils/Untils';
 import { getPaymentMethodIcon, getPaymentMethodName } from './utils';
@@ -73,7 +74,7 @@ const PaymentFailureView = ({ paymentResult }: PaymentFailureProps) => {
             </Button>
             <Button 
               component={Link} 
-              to="/carts"
+              to={APP_ROUTES.CART}
               leftSection={<FiShoppingBag size={16} />}
               color="blue" 
               className="bg-primary"

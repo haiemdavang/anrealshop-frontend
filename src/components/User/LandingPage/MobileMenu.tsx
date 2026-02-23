@@ -1,6 +1,7 @@
 import { Avatar, Button } from '@mantine/core';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { APP_ROUTES } from '../../../constant';
 
 interface NavItem {
     label: string;
@@ -45,7 +46,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
                 {!isAuthenticated ? (
                     <Button
                         component={Link}
-                        to="/login"
+                        to={APP_ROUTES.LOGIN}
                         className="bg-primary hover:bg-primary/90 mt-2"
                         leftSection={<FaSignOutAlt size={14} />}
                     >
@@ -69,22 +70,29 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
 
                         {/* User links */}
                         <Link
-                            to="/account/profile"
+                            to={APP_ROUTES.USER_PROFILE}
                             className="block py-2 font-medium text-gray-700 hover:text-primary transition-colors"
                             onClick={onClose}
                         >
                             Hồ sơ của tôi
                         </Link>
                         <Link
-                            to="/account/orders"
+                            to={APP_ROUTES.USER_ORDERS}
                             className="block py-2 font-medium text-gray-700 hover:text-primary transition-colors"
                             onClick={onClose}
                         >
                             Đơn hàng của tôi
                         </Link>
+                        <Link
+                            to={APP_ROUTES.USER_WISHLIST}
+                            className="block py-2 font-medium text-gray-700 hover:text-primary transition-colors"
+                            onClick={onClose}
+                        >
+                            Sản phẩm yêu thích
+                        </Link>
                         {user?.roles?.includes('SELLER') && (
                             <Link
-                                to="/seller/dashboard"
+                                to={APP_ROUTES.MYSHOP.DASHBOARD}
                                 className="block py-2 font-medium text-gray-700 hover:text-primary transition-colors"
                                 onClick={onClose}
                             >

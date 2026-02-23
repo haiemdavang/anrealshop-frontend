@@ -178,7 +178,7 @@ const HeaderMobile: React.FC = () => {
                             <UnstyledButton
                                 className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
                                 component={Link}
-                                to="/settings/orders"
+                                to={APP_ROUTES.USER_ORDERS}
                                 onClick={closeDrawer}
                             >
                                 <FiPackage size={20} />
@@ -188,7 +188,7 @@ const HeaderMobile: React.FC = () => {
                             <UnstyledButton
                                 className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
                                 component={Link}
-                                to="/settings/wishlist"
+                                to={APP_ROUTES.USER_WISHLIST}
                                 onClick={closeDrawer}
                             >
                                 <FiHeart size={20} />
@@ -198,7 +198,7 @@ const HeaderMobile: React.FC = () => {
                             <UnstyledButton
                                 className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
                                 component={Link}
-                                to="/settings/addresses"
+                                to={APP_ROUTES.USER_ADDRESSES}
                                 onClick={closeDrawer}
                             >
                                 <FiMapPin size={20} />
@@ -257,7 +257,7 @@ const HeaderMobile: React.FC = () => {
                             <UnstyledButton
                                 className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
                                 component={Link}
-                                to="/login"
+                                to={APP_ROUTES.LOGIN}
                                 onClick={closeDrawer}
                             >
                                 <FiLogIn size={20} />
@@ -267,7 +267,7 @@ const HeaderMobile: React.FC = () => {
                             <UnstyledButton
                                 className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
                                 component={Link}
-                                to="/register"
+                                to={APP_ROUTES.REGISTER}
                                 onClick={closeDrawer}
                             >
                                 <BiUser size={20} />

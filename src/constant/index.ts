@@ -183,6 +183,8 @@ export const APP_ROUTES = {
   USER_PROFILE: '/settings/profile',
   USER_SECURITY: '/settings/security',
   USER_ADDRESSES: '/settings/addresses',
+  USER_ORDERS: '/settings/orders',
+  USER_WISHLIST: '/settings/wishlist',
 
   PRODUCTS: '/products',
   SEARCH: '/search',

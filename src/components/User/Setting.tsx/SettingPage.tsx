@@ -31,6 +31,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { APP_ROUTES } from "../../../constant";
 import { AddressPage } from "./Address/AddressPage";
 import Breadcrumbs from "./Breadcrumbs";
 import Favorite from "./Favorite/Favorite";
@@ -296,7 +297,7 @@ const SettingPage = () => {
                   <Routes>
                     <Route
                       path="/"
-                      element={<Navigate to="/settings/profile" replace />}
+                      element={<Navigate to={APP_ROUTES.USER_PROFILE} replace />}
                     />
                     {navItems.map((item) => (
                       <Route

@@ -18,6 +18,7 @@ import {
     FiMessageSquare
 } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { APP_ROUTES } from '../../../../constant';
 import { useOrderStatus } from '../../../../hooks/useOrderStatus';
 import { OrderService } from '../../../../service/OrderService';
 import type { UserOrderDetailDto } from '../../../../types/OrderType';
@@ -108,7 +109,7 @@ export const OrderDetail = () => {
             <PageNotFound
                 title="Không tìm thấy đơn hàng"
                 description="Đơn hàng bạn đang tìm kiếm không tồn tại."
-                redirectLink="/settings/orders"
+                redirectLink={APP_ROUTES.USER_ORDERS}
                 redirectLabel="Quay lại danh sách đơn hàng"
             />
         );

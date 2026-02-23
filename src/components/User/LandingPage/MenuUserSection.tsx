@@ -69,14 +69,14 @@ const MenuUserSection = ({ user, isAuthenticated, scrolled }: MenuUserSectionPro
                         </Menu.Item>
                         <Menu.Item
                             component={Link}
-                            to="/settings/orders"
+                            to={APP_ROUTES.USER_ORDERS}
                             leftSection={<FaClipboardList size={14} />}
                         >
                             Đơn hàng của tôi
                         </Menu.Item>
                         <Menu.Item
                             component={Link}
-                            to="/account/wishlist"
+                            to={APP_ROUTES.USER_WISHLIST}
                             leftSection={<FaHeart size={14} />}
                         >
                             Sản phẩm yêu thích
@@ -114,14 +114,14 @@ const MenuUserSection = ({ user, isAuthenticated, scrolled }: MenuUserSectionPro
                         <Menu.Label>Tài khoản</Menu.Label>
                         <Menu.Item
                             component={Link}
-                            to="/login"
+                            to={APP_ROUTES.LOGIN}
                             leftSection={<FaSignInAlt size={14} />}
                         >
                             Đăng nhập
                         </Menu.Item>
                         <Menu.Item
                             component={Link}
-                            to="/register"
+                            to={APP_ROUTES.REGISTER}
                             leftSection={<FaRegUser size={14} />}
                         >
                             Đăng ký

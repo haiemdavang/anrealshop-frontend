@@ -310,14 +310,14 @@ const Header: React.FC = () => {
                                 <Menu.Item
                                   leftSection={<FiPackage size={16} />}
                                   component={Link}
-                                  to="/settings/orders"
+                                  to={APP_ROUTES.USER_ORDERS}
                                 >
                                   Đơn hàng của tôi
                                 </Menu.Item>
                                 <Menu.Item
                                   leftSection={<FiHeart size={16} />}
                                   component={Link}
-                                  to="/settings/wishlist"
+                                  to={APP_ROUTES.USER_WISHLIST}
                                 >
                                   Sản phẩm yêu thích
                                 </Menu.Item>
@@ -354,14 +354,14 @@ const Header: React.FC = () => {
                                 <Menu.Item
                                   leftSection={<FiLogIn size={16} />}
                                   component={Link}
-                                  to="/login"
+                                  to={APP_ROUTES.LOGIN}
                                 >
                                   <Text size="sm">Đăng nhập</Text>
                                 </Menu.Item>
                                 <Menu.Item
                                   leftSection={<BiUser size={16} />}
                                   component={Link}
-                                  to="/register"
+                                  to={APP_ROUTES.REGISTER}
                                 >
                                   <Text size="sm">Đăng ký</Text>
                                 </Menu.Item>
