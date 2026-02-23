@@ -62,7 +62,7 @@ import { usePorcupine } from '@picovoice/porcupine-react';
         await init(
           ACCESS_KEY,
           { 
-            publicPath: '/voice/hey-Jerry_en_wasm_v4_0_0.ppn', 
+            publicPath: '/voice/hey-jerry_en_wasm_v4_0_0.ppn', 
             label: 'hey Jerry' 
           },
           { 
