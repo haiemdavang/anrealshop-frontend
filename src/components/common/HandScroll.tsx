@@ -9,7 +9,7 @@ import showSuccessNotification from '../Toast/NotificationSuccess';
 
 // ── Constants ──────────────────────────────────────────────
 const PINCH_THRESHOLD  = 0.1;
-const SCROLL_SPEED     = 12;
+const SCROLL_SPEED     = 10;
 const IDLE_TIMEOUT     = 60_000;
 const FINGER_THRESHOLD = 0.01;
 const CURSOR_LERP      = 0.5;
