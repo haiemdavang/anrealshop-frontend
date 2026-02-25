@@ -41,6 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact = false }) =
                   height: '100%',
                   objectFit: 'cover'
                 }}
+                loading='lazy'
               />
             </div>
           </Link>

@@ -14,7 +14,7 @@ import BannerFlowCategory from "./BannerFlowCategory";
 import FilterBar from "./FilterBar";
 import SidebarCategory from "./SidebarCategory";
 
-export const ProductsPage = () => {
+const ProductsPage = () => {
   const { getParam, updateParams } = useURLParams();
   const [products, setProducts] = useState<UserProductDto[]>([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -232,3 +232,5 @@ export const ProductsPage = () => {
     </div>
   );
 };
+
+export default ProductsPage;

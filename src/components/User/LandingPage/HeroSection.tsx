@@ -167,6 +167,7 @@ export const HeroSection = () => {
                     loop
                     playsInline
                     className="h-full w-full object-cover"
+                    preload='metadata'
                 >
                     <source src={slide.src} type="video/mp4" />
                     Your browser does not support the video tag.

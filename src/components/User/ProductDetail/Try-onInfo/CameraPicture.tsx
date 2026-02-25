@@ -1,6 +1,8 @@
 import { ActionIcon, Box, Button, Group, Paper, Text } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { FiCamera, FiUpload, FiX, FiArrowLeft } from 'react-icons/fi';
+import BodyAnalyzer from './BodyAnalyzer';
+import showErrorNotification from '../../../Toast/NotificationError';
 
 interface CameraPictureProps {
   onImageCapture: (imageData: string) => void;
@@ -55,6 +57,7 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
       }
     };
   }, [stream]);
+
 
   const startCamera = async () => {
     setError('');
@@ -132,11 +135,11 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      alert('Vui lòng chọn file ảnh');
+      showErrorNotification('Lỗi chọn file', 'Vui lòng chọn file ảnh');
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      alert('Kích thước file không được vượt quá 5MB');
+      showErrorNotification('Lỗi chọn file', 'Kích thước file không được vượt quá 5MB');
       return;
     }
 
@@ -146,7 +149,7 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
       onImageCapture(data);
       setShowCamera(false);
     };
-    reader.onerror = () => alert('Không thể đọc file. Vui lòng thử lại.');
+    reader.onerror = () => showErrorNotification('Lỗi khi tải ảnh', 'Không thể đọc file. Vui lòng thử lại.');
     reader.readAsDataURL(file);
   };
 
@@ -200,6 +203,7 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
               style={{ transform: 'scaleX(-1)', backgroundColor: '#000' }}
               onCanPlay={() => setIsVideoReady(true)}
             />
+            <BodyAnalyzer videoRef={videoRef} isActive={showCamera} isVideoReady={isVideoReady} />
             {!isVideoReady && (
               <Box className="absolute inset-0 flex items-center justify-center bg-gray-100/90 z-10">
                 <Text c="dimmed">Đang khởi động camera...</Text>

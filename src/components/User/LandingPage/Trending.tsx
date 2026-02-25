@@ -237,6 +237,7 @@ const Trending = ({ id }: TrendingProps) => {
                       loop
                       playsInline
                       className="w-full h-full object-cover"
+                      preload='metadata'
                     >
                       <source
                         src={videoCategory.thumbnailUrl}

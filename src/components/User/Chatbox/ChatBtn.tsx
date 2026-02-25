@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import ChatboxPane from './ChatboxPane';
+import { useState, useEffect, lazy } from 'react';
+const ChatboxPane = lazy(() => import('./ChatboxPane'));
 
 const ChatBtn = () => {
     const [isChatboxOpen, setIsChatboxOpen] = useState(false);
