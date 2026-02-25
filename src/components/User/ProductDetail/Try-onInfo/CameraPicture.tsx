@@ -1,7 +1,7 @@
 import { ActionIcon, Box, Button, Group, Paper, Text } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { FiCamera, FiUpload, FiX, FiArrowLeft } from 'react-icons/fi';
-import BodyAnalyzer from './BodyAnalyzer';
+// import BodyAnalyzer from './BodyAnalyzer';
 import showErrorNotification from '../../../Toast/NotificationError';
 
 interface CameraPictureProps {
@@ -203,7 +203,7 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
               style={{ transform: 'scaleX(-1)', backgroundColor: '#000' }}
               onCanPlay={() => setIsVideoReady(true)}
             />
-            <BodyAnalyzer videoRef={videoRef} isActive={showCamera} isVideoReady={isVideoReady} />
+            {/* <BodyAnalyzer videoRef={videoRef} isActive={showCamera} isVideoReady={isVideoReady} /> */}
             {!isVideoReady && (
               <Box className="absolute inset-0 flex items-center justify-center bg-gray-100/90 z-10">
                 <Text c="dimmed">Đang khởi động camera...</Text>
