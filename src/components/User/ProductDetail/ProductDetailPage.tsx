@@ -17,7 +17,9 @@ import type { MyShopProductSkuDto, ProductDetailDto } from '../../../types/Produ
 import PageNotFound from '../../common/PageNotFound';
 import Breadcrumbs from './Breadcrumbs';
 import ImageProduct from './ImageProduct';
+import { mockAverageRating, mockRatingDistribution, mockReviews, mockTotalReviews } from './MockData';
 import InforProduct from './productInfo/InforProduct';
+import ProductRate from './ProductRate';
 import TryOn from './Try-onInfo/Try-on';
 
 
@@ -234,6 +236,13 @@ const ProductDetailPage = () => {
           </Paper>
         </Grid.Col>
       </Grid>
+
+      <ProductRate
+        reviews={mockReviews}
+        averageRating={mockAverageRating}
+        totalReviews={mockTotalReviews}
+        ratingDistribution={mockRatingDistribution}
+      />
     </Container>
   );
 };

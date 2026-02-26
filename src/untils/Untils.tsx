@@ -111,3 +111,14 @@ export function formatStringView(input: string): string {
   if (!input) return '';
   return input[0].toUpperCase() + input.slice(1).toLowerCase();
 }
+
+export const formatRelativeDate = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'Hôm nay';
+  if (diffDays === 1) return 'Hôm qua';
+  if (diffDays < 7) return `${diffDays} ngày trước`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} tuần trước`;
+  return format(date, 'dd/MM/yyyy', { locale: vi });
+};

@@ -1,8 +1,8 @@
 import { ActionIcon, Box, Group, Image, LoadingOverlay, ScrollArea, Stack, Button } from '@mantine/core';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import ZoomViewModal from './ZoomViewModal';
 
 interface ImageProductProps {
   media: string[];
@@ -219,123 +219,14 @@ const ImageProduct = ({
       </Box>
 
       {/* Zoomed View Modal */}
-      {zoomedView && createPortal(
-        <div
-          className="!fixed !top-0 !left-0 !right-0 bottom-0 bg-black/90 !z-[999] flex items-center justify-center"
-          onClick={() => setZoomedView(false)}
-          style={{ backdropFilter: 'blur(2px)' }}
-        >
-          {/* Close button */}
-          <ActionIcon
-            style={{
-              position: 'absolute',
-              top: '16px',
-              right: '16px',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              color: 'white'
-            }}
-            className="hover:bg-black/70"
-            variant="filled"
-            radius="xl"
-            size="lg"
-            onClick={() => setZoomedView(false)}
-          >
-            <FiX size={24} />
-          </ActionIcon>
-
-          {/* Zoomed image container */}
-          <div
-            className="relative"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              maxWidth: '90vw',
-              maxHeight: '80vh'
-            }}
-          >
-            <Image
-              src={media[selectedImage] || thumbnailUrl}
-              className="max-h-[80vh] max-w-[90vw] object-contain"
-              alt={`${productName} - zoomed view`}
-            />
-          </div>
-
-          {/* Navigation in zoomed view */}
-          {media.length > 1 && (
-            <div className="absolute top-1/2 w-full flex justify-between px-6" style={{ transform: 'translateY(-50%)' }}>
-              <ActionIcon
-                variant="filled"
-                radius="xl"
-                size="xl"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePrevImage();
-                }}
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  color: 'white'
-                }}
-                className="hover:bg-black/50"
-              >
-                <FiChevronLeft size={24} />
-              </ActionIcon>
-              <ActionIcon
-                variant="filled"
-                radius="xl"
-                size="xl"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleNextImage();
-                }}
-                style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                  color: 'white'
-                }}
-                className="hover:bg-black/50"
-              >
-                <FiChevronRight size={24} />
-              </ActionIcon>
-            </div>
-          )}
-
-          {/* Thumbnails in zoomed view */}
-          {media.length > 1 && (
-            <div
-              className="absolute left-1/2 transform -translate-x-1/2"
-              style={{ bottom: '24px' }}
-            >
-              <ScrollArea className="w-auto">
-                <Group className="bg-black/20 p-2 rounded-lg" gap="xs">
-                  {media.map((imgUrl, idx) => (
-                    <Box
-                      key={`zoom-${idx}`}
-                      className={`cursor-pointer overflow-hidden border-2 rounded-md transition-all ${selectedImage === idx ? 'border-white' : 'border-transparent hover:border-gray-400'
-                        }`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedImage(idx);
-                      }}
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        opacity: selectedImage === idx ? 1 : 0.7
-                      }}
-                    >
-                      <Image
-                        src={imgUrl}
-                        height={50}
-                        width={50}
-                        fit="cover"
-                        className="object-cover w-[50px] h-[50px] rounded"
-                        alt={`${productName} - thumbnail ${idx + 1}`}
-                      />
-                    </Box>
-                  ))}
-                </Group>
-              </ScrollArea>
-            </div>
-          )}
-        </div>, document.body
-      )}
+      <ZoomViewModal
+        opened={zoomedView}
+        onClose={() => setZoomedView(false)}
+        images={media}
+        selectedIndex={selectedImage}
+        onSelectIndex={setSelectedImage}
+        altPrefix={productName}
+      />
     </>
   );
 };

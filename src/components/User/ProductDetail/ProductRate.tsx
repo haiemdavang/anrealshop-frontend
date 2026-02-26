@@ -1,22 +1,23 @@
 import {
   Avatar,
-  Badge,
   Box,
   Button,
+  Divider,
   Group,
   Image,
-  Modal,
-  Pagination,
   Paper,
   Progress,
   Rating,
-  SimpleGrid,
   Stack,
   Text,
   Title
 } from '@mantine/core';
-import { useState } from 'react';
-import { FiImage, FiMessageSquare, FiShare2, FiStar, FiThumbsUp } from 'react-icons/fi';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useMemo, useRef, useState } from 'react';
+import { FiCamera, FiStar } from 'react-icons/fi';
+import { formatRelativeDate } from '../../../untils/Untils';
+import PaginationCustom from '../../common/PaginationCustom';
+import ZoomViewModal from './ZoomViewModal';
 
 interface ProductReviewMedia {
   id: string;
@@ -55,278 +56,287 @@ const ProductRate = ({
   reviews,
   averageRating,
   totalReviews,
-  ratingDistribution = {
-    5: Math.round(Math.random() * 100),
-    4: Math.round(Math.random() * 60),
-    3: Math.round(Math.random() * 30),
-    2: Math.round(Math.random() * 15),
-    1: Math.round(Math.random() * 10),
-  }
+  ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
 }: ProductRateProps) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const rateRef = useRef<HTMLDivElement>(null);
+  const [zoomImages, setZoomImages] = useState<string[]>([]);
+  const [zoomIndex, setZoomIndex] = useState(0);
+  const [zoomOpened, setZoomOpened] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterRating, setFilterRating] = useState<number | null>(null);
   const [showWithImages, setShowWithImages] = useState(false);
-  
-  // Calculate total ratings for distribution percentages
-  const totalRatings = Object.values(ratingDistribution).reduce((a, b) => a + b, 0) || 1;
-  
-  // Format date
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return new Intl.DateTimeFormat('vi-VN', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric'
-    }).format(date);
+
+  const scrollToTop = () => {
+    rateRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
-  
-  // Filter reviews
-  const filteredReviews = reviews.filter(review => {
-    if (filterRating && review.rating !== filterRating) return false;
-    if (showWithImages && review.media.length === 0) return false;
-    return true;
-  });
-  
-  // Pagination
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    scrollToTop();
+  };
+
+  const totalRatings = Object.values(ratingDistribution).reduce((a, b) => a + b, 0) || 1;
+
+  const filteredReviews = useMemo(() => {
+    return reviews.filter(review => {
+      if (filterRating && review.rating !== filterRating) return false;
+      if (showWithImages && review.media.length === 0) return false;
+      return true;
+    });
+  }, [reviews, filterRating, showWithImages]);
+
   const itemsPerPage = 5;
   const totalPages = Math.ceil(filteredReviews.length / itemsPerPage);
   const displayedReviews = filteredReviews.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  
-  // Get count of reviews with images
-  const reviewsWithImagesCount = reviews.filter(review => review.media.length > 0).length;
-  
-  // Review image gallery
-  const allImages = reviews.flatMap(review => 
-    review.media.filter(media => media.mediaType === 'IMAGE').map(media => ({
-      url: media.mediaUrl,
-      reviewId: review.id
-    }))
-  );
+
+  const reviewsWithImagesCount = reviews.filter(r => r.media.length > 0).length;
+
+  const allImages = useMemo(() => {
+    return reviews.flatMap(review =>
+      review.media.filter(m => m.mediaType === 'IMAGE').map(m => ({ url: m.mediaUrl, reviewId: review.id }))
+    );
+  }, [reviews]);
+
+  const openGalleryZoom = (index: number) => {
+    setZoomImages(allImages.map(img => img.url));
+    setZoomIndex(index);
+    setZoomOpened(true);
+  };
+
+  const openReviewZoom = (review: ProductReview, mediaIndex: number) => {
+    const reviewImages = review.media.filter(m => m.mediaType === 'IMAGE').map(m => m.mediaUrl);
+    setZoomImages(reviewImages);
+    setZoomIndex(mediaIndex);
+    setZoomOpened(true);
+  };
 
   return (
     <>
-      <Paper radius="md" className="bg-white shadow-sm mb-8">
-        <Box className="p-6">
-          <Title order={3} className="mb-6">Đánh giá sản phẩm</Title>
-          
-          {/* Rating summary */}
-          <SimpleGrid cols={{ base: 1, sm: 2 }} className="mb-8">
-            <Box className="flex flex-col items-center justify-center">
-              <Text size="2rem" fw={700} className="text-primary">{averageRating.toFixed(1)}/5</Text>
-              <Rating value={averageRating} fractions={2} readOnly size="lg" className="mb-2" />
-              <Text size="sm" c="dimmed">{totalReviews} đánh giá</Text>
+      <Paper ref={rateRef} radius="md" className="!bg-white !shadow-sm !mb-6">
+        <Box className="p-5">
+          <Title order={4} className="!mb-5">Đánh giá sản phẩm</Title>
+
+          {/* Rating Summary */}
+          <Box className="flex flex-col sm:flex-row gap-6 mb-5">
+            <Box className="flex flex-col items-center justify-center min-w-[140px] py-3">
+              <Text className="!text-4xl !font-bold text-primary">{averageRating.toFixed(1)}</Text>
+              <Text size="xs" c="dimmed" className="!mb-1">trên 5</Text>
+              <Rating value={averageRating} fractions={4} readOnly size="md" />
+              <Text size="xs" c="dimmed" className="!mt-2">{totalReviews} đánh giá</Text>
             </Box>
-            
-            <Stack className="flex-1">
-              {[5, 4, 3, 2, 1].map((star) => (
-                <Group key={star} justify="apart" className="flex-nowrap" gap="xs">
-                  <Group className="flex-nowrap" gap="xs" w="70px">
-                    <Text size="sm">{star}</Text>
-                    <FiStar size={14} />
-                  </Group>
-                  <Box className="flex-1">
-                    <Progress 
-                      value={(ratingDistribution[star as keyof typeof ratingDistribution] / totalRatings) * 100} 
-                      color={star > 3 ? 'green' : star > 2 ? 'yellow' : 'red'}
-                    />
-                  </Box>
-                  <Text size="sm" className="w-40px text-right">
-                    {ratingDistribution[star as keyof typeof ratingDistribution]}
-                  </Text>
-                </Group>
-              ))}
-            </Stack>
-          </SimpleGrid>
-          
-          {/* Filters */}
-          <Box className="mb-6">
-            <Group>
-              <Button 
-                variant={!filterRating ? 'filled' : 'outline'} 
-                size="xs"
-                onClick={() => {
-                  setFilterRating(null);
-                  setCurrentPage(1);
-                }}
-              >
-                Tất cả
-              </Button>
-              {[5, 4, 3, 2, 1].map(star => (
-                <Button
-                  key={`filter-${star}`}
-                  variant={filterRating === star ? 'filled' : 'outline'}
-                  size="xs"
-                  leftSection={<FiStar size={14} />}
-                  onClick={() => {
-                    setFilterRating(filterRating === star ? null : star);
-                    setCurrentPage(1);
-                  }}
-                >
-                  {star}
-                </Button>
-              ))}
-              <Button
-                variant={showWithImages ? 'filled' : 'outline'}
-                size="xs"
-              leftSection={<FiImage size={14} />}
-                onClick={() => {
-                  setShowWithImages(!showWithImages);
-                  setCurrentPage(1);
-                }}
-              >
-                Có hình ảnh ({reviewsWithImagesCount})
-              </Button>
-            </Group>
+
+            <Divider orientation="vertical" className="!hidden sm:!block" />
+
+            <Box className="flex-1">
+              <Stack gap={6}>
+                {([5, 4, 3, 2, 1] as const).map((star) => {
+                  const count = ratingDistribution[star];
+                  const percent = (count / totalRatings) * 100;
+                  return (
+                    <Group key={star} gap="xs" wrap="nowrap" className="cursor-pointer" onClick={() => { setFilterRating(filterRating === star ? null : star); setCurrentPage(1); setShowReviews(true); }}>
+                      <Group gap={4} wrap="nowrap" w={40} justify="flex-end">
+                        <Text size="sm" fw={500}>{star}</Text>
+                        <FiStar size={12} className="text-yellow-400 fill-yellow-400" />
+                      </Group>
+                      <Progress value={percent} size="sm" radius="xl" className="flex-1" />
+                      <Text size="xs" c="dimmed" w={28} className="text-right">{count}</Text>
+                    </Group>
+                  );
+                })}
+              </Stack>
+            </Box>
           </Box>
-          
-          {/* Image gallery */}
-          {allImages.length > 0 && (
-            <Box className="mb-6">
-              <Text fw={600} className="mb-2">Hình ảnh từ người dùng ({allImages.length})</Text>
-              <Group>
-                {allImages.slice(0, 8).map((image, index) => (
-                  <Box 
-                    key={`gallery-${index}`}
-                    className="w-[100px] h-[100px] cursor-pointer overflow-hidden border border-gray-200 rounded hover:border-primary transition-all"
-                    onClick={() => setSelectedImage(image.url)}
+
+          {/* "Xem thêm" or reviews section */}
+          <AnimatePresence mode="wait">
+          {!showReviews ? (
+            <motion.div
+              key="show-more"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Group justify="flex-end" className="mt-2">
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  onClick={() => setShowReviews(true)}
+                >
+                  Xem {totalReviews} đánh giá &rarr;
+                </Button>
+              </Group>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="reviews"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <Divider className="!mb-0" />
+
+              {/* Filters */}
+              <Group gap={6} className="my-4 flex-wrap">
+                <Button
+                  variant={!filterRating && !showWithImages ? 'filled' : 'default'}
+                  size="xs"
+                  radius="md"
+                  onClick={() => { setFilterRating(null); setShowWithImages(false); setCurrentPage(1); }}
+                >
+                  Tất cả
+                </Button>
+                {([5, 4, 3, 2, 1] as const).map(star => (
+                  <Button
+                    key={star}
+                    variant={filterRating === star ? 'filled' : 'default'}
+                    size="xs"
+                    radius="md"
+                    leftSection={<FiStar size={11} />}
+                    onClick={() => { setFilterRating(filterRating === star ? null : star); setCurrentPage(1); }}
                   >
-                    <Image 
-                      src={image.url} 
-                      alt={`Review image ${index + 1}`} 
-                      width={100} 
-                      height={100} 
-                      fit="cover" 
-                    />
-                  </Box>
+                    {star} ({ratingDistribution[star]})
+                  </Button>
                 ))}
-                {allImages.length > 8 && (
-                  <Box className="w-[100px] h-[100px] cursor-pointer overflow-hidden border border-gray-200 rounded-md flex items-center justify-center bg-gray-50">
-                    <Text size="sm" fw={500} className="text-primary">
-                      +{allImages.length - 8} ảnh
-                    </Text>
+                <Button
+                  variant={showWithImages ? 'filled' : 'default'}
+                  size="xs"
+                  radius="md"
+                  leftSection={<FiCamera size={11} />}
+                  onClick={() => { setShowWithImages(!showWithImages); setCurrentPage(1); }}
+                >
+                  Có ảnh ({reviewsWithImagesCount})
+                </Button>
+              </Group>
+
+              {/* Image Gallery */}
+              {allImages.length > 0 && (
+                <Box className="mb-4">
+                  <Group gap={8}>
+                    {allImages.slice(0, 6).map((image, index) => (
+                      <Box
+                        key={`gallery-${index}`}
+                        className="w-[72px] h-[72px] cursor-pointer overflow-hidden rounded-md border border-gray-200 hover:border-primary transition-colors"
+                        onClick={() => openGalleryZoom(index)}
+                      >
+                        <Image src={image.url} alt={`Ảnh ${index + 1}`} w={72} h={72} fit="cover" />
+                      </Box>
+                    ))}
+                    {allImages.length > 6 && (
+                      <Box
+                        className="w-[72px] h-[72px] cursor-pointer overflow-hidden rounded-md border border-gray-200 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors"
+                        onClick={() => openGalleryZoom(6)}
+                      >
+                        <Text size="xs" fw={600} c="dimmed">+{allImages.length - 6}</Text>
+                      </Box>
+                    )}
+                  </Group>
+                </Box>
+              )}
+
+              <Divider className="!mb-0" />
+
+              {/* Review List */}
+              <Stack gap={0}>
+                {displayedReviews.length > 0 ? (
+                  displayedReviews.map((review, index) => (
+                    <motion.div
+                      key={review.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: index * 0.05 }}
+                    >
+                      <Box className="py-4">
+                        <Group justify="space-between" align="flex-start" className="mb-2">
+                          <Group gap="sm">
+                            <Avatar src={review.user.avatarUrl} radius="xl" size={38} color="blue">
+                              {(review.user.fullName || review.user.username).charAt(0).toUpperCase()}
+                            </Avatar>
+                            <div>
+                              <Text size="sm" fw={600}>{review.user.fullName || review.user.username}</Text>
+                              <Rating value={review.rating} readOnly size="xs" className="mt-0.5" />
+                            </div>
+                          </Group>
+                          <Text size="xs" c="dimmed">{formatRelativeDate(review.createdAt)}</Text>
+                        </Group>
+
+                        {review.comment && (
+                          <Text size="sm" className="!text-gray-700 !leading-relaxed ml-[50px] mb-2">
+                            {review.comment}
+                          </Text>
+                        )}
+
+                        {review.media.length > 0 && (
+                          <Group gap={6} className="ml-[50px] mb-2">
+                            {review.media.map((m, idx) => (
+                              <Box
+                                key={`${review.id}-${idx}`}
+                                className="w-[64px] h-[64px] cursor-pointer overflow-hidden rounded-md border border-gray-200 hover:border-primary transition-colors"
+                                onClick={() => openReviewZoom(review, idx)}
+                              >
+                                <Image src={m.mediaUrl} w={64} h={64} fit="cover" alt={`Ảnh ${idx + 1}`} />
+                              </Box>
+                            ))}
+                          </Group>
+                        )}
+                      </Box>
+                      {index < displayedReviews.length - 1 && <Divider />}
+                    </motion.div>
+                  ))
+                ) : (
+                  <Box className="py-10 text-center">
+                    <FiStar size={36} className="mx-auto mb-2 text-gray-300" />
+                    <Text size="sm" c="dimmed">Không có đánh giá phù hợp</Text>
+                    <Button
+                      variant="subtle"
+                      size="xs"
+                      className="mt-2"
+                      onClick={() => { setFilterRating(null); setShowWithImages(false); setCurrentPage(1); }}
+                    >
+                      Xóa bộ lọc
+                    </Button>
                   </Box>
                 )}
-              </Group>
-            </Box>
-          )}
-          
-          {/* Review list */}
-          <Stack>
-            {displayedReviews.length > 0 ? (
-              displayedReviews.map((review) => (
-                <Paper key={review.id} withBorder p="md" className="hover:bg-gray-50 transition-colors">
-                  <Group justify="apart" className="mb-2">
-                    <Group>
-                      <Avatar src={review.user.avatarUrl} radius="xl" color="blue">
-                        {review.user.fullName?.substring(0, 2) || review.user.username.substring(0, 2)}
-                      </Avatar>
-                      <div>
-                        <Text fw={600}>{review.user.fullName || review.user.username}</Text>
-                        <Group gap={5}>
-                          <Rating value={review.rating} readOnly size="xs" />
-                          <Text size="xs" c="dimmed">· {formatDate(review.createdAt)}</Text>
-                        </Group>
-                      </div>
-                    </Group>
-                    <Badge color={review.rating > 3 ? 'green' : review.rating > 2 ? 'yellow' : 'red'}>
-                      {review.rating} sao
-                    </Badge>
-                  </Group>
-                  
-                  {review.comment && (
-                    <Text size="sm" className="mb-3">
-                      {review.comment}
-                    </Text>
-                  )}
-                  
-                  {review.media.length > 0 && (
-                    <Group className="mt-2">
-                      {review.media.map((media, idx) => (
-                        <Box 
-                          key={`review-${review.id}-media-${idx}`} 
-                          className="w-[80px] h-[80px] cursor-pointer overflow-hidden border border-gray-200 rounded"
-                          onClick={() => setSelectedImage(media.mediaUrl)}
-                        >
-                          <Image 
-                            src={media.mediaUrl} 
-                            width={80} 
-                            height={80} 
-                            fit="cover" 
-                            alt={`Ảnh đánh giá ${idx+1}`}
-                          />
-                        </Box>
-                      ))}
-                    </Group>
-                  )}
-                  
-                  <Group justify="apart" className="mt-3">
-                    <Group gap={5}>
-                      <Button variant="subtle" size="xs"  leftSection={<FiThumbsUp size={14} />} >
-                        Hữu ích
-                      </Button>
-                      <Button variant="subtle" size="xs"  leftSection={<FiMessageSquare size={14} />} >
-                        Bình luận
-                      </Button>
-                    </Group>
-                    <Button variant="subtle" size="xs"  leftSection={<FiShare2 size={14} />} >
-                      Chia sẻ
-                    </Button>
-                  </Group>
-                </Paper>
-              ))
-            ) : (
-              <Box className="py-8 text-center">
-                <FiStar size={40} className="mx-auto mb-3 text-gray-300" />
-                <Text fw={500}>Không có đánh giá phù hợp với bộ lọc</Text>
-                <Button 
-                  variant="subtle" 
-                  className="mt-2"
-                  onClick={() => {
-                    setFilterRating(null);
-                    setShowWithImages(false);
-                  }}
+              </Stack>
+
+              <Group justify="space-between" align="center" className="mt-4">
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  onClick={() => { setShowReviews(false); scrollToTop(); }}
                 >
-                  Xóa bộ lọc
+                  Thu gọn
                 </Button>
-              </Box>
-            )}
-            
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <Group justify="center" className="mt-4">
-                <Pagination 
-                  total={totalPages} 
-                  value={currentPage} 
-                  onChange={setCurrentPage} 
-                  siblings={1}
-                  boundaries={1}
-                />
+                {totalPages > 1 && (
+                  <PaginationCustom
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={filteredReviews.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={handlePageChange}
+                  />
+                )}
               </Group>
-            )}
-          </Stack>
+            </motion.div>
+          )}
+          </AnimatePresence>
         </Box>
       </Paper>
-      
-      {/* Image preview modal */}
-      <Modal
-        opened={!!selectedImage}
-        onClose={() => setSelectedImage(null)}
-        withCloseButton
-        size="lg"
-        padding={0}
-        centered
-      >
-        <Image 
-          src={selectedImage || ''} 
-          alt="Preview" 
-          fit="contain"
-          height={500}
-        />
-      </Modal>
+
+      <ZoomViewModal
+        opened={zoomOpened}
+        onClose={() => setZoomOpened(false)}
+        images={zoomImages}
+        selectedIndex={zoomIndex}
+        onSelectIndex={setZoomIndex}
+        altPrefix="Ảnh đánh giá"
+      />
     </>
   );
 };
