@@ -1,5 +1,6 @@
 import type { ProductAttribute, ProductAttributeSingleValue } from "./AttributeType";
 import type { MediaDto } from "./CommonType";
+import type { ProductReviewDto, ReviewSummaryDto } from "./PreviewType";
 import type { BaseShopDto } from "./ShopType";
 
 export interface ProductCreateRequest {
@@ -115,6 +116,9 @@ export interface ProductDetailDto {
   medias?: MediaDto[];
   attributes?: ProductAttribute[];
   productSkus?: MyShopProductSkuDto[];
+
+  reviews: ProductReviewDto[];
+  reviewSummary: ReviewSummaryDto;
 }
 
 export interface UserProductDto {

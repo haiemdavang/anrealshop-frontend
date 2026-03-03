@@ -165,6 +165,11 @@ export const API_ENDPOINTS = {
     COUNT: '/favorites/count',
     PRODUCT_IDS: '/favorites/product-ids',
   },
+
+  REVIEWS: {
+    CREATE: '/reviews',
+    GET_BY_PRODUCT: (productId: string) => `/reviews/product/${productId}`,
+  },
 };
 
 

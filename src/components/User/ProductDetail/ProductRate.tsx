@@ -15,49 +15,29 @@ import {
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo, useRef, useState } from 'react';
 import { FiCamera, FiStar } from 'react-icons/fi';
+import type { ProductReviewDto, ReviewSummaryDto } from '../../../types/PreviewType';
 import { formatRelativeDate } from '../../../untils/Untils';
 import PaginationCustom from '../../common/PaginationCustom';
 import ZoomViewModal from './ZoomViewModal';
 
-interface ProductReviewMedia {
-  id: string;
-  mediaUrl: string;
-  mediaType: 'IMAGE' | 'VIDEO';
-}
-
-interface ProductReview {
-  id: string;
-  rating: number;
-  comment?: string;
-  createdAt: string;
-  user: {
-    id: string;
-    username: string;
-    fullName?: string;
-    avatarUrl?: string;
-  };
-  media: ProductReviewMedia[];
-}
-
 interface ProductRateProps {
-  reviews: ProductReview[];
-  averageRating: number;
-  totalReviews: number;
-  ratingDistribution?: {
-    5: number;
-    4: number;
-    3: number;
-    2: number;
-    1: number;
-  };
+  reviews: ProductReviewDto[];
+  reviewSummary: ReviewSummaryDto;
 }
 
 const ProductRate = ({
   reviews,
-  averageRating,
-  totalReviews,
-  ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+  reviewSummary,
 }: ProductRateProps) => {
+  const averageRating = reviewSummary?.averageRating ?? 0;
+  const totalReviews = reviewSummary?.totalReviews ?? 0;
+  const ratingDistribution = {
+    5: reviewSummary?.fiveStar ?? 0,
+    4: reviewSummary?.fourStar ?? 0,
+    3: reviewSummary?.threeStar ?? 0,
+    2: reviewSummary?.twoStar ?? 0,
+    1: reviewSummary?.oneStar ?? 0,
+  };
   const rateRef = useRef<HTMLDivElement>(null);
   const [zoomImages, setZoomImages] = useState<string[]>([]);
   const [zoomIndex, setZoomIndex] = useState(0);
@@ -81,7 +61,7 @@ const ProductRate = ({
   const filteredReviews = useMemo(() => {
     return reviews.filter(review => {
       if (filterRating && review.rating !== filterRating) return false;
-      if (showWithImages && review.media.length === 0) return false;
+      if (showWithImages && (!review.mediaList || review.mediaList.length === 0)) return false;
       return true;
     });
   }, [reviews, filterRating, showWithImages]);
@@ -93,11 +73,11 @@ const ProductRate = ({
     currentPage * itemsPerPage
   );
 
-  const reviewsWithImagesCount = reviews.filter(r => r.media.length > 0).length;
+  const reviewsWithImagesCount = reviews.filter(r => r.mediaList && r.mediaList.length > 0).length;
 
   const allImages = useMemo(() => {
     return reviews.flatMap(review =>
-      review.media.filter(m => m.mediaType === 'IMAGE').map(m => ({ url: m.mediaUrl, reviewId: review.id }))
+      (review.mediaList ?? []).filter(m => m.type === 'IMAGE').map(m => ({ url: m.url, reviewId: review.id }))
     );
   }, [reviews]);
 
@@ -107,8 +87,8 @@ const ProductRate = ({
     setZoomOpened(true);
   };
 
-  const openReviewZoom = (review: ProductReview, mediaIndex: number) => {
-    const reviewImages = review.media.filter(m => m.mediaType === 'IMAGE').map(m => m.mediaUrl);
+  const openReviewZoom = (review: ProductReviewDto, mediaIndex: number) => {
+    const reviewImages = (review.mediaList ?? []).filter(m => m.type === 'IMAGE').map(m => m.url);
     setZoomImages(reviewImages);
     setZoomIndex(mediaIndex);
     setZoomOpened(true);
@@ -255,11 +235,11 @@ const ProductRate = ({
                       <Box className="py-4">
                         <Group justify="space-between" align="flex-start" className="mb-2">
                           <Group gap="sm">
-                            <Avatar src={review.user.avatarUrl} radius="xl" size={38} color="blue">
-                              {(review.user.fullName || review.user.username).charAt(0).toUpperCase()}
+                            <Avatar src={review.userAvatarUrl} radius="xl" size={38} color="blue">
+                              {(review.userName ?? '').charAt(0).toUpperCase()}
                             </Avatar>
                             <div>
-                              <Text size="sm" fw={600}>{review.user.fullName || review.user.username}</Text>
+                              <Text size="sm" fw={600}>{review.userName}</Text>
                               <Rating value={review.rating} readOnly size="xs" className="mt-0.5" />
                             </div>
                           </Group>
@@ -272,15 +252,15 @@ const ProductRate = ({
                           </Text>
                         )}
 
-                        {review.media.length > 0 && (
+                        {review.mediaList && review.mediaList.length > 0 && (
                           <Group gap={6} className="ml-[50px] mb-2">
-                            {review.media.map((m, idx) => (
+                            {review.mediaList.map((m, idx) => (
                               <Box
                                 key={`${review.id}-${idx}`}
                                 className="w-[64px] h-[64px] cursor-pointer overflow-hidden rounded-md border border-gray-200 hover:border-primary transition-colors"
                                 onClick={() => openReviewZoom(review, idx)}
                               >
-                                <Image src={m.mediaUrl} w={64} h={64} fit="cover" alt={`Ảnh ${idx + 1}`} />
+                                <Image src={m.url} w={64} h={64} fit="cover" alt={`Ảnh ${idx + 1}`} />
                               </Box>
                             ))}
                           </Group>

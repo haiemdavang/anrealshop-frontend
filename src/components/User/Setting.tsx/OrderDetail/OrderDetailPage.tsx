@@ -82,7 +82,8 @@ export const OrderDetail = () => {
                     setActiveStep(2);
                     break;
                 case 'DELIVERED':
-                    setActiveStep(orderDetail.isReviewed ? 4 : 3);
+                case 'SUCCESS':
+                    setActiveStep(orderDetail.reviewed ? 4 : 3);
                     break;
                 case 'CLOSED':
                     setActiveStep(5);
@@ -145,7 +146,7 @@ export const OrderDetail = () => {
                 <Action
                     status={orderDetail.shopOrderStatus}
                     statusLabel={getStatusLabel(orderDetail.shopOrderStatus)}
-                    isReviewed={orderDetail.isReviewed}
+                    isReviewed={orderDetail.reviewed}
                     handleCancelOrder={handleCancelOrder}
                     orderDetail={orderDetail}
                 />
@@ -231,8 +232,8 @@ export const OrderDetail = () => {
                                             )}
                                         </Group>
 
-                                        {product.isReviewed && (
-                                            <Group gap="xs" mb="xs">
+                                        {product.reviewed && (
+                                            <Group gap="xs" mb="xs">r
                                                 <Rating value={5} size="sm" readOnly />
                                                 <Text size="xs" color="dimmed">Đã đánh giá</Text>
                                             </Group>

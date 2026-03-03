@@ -17,7 +17,6 @@ import type { MyShopProductSkuDto, ProductDetailDto } from '../../../types/Produ
 import PageNotFound from '../../common/PageNotFound';
 import Breadcrumbs from './Breadcrumbs';
 import ImageProduct from './ImageProduct';
-import { mockAverageRating, mockRatingDistribution, mockReviews, mockTotalReviews } from './MockData';
 import InforProduct from './productInfo/InforProduct';
 import ProductRate from './ProductRate';
 import TryOn from './Try-onInfo/Try-on';
@@ -39,7 +38,7 @@ const ProductDetailPage = () => {
 
   useEffect(() => {
     if (slug) {
-      getProductById(slug)
+      getProductById(slug, true)
         .then(productData => {
           setProduct(productData);
           const medias = new Set<string>();
@@ -238,10 +237,8 @@ const ProductDetailPage = () => {
       </Grid>
 
       <ProductRate
-        reviews={mockReviews}
-        averageRating={mockAverageRating}
-        totalReviews={mockTotalReviews}
-        ratingDistribution={mockRatingDistribution}
+        reviews={product.reviews ?? []}
+        reviewSummary={product.reviewSummary ?? { totalReviews: 0, averageRating: 0, fiveStar: 0, fourStar: 0, threeStar: 0, twoStar: 0, oneStar: 0 }}
       />
     </Container>
   );

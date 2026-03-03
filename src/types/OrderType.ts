@@ -2,7 +2,7 @@ import type { SimpleAddressDto } from "./AddressType";
 import type { HistoryShipping, PaymentMethodId } from "./ShipmentType";
 
 // export type OrderStatus = 'ALL'| 'COMPLETED' | 'PROCESSING' | 'PENDING_CONFIRMATION' | 'PREPARING' | 'AWAITING_SHIPMENT' | 'IN_TRANSIT' | 'OUT_FOR_DELIVERY' | 'DELIVERED' | 'REFUND' | 'CANCELED';
-export type OrderStatus = 'ALL'| 'INIT_PROCESSING' | 'PENDING_CONFIRMATION' | 'CONFIRMED' | 'PREPARING' | 'SHIPPING' | 'IN_TRANSIT' | 'DELIVERED' | 'CLOSED';
+export type OrderStatus = 'ALL'| 'INIT_PROCESSING' | 'PENDING_CONFIRMATION' | 'CONFIRMED' | 'PREPARING' | 'SHIPPING' | 'IN_TRANSIT' | 'DELIVERED' | 'SUCCESS' | 'CLOSED';
 
 
 export type ShopOrderStatus = 'INIT_PROCESSING' | 'PENDING_CONFIRMATION' | 'CONFIRMED' | 'PREPARING' | 'SHIPPING' | 'DELIVERED' | 'CLOSED';
@@ -25,9 +25,9 @@ export interface ProductOrderItemDto {
     orderStatus: string;
 
     submitConfirmDate?: string;
- 
+
     cancelReason: string;
-    isReviewed: boolean;
+    reviewed: boolean;
 } 
 
 export interface OrderItemDto {
@@ -113,7 +113,7 @@ export interface OrderDetailDto {
   customerPhone: string;
   customerAddress: string;
 
-  isReviewed: boolean;
+  reviewed: boolean;
 
 }
 
@@ -132,7 +132,7 @@ export interface UserProductOrderItemDto {
     orderStatus: string;
  
     cancelReason: string;
-    isReviewed: boolean;
+    reviewed: boolean;
 
     orderItemId: string;
 } 
@@ -177,7 +177,7 @@ export interface UserOrderDetailDto {
 
   totalCost: number;
 
-  isReviewed: boolean;
+  reviewed: boolean;
 
   address: SimpleAddressDto;
 }

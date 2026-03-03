@@ -121,11 +121,6 @@ const OrderHistory = () => {
         showSuccessNotification("Hệ thống", "Chức năng mua lại đang được phát triển")
     };
 
-    const handleReview = (productId: string) => {
-        console.log('Review product:', productId);
-        showSuccessNotification("Hệ thống", "Chức năng mua lại đang được phát triển")
-    };
-
     return (
         <div className=' overflow-hidden 2xl:h-[94vh] md:h-[91vh]'>
             <Title order={4} className="!mb-4 text-slate-800">Đơn hàng của tôi</Title>
@@ -159,7 +154,6 @@ const OrderHistory = () => {
                                 order={order}
                                 onCancelOrder={handleCancelOrder}
                                 onBuyAgain={handleBuyAgain}
-                                onReview={handleReview}
                                 activeStatus={activeStatus}
                             />
                         ))}

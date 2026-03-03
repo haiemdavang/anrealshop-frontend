@@ -11,7 +11,7 @@ import {
     Text,
     Tooltip
 } from '@mantine/core';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FaStore } from 'react-icons/fa';
 import {
     FiAlertCircle,
@@ -24,17 +24,21 @@ import {
 import { Link } from 'react-router-dom';
 import { getReasonValueByKey, getRejectReasons } from '../../../../data/RejectData';
 import { useOrderStatus } from '../../../../hooks/useOrderStatus';
-import { type ShopOrderStatus, type UserOrderItemDto } from '../../../../types/OrderType';
+import { ReviewService } from '../../../../service/PreviewService';
+import { type ProductOrderItemDto, type ShopOrderStatus, type UserOrderItemDto } from '../../../../types/OrderType';
+import type { CreateReviewRequest } from '../../../../types/PreviewType';
 import { formatDate, formatPrice } from '../../../../untils/Untils';
 import RejectModal from '../../../RejectModal/RejectModal';
 import showSuccessNotification from '../../../Toast/NotificationSuccess';
+import AddCommentModal from './AddCommentModal';
+import showErrorNotification from '../../../Toast/NotificationError';
+import { getErrorMessage } from '../../../../untils/ErrorUntils';
 
 
 interface ShopOrderItemProps {
     order: UserOrderItemDto;
     onCancelOrder?: (orderId: string, reason: string) => void;
     onBuyAgain?: (productIds: string[]) => void;
-    onReview?: (productId: string) => void;
     activeStatus: ShopOrderStatus;
 }
 
@@ -42,11 +46,14 @@ const ShopOrderItem: React.FC<ShopOrderItemProps> = ({
     order,
     onCancelOrder,
     onBuyAgain,
-    onReview,
     activeStatus,
 }) => {
     const { getStatusLabel } = useOrderStatus();
     const [rejectModalOpen, setRejectModalOpen] = useState(false);
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
+    const [reviewingProduct, setReviewingProduct] = useState<ProductOrderItemDto | null>(null);
+    const [localReviewedItems, setLocalReviewedItems] = useState<Set<string>>(new Set());
+
     const handleBuyAgain = () => {
         if (onBuyAgain) {
             const productIds = order.productOrderItemDtoSet.map(product => product.productId);
@@ -54,11 +61,20 @@ const ShopOrderItem: React.FC<ShopOrderItemProps> = ({
         }
     };
 
-    const handleReview = (productId: string) => {
-        if (onReview) {
-            onReview(productId);
-        }
+    const handleReview = (product: ProductOrderItemDto) => {
+        setReviewingProduct(product);
+        setReviewModalOpen(true);
     };
+
+    const handleReviewSubmit = useCallback(async (data: CreateReviewRequest) => {
+        try {
+            await ReviewService.createReview(data);
+            setLocalReviewedItems(prev => new Set(prev).add(data.orderItemId));
+            showSuccessNotification('Đánh giá', 'Đánh giá sản phẩm thành công!');
+        } catch (error) {
+            showErrorNotification   ('Đánh giá', getErrorMessage(error) ||'Có lỗi xảy ra khi đánh giá sản phẩm. Vui lòng thử lại.');
+        }
+    }, []);
 
     const handleRejectConfirm = (reason: string) => {
         if (onCancelOrder) {
@@ -153,12 +169,12 @@ const ShopOrderItem: React.FC<ShopOrderItemProps> = ({
                                     )}
                                 </Group>
 
-                                {product.isReviewed && (
+                                {(product.reviewed || localReviewedItems.has(product.orderItemId)) && (
                                     <Group gap="xs" mb="xs">
                                         <Rating value={5} size="sm" readOnly />
                                         <Text size="xs" color="dimmed">Đã đánh giá</Text>
                                     </Group>
-                                )}
+                            )}
                             </div>
 
                             <div className="text-right">
@@ -169,19 +185,19 @@ const ShopOrderItem: React.FC<ShopOrderItemProps> = ({
                                     {formatPrice(product.price)}
                                 </Text>
                                 <Group justify="flex-end">
-                                    {!product.isReviewed && activeStatus === 'DELIVERED' && (
+                                    {!product.reviewed && !localReviewedItems.has(product.orderItemId) && activeStatus === 'DELIVERED' && (
                                         <Button
                                             variant="light"
                                             size="xs"
                                             leftSection={<FiStar size={14} />}
                                             onClick={() => {
-                                                handleReview(product.orderItemId);
+                                                handleReview(product);
                                             }}
                                         >
                                             Đánh giá
                                         </Button>
                                     )}
-                                    {activeStatus === 'DELIVERED' && (
+                                    {!product.reviewed && !localReviewedItems.has(product.orderItemId) && activeStatus === 'DELIVERED' && (
                                         <Button
                                             variant="light"
                                             size="xs"
@@ -251,6 +267,18 @@ const ShopOrderItem: React.FC<ShopOrderItemProps> = ({
                 onConfirm={handleRejectConfirm}
                 orderId={order.shopOrderId}
             />
+
+            {reviewingProduct && (
+                <AddCommentModal
+                    opened={reviewModalOpen}
+                    onClose={() => {
+                        setReviewModalOpen(false);
+                        setReviewingProduct(null);
+                    }}
+                    onSubmit={handleReviewSubmit}
+                    productItems={[reviewingProduct]}
+                />
+            )}
         </Paper>
     );
 };

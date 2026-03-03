@@ -9,8 +9,10 @@ const create = async (data: ProductCreateRequest) => {
     return response.data;
 }
 
-const getProductById = async (id: string): Promise<ProductDetailDto> => {
-    const response = await axiosNoWithCredInstance.get(API_ENDPOINTS.PRODUCTS.GET_BY_ID(id));
+const getProductById = async (id: string, isReview: boolean): Promise<ProductDetailDto> => {
+    const response = await axiosNoWithCredInstance.get(API_ENDPOINTS.PRODUCTS.GET_BY_ID(id), {
+        params: { isReview }
+    });
     return response.data;
 };
 

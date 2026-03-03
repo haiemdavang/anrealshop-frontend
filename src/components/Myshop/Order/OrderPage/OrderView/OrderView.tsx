@@ -237,9 +237,9 @@ const OrderView = ({
                                                         )}
                                                     </div>
                                                     <div className="text-xs text-gray-500">
-                                                        {item.isReviewed ? "Đã đánh giá" : "Chưa có đánh giá"}
+                                                        {item.reviewed ? "Đã đánh giá" : "Chưa có đánh giá"}
                                                     </div>
-                                                </div>
+                                                </div>r
                                             </div>
 
                                             <div className="col-span-2">

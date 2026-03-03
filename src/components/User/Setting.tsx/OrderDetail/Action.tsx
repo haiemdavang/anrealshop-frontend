@@ -1,6 +1,6 @@
 import { Box, Button, Group, Text } from '@mantine/core';
 import React, { useState } from 'react';
-import { FiShoppingBag, FiStar } from 'react-icons/fi';
+import { FiShoppingBag } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { getRejectReasons } from '../../../../data/RejectData';
 import RejectModal from '../../../RejectModal/RejectModal';
@@ -74,7 +74,7 @@ const Action: React.FC<ActionProps> = ({ status, statusLabel, isReviewed, handle
                         </Button>
                     )}
 
-                    {/* Review button - visible for delivered orders that haven't been reviewed */}
+                    {/* Review button - visible for delivered orders that haven't been reviewed
                     {status === 'DELIVERED' && !isReviewed && (
                         <Button
                             variant="filled"
@@ -83,7 +83,7 @@ const Action: React.FC<ActionProps> = ({ status, statusLabel, isReviewed, handle
                         >
                             Đánh giá sản phẩm
                         </Button>
-                    )}
+                    )} */}
 
                     {/* Cancel button - visible for pending orders */}
                     {status === 'PENDING_CONFIRMATION' && (
