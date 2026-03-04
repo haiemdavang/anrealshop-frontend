@@ -18,7 +18,7 @@ import { FiCamera, FiStar } from 'react-icons/fi';
 import type { ProductReviewDto, ReviewSummaryDto } from '../../../types/PreviewType';
 import { formatRelativeDate } from '../../../untils/Untils';
 import PaginationCustom from '../../common/PaginationCustom';
-import ZoomViewModal from './ZoomViewModal';
+import ZoomViewModal from '../../common/ZoomViewModal';
 
 interface ProductRateProps {
   reviews: ProductReviewDto[];

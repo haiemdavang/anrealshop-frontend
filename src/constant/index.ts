@@ -168,6 +168,7 @@ export const API_ENDPOINTS = {
 
   REVIEWS: {
     CREATE: '/reviews',
+    MY_REVIEWS: '/reviews/my-reviews',
     GET_BY_PRODUCT: (productId: string) => `/reviews/product/${productId}`,
   },
 };

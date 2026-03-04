@@ -40,6 +40,7 @@ import { OrderDetail } from "./OrderDetail/OrderDetailPage";
 import OrderHistory from "./OrderHistory/OrderHistoryPage";
 import Preferences from "./Preferences";
 import Profile from "./Profile/Profile";
+import MyReviews from "./Reviews/MyReviews";
 import Security from "./Security/Security";
 
 // Define navigation item interface
@@ -110,7 +111,7 @@ const SettingPage = () => {
       path: "/reviews",
       label: "Đánh giá của tôi",
       icon: <FiStar size={16} />,
-      component: <div>Đánh giá của tôi</div>, // Placeholder component
+      component: <MyReviews />,
     },
     {
       path: "/coupons",

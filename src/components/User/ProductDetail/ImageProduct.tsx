@@ -2,7 +2,7 @@ import { ActionIcon, Box, Group, Image, LoadingOverlay, ScrollArea, Stack, Butto
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
-import ZoomViewModal from './ZoomViewModal';
+import ZoomViewModal from '../../common/ZoomViewModal';
 
 interface ImageProductProps {
   media: string[];

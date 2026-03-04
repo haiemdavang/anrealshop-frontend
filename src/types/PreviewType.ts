@@ -21,6 +21,7 @@ export interface ProductReviewDto {
     userAvatarUrl?: string;
     productId: string;
     productName: string;
+    productImage: string;
     orderItemId: string;
     rating: number;
     comment: string;

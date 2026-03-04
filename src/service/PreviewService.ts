@@ -7,6 +7,11 @@ const createReview = async (request: CreateReviewRequest): Promise<ProductReview
     return response.data;
 };
 
+const getMyReviews = async (): Promise<ProductReviewDto[]> => {
+    const response = await axiosInstance.get(API_ENDPOINTS.REVIEWS.MY_REVIEWS);
+    return response.data;
+};
+
 const getReviewsByProductId = async (productId: string, size: number = 10): Promise<ReviewListResponse> => {
     const response = await axiosInstance.get(API_ENDPOINTS.REVIEWS.GET_BY_PRODUCT(productId), {
         params: { size },
@@ -16,5 +21,6 @@ const getReviewsByProductId = async (productId: string, size: number = 10): Prom
 
 export const ReviewService = {
     createReview,
+    getMyReviews,
     getReviewsByProductId,
 };
