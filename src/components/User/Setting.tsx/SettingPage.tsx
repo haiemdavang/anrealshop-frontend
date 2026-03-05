@@ -42,6 +42,7 @@ import Preferences from "./Preferences";
 import Profile from "./Profile/Profile";
 import MyReviews from "./Reviews/MyReviews";
 import Security from "./Security/Security";
+import Wallet from "./Wallet/Wallet";
 
 // Define navigation item interface
 interface NavItem {
@@ -97,9 +98,9 @@ const SettingPage = () => {
     },
     {
       path: "/payment",
-      label: "Phương thức thanh toán",
+      label: "Ví của tôi",
       icon: <FiCreditCard size={16} />,
-      component: <div>Phương thức thanh toán</div>, // Placeholder component
+      component: <Wallet />,
     },
     {
       path: "/addresses",

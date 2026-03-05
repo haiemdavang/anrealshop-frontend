@@ -171,6 +171,18 @@ export const API_ENDPOINTS = {
     MY_REVIEWS: '/reviews/my-reviews',
     GET_BY_PRODUCT: (productId: string) => `/reviews/product/${productId}`,
   },
+
+  WALLET: {
+    ME: '/wallet/me',
+    VERIFY: '/wallet/verify',
+    VERIFICATION: '/wallet/verification',
+    VERIFY_PASSWORD: '/wallet/verify-password',
+  },
+
+  KYC: {
+    SCAN_ID: '/kyc/scan-id',
+    VERIFY_FACE: '/kyc/verify-face',
+  },
 };
 
 

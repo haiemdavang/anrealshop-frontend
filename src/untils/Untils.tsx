@@ -112,6 +112,38 @@ export function formatStringView(input: string): string {
   return input[0].toUpperCase() + input.slice(1).toLowerCase();
 }
 
+export const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
+export const urlToBase64 = async (url: string): Promise<string> => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const file = new File([blob], 'image.jpg', { type: blob.type });
+  return fileToBase64(file);
+};
+
+export const parseDateString = (dateStr: string): Date | null => {
+  const parts = dateStr.split(/[-/]/);
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    const date = new Date(year, month, day);
+    if (!isNaN(date.getTime())) return date;
+  }
+  return null;
+};
+
 export const formatRelativeDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   const now = new Date();
