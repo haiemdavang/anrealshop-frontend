@@ -31,6 +31,10 @@ export const formatPrice = (price: number): string => {
   }).format(price);
 };
 
+export const formatPriceMasked = (): string => {
+  return '***.**  ₫';
+};
+
 export const formatDate = (dateString: string): string => {
   return format(new Date(dateString), 'dd/MM/yyyy HH:mm', { locale: vi });
 };

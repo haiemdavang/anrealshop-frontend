@@ -5,6 +5,7 @@ import {
   FiCheckSquare,
   FiChevronLeft,
   FiChevronRight,
+  FiCreditCard,
   FiEye,
   FiHome,
   FiLayers,
@@ -150,6 +151,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ opened, onClose }) => {
       icon: <FiCheckSquare size={16} />,
       label: 'Duyệt sản phẩm',
       path: '/admin/product-approvals'
+    },
+    {
+      icon: <FiCreditCard size={16} />,
+      label: 'Quản lý ví',
+      path: '/admin/wallets'
     },
     {
       icon: <FiShoppingCart size={16} />,

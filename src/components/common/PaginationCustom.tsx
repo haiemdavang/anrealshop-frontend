@@ -19,17 +19,19 @@ const PaginationCustom: React.FC<PaginationCustomProps> = ({
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <Group justify="space-between" mt="md" p="sm">
+    <Group justify="space-between" mt="md" p="sm" style={{ position: 'sticky', bottom: 0 }}>
       <Text size="sm" c="dimmed">
         Hiển thị {startItem} - {endItem} trong tổng số {totalItems} mục
       </Text>
-      <Pagination
-        total={totalPages}
-        value={currentPage}
-        onChange={onPageChange}
-        size="sm"
-        withEdges
-      />
+      {totalPages > 1 && (
+        <Pagination
+          total={totalPages}
+          value={currentPage}
+          onChange={onPageChange}
+          size="sm"
+          withEdges
+        />
+      )}
     </Group>
   );
 };

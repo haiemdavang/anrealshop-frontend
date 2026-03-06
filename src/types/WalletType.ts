@@ -79,3 +79,35 @@ export interface VerifyPasswordResponse {
     verified: boolean;
     message: string;
 }
+
+// Admin types
+export interface AdminWalletDto {
+    id: string;
+    ownerId: string;
+    ownerType: WalletOwnerType;
+    availableBalance: number;
+    currency: string;
+    status: WalletStatus;
+    verificationStatus: VerificationStatus;
+    createdAt: string;
+    updatedAt?: string;
+    userEmail: string;
+    userFullName: string;
+    userAvatarUrl: string;
+    userPhoneNumber: string;
+}
+
+export interface AdminWalletListResponse {
+    totalCount: number;
+    totalPages: number;
+    currentPage: number;
+    wallets: AdminWalletDto[];
+}
+
+export interface AdminWalletParams {
+    page?: number;
+    limit?: number;
+    searchUser?: string;
+    walletStatus?: WalletStatus;
+    sortBy?: string;
+}

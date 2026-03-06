@@ -177,6 +177,10 @@ export const API_ENDPOINTS = {
     VERIFY: '/wallet/verify',
     VERIFICATION: '/wallet/verification',
     VERIFY_PASSWORD: '/wallet/verify-password',
+    ADMIN_WALLETS: '/wallet/admin/wallets',
+    ADMIN_APPROVE: (id: string) => `/wallet/admin/wallets/${id}/approve`,
+    ADMIN_REJECT: (id: string) => `/wallet/admin/wallets/${id}/reject`,
+    ADMIN_VERIFICATION_DETAIL: (id: string) => `/wallet/admin/wallets/${id}/verification`,
   },
 
   KYC: {
