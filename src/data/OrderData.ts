@@ -56,6 +56,11 @@ export const OrderStatusDefaultDataUser: OrderStatusDto[] = [
   },
   {
     id: 'DELIVERED',
+    name: 'Đã giao',
+    count: 0
+  },
+  {
+    id: 'SUCCESS',
     name: 'Hoàn thành',
     count: 0
   },

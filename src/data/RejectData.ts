@@ -1,4 +1,4 @@
-export type RejectType = 'order' | 'shipping' | 'order-user' | 'user';
+export type RejectType = 'order' | 'shipping' | 'order-user' | 'user' | 'wallet';
 
 export interface ItemList {
   key: string;
@@ -38,6 +38,15 @@ export const userDisableReasons: ItemList[] = [
   { key: 'other', value: 'Lý do khác' }
 ];
 
+export const walletRejectReasons: ItemList[] = [
+  { key: 'invalid_document', value: 'Giấy tờ không hợp lệ' },
+  { key: 'blur_image', value: 'Hình ảnh bị mờ, không rõ ràng' },
+  { key: 'mismatch_info', value: 'Thông tin không khớp với giấy tờ' },
+  { key: 'expired_document', value: 'Giấy tờ đã hết hạn' },
+  { key: 'fake_document', value: 'Giấy tờ giả mạo' },
+  { key: 'other', value: 'Lý do khác' }
+];
+
 export const getRejectReasons = (type: RejectType): ItemList[] => {
   switch (type) {
     case 'order':
@@ -48,6 +57,8 @@ export const getRejectReasons = (type: RejectType): ItemList[] => {
       return userCancelOrderReasons;
     case 'user':
       return userDisableReasons;
+    case 'wallet':
+      return walletRejectReasons;
     default:
       return defaultRejectOrderReasons;
   }
@@ -58,7 +69,8 @@ export const getReasonValueByKey = (key: string): string | undefined => {
     ...defaultRejectOrderReasons,
     ...defaultRejectShippingReasons,
     ...userCancelOrderReasons,
-    ...userDisableReasons
+    ...userDisableReasons,
+    ...walletRejectReasons
   ];
 
   const foundItem = allReasons.find(item => item.key === key);

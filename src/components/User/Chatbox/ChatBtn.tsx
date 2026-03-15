@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import ChatboxPane from './ChatboxPane';
+import { useState, useEffect, lazy } from 'react';
+const ChatboxPane = lazy(() => import('./ChatboxPane'));
 
 const ChatBtn = () => {
     const [isChatboxOpen, setIsChatboxOpen] = useState(false);
@@ -14,7 +14,9 @@ const ChatBtn = () => {
     return (
         <>
             {/* Chatbox */}
-            <ChatboxPane isOpen={isChatboxOpen} onClose={() => setIsChatboxOpen(false)} />
+            {isChatboxOpen && (
+                <ChatboxPane isOpen={isChatboxOpen} onClose={() => setIsChatboxOpen(false)} />
+            )}
 
             {/* Floating Chat Button */}
             {!isChatboxOpen && (

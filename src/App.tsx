@@ -13,7 +13,7 @@ import { connectWs, disconnectWs } from './service/websocketClient';
 import { fetchCurrentUser } from './store/authSlice';
 import { useWakeWord } from './hooks/useWakeWord';
 import OverlayVoice from './components/common/OverlayVoice';
-import ChatBtn from './components/User/Chatbox/ChatBtn';
+import ButtonHome from './components/User/ButtonHome/ButtonHome';
 
 const AuthoPage = lazy(() => import('./pages/Auth/AuthoPage'));
 const MyshopPage = lazy(() => import('./pages/MyshopPage/MyshopRoute'));
@@ -90,6 +90,7 @@ function App() {
       await initWakeWord();
       if (isLoaded) {
         await startListening();
+        console.log('Wake word detection initialized and listening started');
       }
     };
 
@@ -99,7 +100,7 @@ function App() {
 
   return (
     <MantineProvider theme={theme}>
-      <Notifications position="bottom-right" zIndex={1000} />
+      <Notifications position="top-right" zIndex={1000} mt={"50px"}/>
 
       {/* Voice Overlay */}
       <OverlayVoice 
@@ -108,8 +109,7 @@ function App() {
         isRecording={isRecognizing}
       />
 
-      {/* Chat Button */}
-      {user && isAuthenticated && <ChatBtn />}
+      <ButtonHome showChat={!!(user && isAuthenticated)} />
 
       <BrowserRouter>
         <div className="min-h-screen flex flex-col">

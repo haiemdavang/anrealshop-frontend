@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { FiCheckCircle, FiHome, FiPackage } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { APP_ROUTES } from '../../../constant';
 import type { PaymentResultData } from '../../../types/PaymentResultType';
 import { formatPrice } from '../../../untils/Untils';
 import { getPaymentMethodIcon, getPaymentMethodName } from './utils';
@@ -115,7 +116,7 @@ const PaymentSuccessView = ({ paymentResult }: PaymentSuccessProps) => {
             </Button>
             <Button 
               component={Link} 
-              to="/settings/orders?status=PENDING_CONFIRMATION"
+              to={`${APP_ROUTES.USER_ORDERS}?status=PENDING_CONFIRMATION`}
               leftSection={<FiPackage size={16} />}
               color="blue" 
               className="bg-primary"

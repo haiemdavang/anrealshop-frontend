@@ -148,6 +148,46 @@ export const API_ENDPOINTS = {
     BOT: '/chat/bot',
     BOT_HISTORY: '/chat/bot/history',
   },
+
+  TRYON: {
+    DETECT: '/tryon/detect',
+  },
+
+  SEARCH: {
+    SUGGEST: '/public/search/suggest',
+  },
+
+  FAVORITES: {
+    BASE: '/favorites',
+    REMOVE_BY_PRODUCT: (productId: string) => `/favorites/product/${productId}`,
+    REMOVE_BY_ID: (favoriteId: string) => `/favorites/${favoriteId}`,
+    CHECK: (productId: string) => `/favorites/check/${productId}`,
+    COUNT: '/favorites/count',
+    PRODUCT_IDS: '/favorites/product-ids',
+  },
+
+  REVIEWS: {
+    CREATE: '/reviews',
+    MY_REVIEWS: '/reviews/my-reviews',
+    GET_BY_PRODUCT: (productId: string) => `/reviews/product/${productId}`,
+  },
+
+  WALLET: {
+    ME: '/wallet/me',
+    VERIFY: '/wallet/verify',
+    VERIFICATION: '/wallet/verification',
+    VERIFY_PASSWORD: '/wallet/verify-password',
+    TRANSACTIONS: '/wallet/transactions',
+    ADMIN_WALLETS: '/wallet/admin/wallets',
+    ADMIN_APPROVE: (id: string) => `/wallet/admin/wallets/${id}/approve`,
+    ADMIN_REJECT: (id: string) => `/wallet/admin/wallets/${id}/reject`,
+    ADMIN_VERIFICATION_DETAIL: (id: string) => `/wallet/admin/wallets/${id}/verification`,
+  },
+
+  KYC: {
+    SCAN_ID: '/kyc/scan-id',
+    VERIFY_FACE: '/kyc/verify-face',
+  },
 };
 
 
@@ -166,6 +206,8 @@ export const APP_ROUTES = {
   USER_PROFILE: '/settings/profile',
   USER_SECURITY: '/settings/security',
   USER_ADDRESSES: '/settings/addresses',
+  USER_ORDERS: '/settings/orders',
+  USER_WISHLIST: '/settings/wishlist',
 
   PRODUCTS: '/products',
   SEARCH: '/search',

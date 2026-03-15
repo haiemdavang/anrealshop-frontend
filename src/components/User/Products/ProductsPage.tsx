@@ -1,7 +1,7 @@
 import { Container, Drawer, SimpleGrid, Text } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FiPackage } from "react-icons/fi";
 import {
   useGetProduct,
@@ -14,7 +14,7 @@ import BannerFlowCategory from "./BannerFlowCategory";
 import FilterBar from "./FilterBar";
 import SidebarCategory from "./SidebarCategory";
 
-export const ProductsPage = () => {
+const ProductsPage = () => {
   const { getParam, updateParams } = useURLParams();
   const [products, setProducts] = useState<UserProductDto[]>([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -28,6 +28,7 @@ export const ProductsPage = () => {
 
   // Get all params from URL
   const selectedCategory = getParam("ct", "all");
+  const searchQuery = getParam("q");
   const minPrice = getParam("mip");
   const maxPrice = getParam("map");
   const brands = getParam("br");
@@ -50,7 +51,7 @@ export const ProductsPage = () => {
     rating: rating || "",
   };
 
-  const fetchProducts = async (params: UseProductParams) => {
+  const fetchProducts = useCallback(async (params: UseProductParams) => {
     try {
       const data = await getListRecommended(params);
       setProducts(data);
@@ -58,12 +59,13 @@ export const ProductsPage = () => {
       console.error("Error fetching products:", error);
       setProducts([]);
     }
-  };
+  }, [getListRecommended]);
 
   useEffect(() => {
     const params: UseProductParams = {
       page: Number(page) - 1,
       limit: 20,
+      search: searchQuery || undefined,
       categoryId: selectedCategory === "all" ? undefined : selectedCategory,
       minPrice: minPrice ? Number(minPrice) : undefined,
       maxPrice: maxPrice ? Number(maxPrice) : undefined,
@@ -76,7 +78,9 @@ export const ProductsPage = () => {
 
     fetchProducts(params);
   }, [
+    fetchProducts,
     selectedCategory,
+    searchQuery,
     minPrice,
     maxPrice,
     brands,
@@ -94,7 +98,14 @@ export const ProductsPage = () => {
     });
   };
 
-  const handleApplyFilters = (filters: any) => {
+  const handleApplyFilters = (filters: {
+    priceRange: [number, number];
+    brands: string[];
+    colors: string[];
+    sizes: string[];
+    origins: string[];
+    rating: string;
+  }) => {
     updateParams({
       mip: filters.priceRange[0] || null,
       map: filters.priceRange[1] || null,
@@ -221,3 +232,5 @@ export const ProductsPage = () => {
     </div>
   );
 };
+
+export default ProductsPage;

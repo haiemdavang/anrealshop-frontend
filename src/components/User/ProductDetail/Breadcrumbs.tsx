@@ -1,6 +1,7 @@
 import { Anchor, Breadcrumbs as MantineBreadcrumbs, Text } from '@mantine/core';
 import { FiChevronRight } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { APP_ROUTES } from '../../../constant';
 import { formatStringView } from '../../../untils/Untils';
 
 interface BreadcrumbsProps {
@@ -16,7 +17,7 @@ const Breadcrumbs = ({ productName, categoryId, categoryName }: BreadcrumbsProps
         <Anchor component={Link} to="/" className="!text-gray-500 hover:!text-primary no-underline">
           Trang chủ
         </Anchor>
-        <Anchor component={Link} to="/products" className="!text-gray-500 hover:!text-primary no-underline">
+        <Anchor component={Link} to={APP_ROUTES.PRODUCTS} className="!text-gray-500 hover:!text-primary no-underline">
           Sản phẩm
         </Anchor>
         {categoryId && categoryName && (

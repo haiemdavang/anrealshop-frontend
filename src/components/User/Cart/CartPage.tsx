@@ -307,7 +307,7 @@ const CartPage: React.FC = () => {
                 />
               )}
             </Paper>
-          </Grid.Col>
+          </Grid.Col> 
 
           <Grid.Col span={{ base: 12, md: 4 }}>
             <Box className="sticky top-4">

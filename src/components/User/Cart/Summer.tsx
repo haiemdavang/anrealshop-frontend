@@ -17,6 +17,7 @@ import type { CartShippingFee } from '../../../types/ShipmentType';
 import { formatPrice } from '../../../untils/Untils';
 import { APP_ROUTES, LOCAL_STORAGE_KEYS } from '../../../constant';
 import showErrorNotification from '../../Toast/NotificationError';
+import { useNavigate } from 'react-router-dom';
 
 interface SummerProps {
   cartItems: CartDto[];
@@ -49,6 +50,8 @@ const Summer: React.FC<SummerProps> = ({
     return { selectedItemsCount, subtotal, discount, shippingCost, total, hasSelectedItems, freeShippingAmount };
   }, [cartItems, shippingFees, freeShippingThreshold]);
 
+  const navigate = useNavigate();
+
   const handlePayment = () => {
     if (!hasSelectedItems) {
       showErrorNotification('Thông báo','Vui lòng chọn sản phẩm để tiến hành thanh toán');
@@ -56,7 +59,7 @@ const Summer: React.FC<SummerProps> = ({
     }
     const idItemsSelected: ItemsCheckoutRequest = cartItems
       .flatMap(cart => cart.items) 
-      .filter(item => item.isSelected) 
+      .filter(item => item.isSelected)
       .reduce((acc, item) => {
         acc[item.productSkuId] = item.quantity; 
         return acc;
@@ -64,7 +67,7 @@ const Summer: React.FC<SummerProps> = ({
 
     localStorage.setItem(LOCAL_STORAGE_KEYS.ORDER_ITEM_IDS, JSON.stringify(idItemsSelected));
 
-    window.location.href = APP_ROUTES.CHECKOUT; 
+    navigate(APP_ROUTES.CHECKOUT);
   }
 
   return (

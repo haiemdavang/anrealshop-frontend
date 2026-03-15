@@ -29,16 +29,16 @@ export function AuthoPage() {
         className='m-4 inline-block absolute top-5 left-5 cursor-pointer z-50'
       >
         <Button leftSection={<FiArrowLeft size={20} />} variant='light'>
-          Quay lại
+          {location.pathname === "/login" ? "Quay lại" : ""}
         </Button>
       </span>
       
       <div className={`w-[100vw] h-[100vh] flex [&>*]:flex-shrink-0 duration-1000 transition-all ${
-        location.pathname === "/login" ? "translate-x-0" : "-translate-x-1/2"
+        location.pathname === "/login" ? "translate-x-0" : "-translate-x-full md:-translate-x-1/2"
       }`}>
         <SignIn />
-        
-        <div className={`w-1/2 bg-primary/10 flex flex-col items-center gap-4 justify-center duration-200 transition-all ease-in-out ${
+
+        <div className={`hidden md:flex w-1/2 bg-primary/10 flex-col items-center gap-4 justify-center duration-200 transition-all ease-in-out ${
           location.pathname === "/login" ? "rounded-l-[200px]" : "rounded-r-[200px]"
         }`}>
           <div className="flex gap-3 items-center text-primary">
@@ -52,7 +52,7 @@ export function AuthoPage() {
             Trải nghiệm mua sắm tuyệt vời
           </div>
         </div>
-        
+
         <SignUp />
       </div>
     </div>

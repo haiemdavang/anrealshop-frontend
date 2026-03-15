@@ -96,7 +96,7 @@ export function SignUp() {
   }
   return (
     <motion.div
-      className="w-1/2 bg-white flex items-center justify-center p-8"
+      className="w-screen md:w-1/2 bg-white flex items-center justify-center px-4 pt-8 pb-6 sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -107,7 +107,7 @@ export function SignUp() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Title order={1} className="text-3xl font-bold mb-6 text-center text-slate-800">
+        <Title order={1} className="text-2xl sm:text-3xl font-bold mb-6 text-center text-slate-800">
           Đăng ký
         </Title>
 
@@ -115,7 +115,7 @@ export function SignUp() {
           <Stack gap="md">
             <TextInput
               label="Họ và tên"
-              placeholder="Nhập tên đây nha thượng đế"
+              placeholder="Nguyễn Văn A"
               required
               value={form.values.fullName}
               onChange={(event) => form.setFieldValue('fullName', event.currentTarget.value)}
@@ -125,7 +125,7 @@ export function SignUp() {
 
             <TextInput
               label="Email"
-              placeholder="email nè"
+              placeholder="example@example.com"
               required
               value={form.values.email}
               onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
@@ -135,7 +135,7 @@ export function SignUp() {
 
             <PasswordInput
               label="Mật khẩu"
-              placeholder="Ngày sinh người yêu cũ ha -.-"
+              placeholder="Mật khẩu của bạn"
               required
               value={form.values.password}
               onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
@@ -145,7 +145,7 @@ export function SignUp() {
 
             <PasswordInput
               label="Xác nhận mật khẩu"
-              placeholder="Nhang lại mật khẩu của bạn"
+              placeholder="Nhập lại mật khẩu của bạn"
               required
               value={form.values.confirmPassword}
               onChange={(event) => form.setFieldValue('confirmPassword', event.currentTarget.value)}

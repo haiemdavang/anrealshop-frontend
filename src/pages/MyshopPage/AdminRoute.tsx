@@ -15,6 +15,7 @@ const AdminHeader = lazy(() => import('../../components/Admin/Header/AdminHeader
 const AdminSidebar = lazy(() => import('../../components/Admin/Header/AdminSideBar'));
 const ProductApprovalPage = lazy(() => import('../../components/Admin/Product/ProductPage'));
 const ShopApprovalPage = lazy(() => import('../../components/Admin/Shop/ShopPage'));
+const WalletPage = lazy(() => import('../../components/Admin/Wallet/WalletPage'));
 
 // const AdminDashboard = lazy(() => import('../../components/Admin/Dashboard/AdminDashboard'));
 // const UserManagement = lazy(() => import('../../components/Admin/User/UserManagement'));
@@ -46,7 +47,8 @@ const AdminPage: React.FC = () => {
       'orders': 'Quản lý đơn hàng',
       'reports': 'Báo cáo & Thống kê',
       'settings': 'Cài đặt hệ thống',
-      'display': 'Hiển thị trang chủ'
+      'display': 'Hiển thị trang chủ',
+      'wallets': 'Quản lý ví'
     };
 
     const items = [
@@ -119,6 +121,7 @@ const AdminPage: React.FC = () => {
               <Route path="product-approvals" element={<ProductApprovalPage />} />
               <Route path="orders" element={<OrderManagement />} />
               <Route path="reports" element={<ReportManagement />} />
+              <Route path="wallets" element={<WalletPage />} />
               <Route path="settings" element={<SystemSettings />} />
               <Route path="*" element={<div>Page not found</div>} />
             </Routes>

@@ -121,7 +121,7 @@ const CheckoutPage = () => {
         if (data.bankTransfer) {
           window.location.href = data.urlRedirect;
         } else {
-          window.location.href = APP_ROUTES.PAYMENT_RESULT(data.orderId);
+          navigate(APP_ROUTES.PAYMENT_RESULT(data.orderId));
         }
       })
       .catch(error => {

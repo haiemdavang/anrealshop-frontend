@@ -1,99 +1,65 @@
 import React, { useState, useEffect } from 'react';
-import { Paper, Group, Text, Divider, Skeleton, Box, UnstyledButton } from '@mantine/core';
-import { FiSearch } from 'react-icons/fi';
+import { Paper, Group, Text, Divider, Skeleton, Box } from '@mantine/core';
 import { Link } from 'react-router-dom';
-
-type SearchResult = {
-  id: string;
-  name: string;
-  thumbnailUrl?: string;
-  price: number;
-  category?: string;
-};
+import { SearchService } from '../../service/SearchService';
+import type { ProductSuggestDto, CategorySuggestDto } from '../../types/SearchType';
+import showErrorNotification from '../Toast/NotificationError';
+import { getErrorMessage } from '../../untils/ErrorUntils';
 
 interface SuggestSearchProps {
   searchTerm: string;
   visible: boolean;
   onSelect: () => void;
   withBlur?: boolean;
-  className?: string; 
+  className?: string;
+  productLimit?: number;
+  categoryLimit?: number;
 }
-
-// Hàm mô phỏng gọi API tìm kiếm
-const mockSearchAPI = async (term: string): Promise<{ products: SearchResult[], categories: string[], recentSearches: string[] }> => {
-  // Giả lập độ trễ API
-  await new Promise(resolve => setTimeout(resolve, 300));
-
-  // Nếu không có từ khóa, trả về rỗng
-  if (!term.trim()) {
-    return { products: [], categories: [], recentSearches: [] };
-  }
-
-  // Mô phỏng kết quả tìm kiếm
-  return {
-    products: [
-      { id: '1', name: `Áo thun ${term}`, price: 299000, thumbnailUrl: 'https://picsum.photos/id/26/60/60', category: 'Áo & Thời trang nam' },
-      { id: '2', name: `Quần jean ${term} dáng suông`, price: 499000, thumbnailUrl: 'https://picsum.photos/id/21/60/60', category: 'Quần & Thời trang nam' },
-      { id: '3', name: `Giày ${term} thể thao`, price: 799000, thumbnailUrl: 'https://picsum.photos/id/15/60/60', category: 'Giày & Phụ kiện' },
-    ],
-    categories: [
-      'Áo thun',
-      'Quần jean',
-      'Giày thể thao'
-    ],
-    recentSearches: [
-      'áo khoác',
-      'quần jean nam',
-      'giày nike'
-    ]
-  };
-};
 
 const SuggestSearch: React.FC<SuggestSearchProps> = ({
   searchTerm,
   visible,
   onSelect,
   withBlur = true,
-  className = ''
+  className = '',
+  productLimit = 5,
+  categoryLimit = 3
 }) => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<{
-    products: SearchResult[];
-    categories: string[];
-    recentSearches: string[];
+    products: ProductSuggestDto[];
+    categories: CategorySuggestDto[];
   }>({
     products: [],
-    categories: [],
-    recentSearches: []
+    categories: []
   });
 
   useEffect(() => {
     if (!visible || !searchTerm.trim()) {
-      setResults({ products: [], categories: [], recentSearches: [] });
+      setResults({ products: [], categories: [] });
       return;
     }
 
     const fetchResults = async () => {
       setLoading(true);
       try {
-        const data = await mockSearchAPI(searchTerm);
+        const data = await SearchService.suggestSearch(searchTerm, productLimit, categoryLimit);
         setResults(data);
-      } catch (error) {
-        console.error('Error fetching search results:', error);
+      } catch (error: unknown) {
+        showErrorNotification('Đã có lỗi xảy ra.', getErrorMessage(error));
       } finally {
         setLoading(false);
       }
     };
 
-    const timer = setTimeout(fetchResults, 200);
+    const timer = setTimeout(fetchResults, 300);
     return () => clearTimeout(timer);
-  }, [searchTerm, visible]);
+  }, [searchTerm, visible, productLimit, categoryLimit]);
 
   if (!visible) return null;
 
   // Define blur class based on withBlur prop
   const blurClass = !withBlur ? '!backdrop-blur-md !bg-white/80' : '!bg-white';
-  console.log('blurClass', withBlur);
 
   // Loading state
   if (loading) {
@@ -101,7 +67,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
       <Paper
         shadow="md"
         radius="md"
-        className={`absolute mt-1 w-full z-50 px-3 py-3 ${blurClass} ${className}`}
+        className={`absolute mt-1 w-full z-[9999] px-3 py-3 ${blurClass} ${className}`}
       >
         <Box mb="md">
           <Skeleton height={16} mb={8} />
@@ -128,35 +94,9 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
   // When there are no results
   const noResults = !results.products.length && !results.categories.length && !searchTerm.trim();
 
-  // Display search history when no keyword
+  // Display empty state when no keyword
   if (noResults) {
-    return (
-      <Paper
-        shadow="md"
-        radius="md"
-        className={`absolute mt-1 w-full z-50 px-3 py-3 ${blurClass} ${className}`}
-      >
-        <Text size="sm" fw={500} mb="xs">Tìm kiếm gần đây</Text>
-        {results.recentSearches.length > 0 ? (
-          results.recentSearches.map((term, index) => (
-            <UnstyledButton
-              key={index}
-              className="w-full text-left p-2 hover:bg-gray-100 rounded"
-              onClick={onSelect}
-            >
-              <Group>
-                <FiSearch size={14} className="text-gray-500" />
-                <Text size="sm">{term}</Text>
-              </Group>
-            </UnstyledButton>
-          ))
-        ) : (
-          <Text size="sm" color="dimmed" ta="center" py="md">
-            Không có lịch sử tìm kiếm gần đây
-          </Text>
-        )}
-      </Paper>
-    );
+    return null;
   }
 
   // Display search results
@@ -164,24 +104,24 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
     <Paper
       shadow="md"
       radius="md"
-      className={`absolute mt-1 w-full z-50 px-3 py-3 ${blurClass} ${className}`}
+      className={`absolute mt-1 w-full z-[9999] px-3 py-3 ${blurClass} ${className}`}
     >
       {/* Categories */}
       {results.categories.length > 0 && (
         <>
           <Text size="sm" fw={500} mb="xs">Danh mục liên quan</Text>
           <Group mb="md">
-            {results.categories.map((category, index) => (
+            {results.categories.map((category) => (
               <Link
-                key={index}
-                to={`/search?category=${encodeURIComponent(category)}`}
+                key={category.id}
+                to={`/products?ct=${category.urlSlug}`}
                 className="no-underline"
                 onClick={onSelect}
               >
                 <Box
                   className="bg-gray-100 hover:bg-gray-200 py-1 px-3 rounded-full text-sm text-gray-700"
                 >
-                  {category}
+                  {category.name}
                 </Box>
               </Link>
             ))}
@@ -198,7 +138,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
           {results.products.map(product => (
             <Link
               key={product.id}
-              to={`/product/${product.id}`}
+              to={`/products/${product.urlSlug}`}
               className="no-underline text-inherit"
               onClick={onSelect}
             >
@@ -212,8 +152,8 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
                 )}
                 <Box style={{ flex: 1 }}>
                   <Text size="sm" lineClamp={1}>{product.name}</Text>
-                  {product.category && (
-                    <Text size="xs" color="dimmed">{product.category}</Text>
+                  {product.categoryName && (
+                    <Text size="xs" c="dimmed">{product.categoryName}</Text>
                   )}
                 </Box>
                 <Text size="sm" fw={500}>{product.price.toLocaleString()}đ</Text>
@@ -227,8 +167,8 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
 
       {/* See all results */}
       <Link
-        to={`/search?q=${encodeURIComponent(searchTerm)}`}
-        className="block text-center text-blue-600 no-underline hover:underline py-1"
+        to={`/products?q=${encodeURIComponent(searchTerm)}`}
+        className="block text-center text-primary no-underline hover:underline py-1"
         onClick={onSelect}
       >
         <Text size="sm">Xem tất cả kết quả cho "{searchTerm}"</Text>

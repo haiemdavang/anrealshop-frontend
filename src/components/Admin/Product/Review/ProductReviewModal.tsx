@@ -66,7 +66,7 @@ const ProductReviewModal: React.FC<ProductReviewModalProps> = ({
 
     const fetchProduct = useCallback(() => {
         if (!product) return;
-        getProductById(product.id)
+        getProductById(product.id, false)
             .then((data) => {
                 setProductDetail(data);
             })

@@ -121,6 +121,7 @@ const ProductCard = ({
               height: '100%'
             }}
             className="hover:scale-105"
+            loading='lazy'
           />
         </div>
       </Card.Section>

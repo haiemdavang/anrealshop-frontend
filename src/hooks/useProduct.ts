@@ -310,10 +310,10 @@ export const useProductApproval = () => {
 export const useGetProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
 
-    const getProductById = useCallback(async (id: string) => {
+    const getProductById = useCallback(async (id: string, isReview: boolean) => {
         setIsLoading(true);
         try {
-            const result = await ProductsService.getProductById(id);
+            const result = await ProductsService.getProductById(id, isReview);
             return result;
         } catch (err: any) {
             const errorMessage = getErrorMessage(err);

@@ -197,6 +197,8 @@ export const Header = () => {
                                 onSelect={handleSelectSearchResult}
                                 withBlur={scrolled}
                                 className="w-60 sm:w-72 md:w-96 right-0 mt-4"
+                                productLimit={3}
+                                categoryLimit={3}
                             />
                         </div>
 

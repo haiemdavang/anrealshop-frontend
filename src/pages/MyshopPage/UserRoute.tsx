@@ -9,8 +9,6 @@ import {
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/header/Header";
 import showErrorNotification from "../../components/Toast/NotificationError";
-import LandingPage from "../../components/User/LandingPage/LandingPage";
-import { ProductsPage } from "../../components/User/Products/ProductsPage";
 import { APP_ROUTES } from "../../constant";
 import { useAppSelector } from "../../hooks/useAppRedux";
 
@@ -26,12 +24,14 @@ const ProductDetailPage = lazy(
   () => import("../../components/User/ProductDetail/ProductDetailPage")
 );
 const SettingPage = lazy(
-  () => import("../../components/User/Setting.tsx/SettingPage")
+  () => import("../../components/User/Setting/SettingPage")
 );
 const ShopPage = lazy(() => import("../../components/User/Shop/ShopPage"));
 const PaymentResultPage = lazy(
   () => import("../../components/User/paymentResult/PaymentResultPage")
 );
+const ProductsPage = lazy(() => import("../../components/User/Products/ProductsPage"));
+const LandingPage = lazy(() => import("../../components/User/LandingPage/LandingPage"));
 
 const UserRoute = () => {
   const location = useLocation();

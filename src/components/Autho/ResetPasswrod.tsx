@@ -174,7 +174,7 @@ export function ResetPassword(props: ResetPasswordProps) {
                   autoFocus
                   type="number"
                   length={6}
-                  size="md"
+                  size="sm"
                   onComplete={handleVerifyOtp}
                   onChange={(value) => form.setFieldValue('otp', value)}
                 // error={!!form.errors.otp} // Sử dụng lỗi từ useForm

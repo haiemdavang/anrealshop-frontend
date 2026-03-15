@@ -68,12 +68,10 @@ export const useOrder = (options: UseOrderOptions = {}) => {
     setState(prev => ({ ...prev, isLoadingOrders: true, error: null }));
     try {
 
-      console.log('Fetching orders with params:', params, 'in mode:', mode);
       const response = mode === 'user'
         ? await OrderService.getUserOrders(params)
         : await OrderService.getMyShopOrders(params);
 
-      console.log('Fetched orders:', response);
       const orderItems =
         Array.isArray(response.orderItemDtoSet) &&
         response.orderItemDtoSet.length === 1 &&

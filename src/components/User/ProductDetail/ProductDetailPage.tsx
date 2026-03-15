@@ -18,6 +18,8 @@ import PageNotFound from '../../common/PageNotFound';
 import Breadcrumbs from './Breadcrumbs';
 import ImageProduct from './ImageProduct';
 import InforProduct from './productInfo/InforProduct';
+import ProductRate from './ProductRate';
+import TryOn from './Try-onInfo/Try-on';
 
 
 
@@ -30,12 +32,13 @@ const ProductDetailPage = () => {
   const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
   const [selectedSku, setSelectedSku] = useState<MyShopProductSkuDto | null>(null);
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [showTryOn, setShowTryOn] = useState(false);
 
   const { isLoading, getProductById } = useGetProduct();
 
   useEffect(() => {
     if (slug) {
-      getProductById(slug)
+      getProductById(slug, true)
         .then(productData => {
           setProduct(productData);
           const medias = new Set<string>();
@@ -64,7 +67,7 @@ const ProductDetailPage = () => {
           }
         })
     }
-  }, [slug, getProductById, getParam]);
+  }, [slug, getProductById]);
 
   const getOrderImageActive = useCallback((url: string) => {
     if (!url) return 0;
@@ -204,6 +207,8 @@ const ProductDetailPage = () => {
                 productName={product.name}
                 selectedImage={selectedImage}
                 setSelectedImage={setSelectedImage}
+                onTryProduct={() => setShowTryOn(true)}
+                showTryOn={showTryOn}
               />
             </div>
           </Paper>
@@ -212,17 +217,29 @@ const ProductDetailPage = () => {
         <Grid.Col span={{ base: 12, md: 7.4 }}>
           <Paper radius="md" className="!mb-8 !bg-white !shadow-sm">
             <div className="p-4">
-              <InforProduct
-                product={product}
-                selectedAttributes={selectedAttributes}
-                selectedSku={selectedSku}
-                onAttributeSelect={handleAttributeSelect}
-                groupedAttributes={groupedAttributes}
-              />
+              {showTryOn ? (
+                <TryOn 
+                  productImageUrl={media[selectedImage] || product.thumbnailUrl}
+                  onBack={() => setShowTryOn(false)}
+                />
+              ) : (
+                <InforProduct
+                  product={product}
+                  selectedAttributes={selectedAttributes}
+                  selectedSku={selectedSku}
+                  onAttributeSelect={handleAttributeSelect}
+                  groupedAttributes={groupedAttributes}
+                />
+              )}
             </div>
           </Paper>
         </Grid.Col>
       </Grid>
+
+      <ProductRate
+        reviews={product.reviews ?? []}
+        reviewSummary={product.reviewSummary ?? { totalReviews: 0, averageRating: 0, fiveStar: 0, fourStar: 0, threeStar: 0, twoStar: 0, oneStar: 0 }}
+      />
     </Container>
   );
 };

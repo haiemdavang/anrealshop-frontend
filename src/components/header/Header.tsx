@@ -1,11 +1,8 @@
 import {
-  Box,
-  Burger,
   Button,
   CloseButton,
   Container,
   Divider,
-  Drawer,
   Flex,
   Group,
   Input,
@@ -14,12 +11,13 @@ import {
   Text,
   UnstyledButton,
 } from "@mantine/core";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useMediaQuery } from "@mantine/hooks";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { BiUser } from "react-icons/bi";
 import { FaSearch, FaShoppingBag, FaStore } from "react-icons/fa";
 import {
+  FiHeart,
   FiHome,
   FiLogIn,
   FiLogOut,
@@ -31,6 +29,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constant";
 import { useAppSelector } from "../../hooks/useAppRedux";
 import { useAuth } from "../../hooks/useAuth";
+import HeaderMobile from "./HeaderMobile";
 import SuggestSearch from "../header/SuggestSearch";
 import showSuccessNotification from "../Toast/NotificationSuccess";
 
@@ -53,9 +52,8 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
-    useDisclosure(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+
 
   // Responsive breakpoints
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -89,6 +87,17 @@ const Header: React.FC = () => {
     setShowSuggestions(true);
   };
 
+  const handleClearSearch = () => {
+    setSearchValue("");
+    setShowSuggestions(false);
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.has("q")) {
+      searchParams.delete("q");
+      const newSearch = searchParams.toString();
+      navigate(`${location.pathname}${newSearch ? `?${newSearch}` : ""}`, { replace: true });
+    }
+  };
+
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
@@ -103,7 +112,7 @@ const Header: React.FC = () => {
       }
 
       // Chuyển đến trang kết quả tìm kiếm
-      window.location.href = `/search?q=${encodeURIComponent(searchValue)}`;
+      navigate(`/products?q=${encodeURIComponent(searchValue)}`);
     }
     setShowSuggestions(false);
   };
@@ -126,6 +135,7 @@ const Header: React.FC = () => {
         duration: 0.5,
         ease: "easeOut",
       }}
+      style={{zIndex: 1}}
     >
       <Container size="xl">
         {/* Main header row */}
@@ -184,10 +194,7 @@ const Header: React.FC = () => {
                               searchValue ? "visible" : "invisible"
                             }`}
                             aria-label="Clear input"
-                            onClick={() => {
-                              setSearchValue("");
-                              setShowSuggestions(false);
-                            }}
+                            onClick={handleClearSearch}
                           />
                           <Divider size={"2"} orientation="vertical" />
                           <Button
@@ -303,9 +310,16 @@ const Header: React.FC = () => {
                                 <Menu.Item
                                   leftSection={<FiPackage size={16} />}
                                   component={Link}
-                                  to="/settings/orders"
+                                  to={APP_ROUTES.USER_ORDERS}
                                 >
                                   Đơn hàng của tôi
+                                </Menu.Item>
+                                <Menu.Item
+                                  leftSection={<FiHeart size={16} />}
+                                  component={Link}
+                                  to={APP_ROUTES.USER_WISHLIST}
+                                >
+                                  Sản phẩm yêu thích
                                 </Menu.Item>
                                 <Menu.Divider />
                                 {user?.hasShop ? (
@@ -340,14 +354,14 @@ const Header: React.FC = () => {
                                 <Menu.Item
                                   leftSection={<FiLogIn size={16} />}
                                   component={Link}
-                                  to="/login"
+                                  to={APP_ROUTES.LOGIN}
                                 >
                                   <Text size="sm">Đăng nhập</Text>
                                 </Menu.Item>
                                 <Menu.Item
                                   leftSection={<BiUser size={16} />}
                                   component={Link}
-                                  to="/register"
+                                  to={APP_ROUTES.REGISTER}
                                 >
                                   <Text size="sm">Đăng ký</Text>
                                 </Menu.Item>
@@ -433,183 +447,11 @@ const Header: React.FC = () => {
             </motion.div>
           )}
 
-          {/* Mobile: Cart + Menu Button */}
-          {isMobile && (
-            <Group gap="sm" className="flex-shrink-0">
-              <UnstyledButton
-                onClick={handleOpenCart}
-                className="relative text-contentText hover:text-primary transition-colors"
-              >
-                <FaShoppingBag size={20} />
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
-                  {user?.cartCount || 0}
-                </span>
-              </UnstyledButton>
-              <Burger opened={drawerOpened} onClick={toggleDrawer} size="sm" />
-            </Group>
-          )}
+          {/* Mobile: HeaderMobile Component */}
+          {isMobile && <HeaderMobile />}
         </div>
 
-        {/* Mobile Search Bar - Below header on mobile */}
-        {isMobile && (
-          <Box mt="md">
-            <form onSubmit={handleSearchSubmit}>
-              <Input
-                size="sm"
-                radius="md"
-                placeholder="Tìm kiếm sản phẩm..."
-                value={searchValue}
-                onChange={handleSearchChange}
-                onFocus={handleSearchFocus}
-                leftSection={<FaSearch size={14} className="text-gray-400" />}
-                rightSectionPointerEvents="all"
-                rightSection={
-                  searchValue && (
-                    <CloseButton
-                      size="sm"
-                      onClick={() => {
-                        setSearchValue("");
-                        setShowSuggestions(false);
-                      }}
-                    />
-                  )
-                }
-              />
-            </form>
-            {/* Mobile Search Suggestions */}
-            <div className="relative">
-              <SuggestSearch
-                searchTerm={searchValue}
-                visible={showSuggestions}
-                onSelect={() => setShowSuggestions(false)}
-              />
-            </div>
-          </Box>
-        )}
       </Container>
-
-      {/* Mobile Drawer Menu */}
-      <Drawer
-        opened={drawerOpened}
-        onClose={closeDrawer}
-        position="right"
-        size="80%"
-        padding="md"
-        title={
-          <Text fw={600} size="lg">
-            Menu
-          </Text>
-        }
-      >
-        <Stack gap="md">
-          {/* User Info */}
-          {isAuthenticated && user?.address && (
-            <Box className="bg-gray-50 p-3 rounded-lg">
-              <Group gap="xs" className="text-gray-600">
-                <FiMapPin size={14} />
-                <Text size="sm">
-                  {user?.address?.districtName}, {user?.address?.provinceName}
-                </Text>
-              </Group>
-            </Box>
-          )}
-
-          {/* Home */}
-          {location.pathname !== APP_ROUTES.HOME && (
-            <UnstyledButton
-              className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
-              component={Link}
-              to={APP_ROUTES.HOME}
-              onClick={closeDrawer}
-            >
-              <FiHome size={20} />
-              <Text>Trang chủ</Text>
-            </UnstyledButton>
-          )}
-
-          <Divider />
-
-          {/* Account Options */}
-          {isAuthenticated ? (
-            <>
-              <UnstyledButton
-                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
-                component={Link}
-                to={APP_ROUTES.USER_PROFILE}
-                onClick={closeDrawer}
-              >
-                <BiUser size={20} />
-                <Text>Thông tin tài khoản</Text>
-              </UnstyledButton>
-
-              <UnstyledButton
-                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
-                component={Link}
-                to="/settings/orders"
-                onClick={closeDrawer}
-              >
-                <FiPackage size={20} />
-                <Text>Đơn hàng của tôi</Text>
-              </UnstyledButton>
-
-              <Divider />
-
-              <UnstyledButton
-                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
-                component={Link}
-                to={
-                  user?.hasShop
-                    ? APP_ROUTES.MYSHOP.BASE
-                    : APP_ROUTES.SHOP_REGISTER
-                }
-                onClick={closeDrawer}
-              >
-                <FaStore size={20} />
-                <Text>
-                  {user?.hasShop ? "Quản lý cửa hàng" : "Đăng ký cửa hàng"}
-                </Text>
-              </UnstyledButton>
-
-              <Divider />
-
-              <UnstyledButton
-                className="flex items-center gap-3 p-2 hover:bg-red-50 rounded-lg text-red-600"
-                onClick={() => {
-                  handleLogout();
-                  closeDrawer();
-                }}
-              >
-                <FiLogOut size={20} />
-                <Text>Đăng xuất</Text>
-              </UnstyledButton>
-            </>
-          ) : (
-            <>
-              <UnstyledButton
-                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
-                component={Link}
-                to="/login"
-                onClick={closeDrawer}
-              >
-                <FiLogIn size={20} />
-                <Text>Đăng nhập</Text>
-              </UnstyledButton>
-
-              <UnstyledButton
-                className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
-                component={Link}
-                to="/register"
-                onClick={closeDrawer}
-              >
-                <BiUser size={20} />
-                <Text>Đăng ký</Text>
-              </UnstyledButton>
-            </>
-          )}
-
-          <Divider />
-        </Stack>
-      </Drawer>
     </motion.header>
   );
 };
