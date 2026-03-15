@@ -24,7 +24,7 @@ const ProductDetailPage = lazy(
   () => import("../../components/User/ProductDetail/ProductDetailPage")
 );
 const SettingPage = lazy(
-  () => import("../../components/User/Setting.tsx/SettingPage")
+  () => import("../../components/User/Setting/SettingPage")
 );
 const ShopPage = lazy(() => import("../../components/User/Shop/ShopPage"));
 const PaymentResultPage = lazy(

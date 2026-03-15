@@ -80,6 +80,37 @@ export interface VerifyPasswordResponse {
     message: string;
 }
 
+// Transaction Types
+export type TransactionType = 'NAP_TIEN' | 'RUT_TIEN' | 'THANH_TOAN' | 'NHAN_TIEN' | 'HOAN_TIEN';
+export type TransactionStatus = 'THANH_CONG' | 'THAT_BAI' | 'DANG_XU_LY';
+
+export interface TransactionHistoryDto {
+    id: string;
+    walletId: string;
+    transactionType: TransactionType;
+    amount: number;
+    balanceBefore: number;
+    balanceAfter: number;
+    status: TransactionStatus;
+    referenceCode: string;
+    description: string;
+    createdAt: string;
+}
+
+export interface TransactionHistoryListResponse {
+    totalCount: number;
+    totalPages: number;
+    currentPage: number;
+    transactions: TransactionHistoryDto[];
+}
+
+export interface TransactionParams {
+    page?: number;
+    limit?: number;
+    transactionType?: TransactionType;
+    sortBy?: string;
+}
+
 // Admin types
 export interface AdminWalletDto {
     id: string;

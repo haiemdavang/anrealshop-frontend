@@ -31,17 +31,15 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { APP_ROUTES } from "../../../constant";
 import { AddressPage } from "./Address/AddressPage";
 import Breadcrumbs from "./Breadcrumbs";
-import Favorite from "./Favorite/Favorite";
 import Notification from "./Notification";
 import { OrderDetail } from "./OrderDetail/OrderDetailPage";
 import OrderHistory from "./OrderHistory/OrderHistoryPage";
 import Preferences from "./Preferences";
 import Profile from "./Profile/Profile";
-import MyReviews from "./Reviews/MyReviews";
 import Security from "./Security/Security";
+import Favorite from "./Favorite/Favorite";
 import Wallet from "./Wallet/Wallet";
 
 // Define navigation item interface
@@ -98,7 +96,7 @@ const SettingPage = () => {
     },
     {
       path: "/payment",
-      label: "Ví của tôi",
+      label: "Phương thức thanh toán",
       icon: <FiCreditCard size={16} />,
       component: <Wallet />,
     },
@@ -112,7 +110,7 @@ const SettingPage = () => {
       path: "/reviews",
       label: "Đánh giá của tôi",
       icon: <FiStar size={16} />,
-      component: <MyReviews />,
+      component: <div>Đánh giá của tôi</div>, // Placeholder component
     },
     {
       path: "/coupons",
@@ -299,7 +297,7 @@ const SettingPage = () => {
                   <Routes>
                     <Route
                       path="/"
-                      element={<Navigate to={APP_ROUTES.USER_PROFILE} replace />}
+                      element={<Navigate to="/settings/profile" replace />}
                     />
                     {navItems.map((item) => (
                       <Route

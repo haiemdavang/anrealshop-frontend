@@ -293,7 +293,7 @@ const ModalVerifyKYC = ({ opened, onClose, onSuccess }: ModalVerifyKYCProps) => 
 
             <Divider mb="xl" />
 
-            <ScrollArea.Autosize mah="40vh" offsetScrollbars>
+            <ScrollArea.Autosize mah="50vh" offsetScrollbars>
                 <div className="px-1">
                     {/* Step 0: Upload Document */}
                     {activeStep === 0 && (

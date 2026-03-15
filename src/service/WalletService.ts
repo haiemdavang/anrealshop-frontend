@@ -3,6 +3,8 @@ import type {
     AdminWalletDto,
     AdminWalletListResponse,
     AdminWalletParams,
+    TransactionHistoryListResponse,
+    TransactionParams,
     UserVerificationDto,
     VerifyPasswordResponse,
     VerifyWalletRequest,
@@ -27,6 +29,11 @@ const submitVerification = async (request: VerifyWalletRequest): Promise<UserVer
 
 const verifyPassword = async (paymentPassword: string): Promise<VerifyPasswordResponse> => {
     const response = await axiosInstance.post(API_ENDPOINTS.WALLET.VERIFY_PASSWORD, { paymentPassword });
+    return response.data;
+};
+
+const getTransactionHistory = async (params: TransactionParams): Promise<TransactionHistoryListResponse> => {
+    const response = await axiosInstance.get(API_ENDPOINTS.WALLET.TRANSACTIONS, { params });
     return response.data;
 };
 
@@ -56,6 +63,7 @@ export const WalletService = {
     getMyVerification,
     submitVerification,
     verifyPassword,
+    getTransactionHistory,
     getAdminWallets,
     approveVerification,
     rejectVerification,
