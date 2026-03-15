@@ -32,4 +32,4 @@ dist-ssr
 *.sw?
 
 
-src/service/AxiosInstant.ts
+# src/service/AxiosInstant.ts
