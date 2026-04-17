@@ -1,6 +1,6 @@
-import { Anchor, Box, Breadcrumbs, Container, Group, Paper, Text, Title } from '@mantine/core';
+import { Box, Container, Group, Paper, Text, Title } from '@mantine/core';
 import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
-import { FiChevronRight, FiShoppingBag } from 'react-icons/fi';
+import { FiShoppingBag, FiHome } from 'react-icons/fi';
 import { useSearchParams } from 'react-router-dom';
 import { useProduct } from '../../../hooks/useProduct';
 import type { BaseCategoryDto } from '../../../types/CategoryType';
@@ -22,6 +22,7 @@ const CheckboxSelected = lazy(() => import('./Managerment/ProductView/CheckboxSe
 const GridView = lazy(() => import('./Managerment/ProductView/GridView/GridView'));
 const ListView = lazy(() => import('./Managerment/ProductView/ListView/ListView'));
 const NonProductFound = lazy(() => import('./Managerment/ProductView/NonProductFound'));
+import { BreadcrumbItems } from '../Components/BreadcrumbItems';
 const Pagination = lazy(() => import('../../common/PaginationCustom'));
 
 const ProductPage = () => {
@@ -212,13 +213,9 @@ const ProductPage = () => {
 
   // Breadcrumb items
   const breadcrumbItems = [
-    { title: 'Trang chủ', href: '/myshop' },
-    { title: 'Quản lý sản phẩm', href: '#' },
-  ].map((item, index) => (
-    <Anchor href={item.href} key={index} size="sm">
-      {item.title}
-    </Anchor>
-  ));
+    { title: 'Trang chủ', href: '/myshop', icon: <FiHome size={14} /> },
+    { title: 'Quản lý sản phẩm' },
+  ];
 
   return (
     <Container fluid px="lg" py="md">
@@ -231,9 +228,7 @@ const ProductPage = () => {
         className="border-b border-gray-200"
       >
         <Box mb="xs">
-          <Breadcrumbs separator={<FiChevronRight size={14} />}>
-            {breadcrumbItems}
-          </Breadcrumbs>
+          <BreadcrumbItems items={breadcrumbItems} />
         </Box>
 
         <Group justify="space-between" align="center">

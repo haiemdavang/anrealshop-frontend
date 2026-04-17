@@ -47,6 +47,7 @@ export const API_ENDPOINTS = {
   SHOPS: {
     INFO: '/shops',
     REGISTER: '/shops/register',
+    PUBLIC_DETAILS: (id: string) => `/public/shops/${id}`,
   },
   PRODUCTS: {
     BASE: '/products',

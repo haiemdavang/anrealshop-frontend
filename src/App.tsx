@@ -69,7 +69,7 @@ function App() {
   } = useWakeWord();
 
   useEffect(() => {
-    
+
     if (!user && !isAuthenticated) {
       dispatch(fetchCurrentUser());
     }
@@ -94,16 +94,16 @@ function App() {
       }
     };
 
-    if(user && isAuthenticated)
+    if (user && isAuthenticated)
       setupWakeWord();
   }, [initWakeWord, startListening, isLoaded, user, isAuthenticated]);
 
   return (
     <MantineProvider theme={theme}>
-      <Notifications position="top-right" zIndex={1000} mt={"50px"}/>
+      <Notifications position="top-right" zIndex={1000} mt={"50px"} />
 
       {/* Voice Overlay */}
-      <OverlayVoice 
+      <OverlayVoice
         visible={isWakeWordDetected}
         message={isRecognizing ? 'Đang nghe lệnh...' : `Wake word: ${detectedLabel}`}
         isRecording={isRecognizing}
