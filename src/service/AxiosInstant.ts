@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json',
   },
 });
- 
+
 const axiosNoAuthInstance = axios.create({
   baseURL: BASE_API_URL,
   withCredentials: true,

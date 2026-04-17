@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@mantine/carousel": "^7.17.0",
+    "@mantine/charts": "^7.17.8",
     "@mantine/core": "^7.17.7",
     "@mantine/dates": "^7.17.7",
     "@mantine/form": "^7.17.7",
@@ -44,6 +45,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.1",
     "react-webcam": "^7.2.0",
+    "recharts": "^2.15.4",
     "slugify": "^1.6.6",
     "sockjs-client": "^1.6.1"
   },

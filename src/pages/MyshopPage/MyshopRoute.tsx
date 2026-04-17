@@ -8,6 +8,7 @@ import { fetchCurrentShop } from '../../store/authSlice';
 
 
 const ShopAdminHeader = lazy(() => import('../../components/header/ShopAdminHeader'));
+const DashboardPage = lazy(() => import('../../components/Myshop/Dashboard/DashboardPage'));
 const MessagePage = lazy(() => import('../../components/Myshop/Message/MessagePage'));
 // const OrderDetailComp = lazy(() => import('../../components/Myshop/Order/OrderDetailPage'));
 const OrderPage = lazy(() => import('../../components/Myshop/Order/OrderPage'));
@@ -33,7 +34,7 @@ const MyshopPage = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      if (isAuthenticated  && user && user.role !== 'ADMIN' && !shop  && status === 'succeeded') {
+      if (isAuthenticated && user && user.role !== 'ADMIN' && !shop && status === 'succeeded') {
         if (!user?.hasShop) {
           navigate(APP_ROUTES.SHOP_REGISTER);
           showErrorNotification("Thông báo", "Bạn cần đăng ký cửa hàng trước khi truy cập.");
@@ -46,7 +47,7 @@ const MyshopPage = () => {
     return <OverlayLoading visible={true} />
   }
 
-   if (isAuthenticated && user?.role === 'ADMIN') {
+  if (isAuthenticated && user?.role === 'ADMIN') {
     showErrorNotification('Quyền truy cập bị từ chối', 'Bạn sẽ được chuyển đến trang quản trị.');
     navigate(APP_ROUTES.ADMIN.BASE);
     return null;
@@ -60,8 +61,10 @@ const MyshopPage = () => {
 
       <div className="flex-1 bg-gray-50">
         <Routes>
-          <Route index element={<Navigate to={APP_ROUTES.MYSHOP.DASHBOARD} replace />} />
-          <Route path={APP_ROUTES.MYSHOP.DASHBOARD} element={<div>Dashboard Content</div>} />
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={
+            <DashboardPage />
+          } />
           <Route path="sale" element={<div>Sales Overview</div>} />
           <Route path="products" element={<ProductPage />} />
           <Route path="products/create" element={<CreateProduct />} />
