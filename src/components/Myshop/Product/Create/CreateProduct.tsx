@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { FiEye, FiSave } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import Infor from './Infor';
+import GuideSEO from './GuideSEO';
 import { useProductForm } from '../../../../hooks/useProductForm';
-  
+
 const ProductForm = () => {
   const { id } = useParams();
   const isEditMode = !!id;
@@ -26,17 +27,17 @@ const ProductForm = () => {
     setIsPreviewOpen(false);
   };
 
-  
+
 
   return (
     <Container fluid px="lg" py="md" style={{ position: 'relative' }}>
-      <LoadingOverlay 
-        visible={isLoading} 
+      <LoadingOverlay
+        visible={isLoading}
         zIndex={1000}
-        overlayProps={{ 
-          radius: "sm", 
+        overlayProps={{
+          radius: "sm",
           blur: 2,
-          backgroundOpacity: 0.5 
+          backgroundOpacity: 0.5
         }}
       />
 
@@ -96,10 +97,18 @@ const ProductForm = () => {
       </Modal>
 
       <Paper className="!bg-transparent mb-20">
-        <Infor
-          form={form}
-          isEditMode={isEditMode}
-        />
+        <div className="flex gap-5 items-start">
+          <div className="flex-1 min-w-0">
+            <Infor
+              form={form}
+              isEditMode={isEditMode}
+            />
+          </div>
+
+          <div className="w-72 shrink-0 hidden xl:block sticky top-20">
+            <GuideSEO />
+          </div>
+        </div>
       </Paper>
 
       <Paper
@@ -111,12 +120,12 @@ const ProductForm = () => {
         <Container fluid px="lg">
           <Group justify="space-between">
             <Text size="sm" c="dimmed" className="hidden md:block">
-              {isLoading 
-                ? (isEditMode ? 'Đang cập nhật sản phẩm...' : 'Đang tạo sản phẩm...') 
-                : isDirty 
-                  ? 'Sản phẩm có thay đổi chưa được lưu' 
-                  : isEditMode 
-                    ? 'Chỉnh sửa thông tin sản phẩm của bạn' 
+              {isLoading
+                ? (isEditMode ? 'Đang cập nhật sản phẩm...' : 'Đang tạo sản phẩm...')
+                : isDirty
+                  ? 'Sản phẩm có thay đổi chưa được lưu'
+                  : isEditMode
+                    ? 'Chỉnh sửa thông tin sản phẩm của bạn'
                     : 'Tạo và quản lý thông tin sản phẩm của bạn'
               }
             </Text>

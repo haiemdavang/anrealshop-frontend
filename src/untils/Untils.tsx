@@ -172,3 +172,23 @@ export function buildPath(input: string): string {
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
 }
+
+export const textFromObject = (obj: any): string => {
+  if (!obj || typeof obj !== 'object') {
+    return String(obj || '');
+  }
+
+  const parts: string[] = [];
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      if (typeof value === 'object') {
+        parts.push(`${key}: { ${textFromObject(value)} }`);
+      } else {
+        parts.push(`${key}: ${value}`);
+      }
+    }
+  });
+
+  return parts.join(', ');
+};

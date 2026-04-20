@@ -21,6 +21,8 @@ import RichTextEditor from '../../../../RichText/RichTextEditor';
 import CategoryInfo from './CategoryInfo';
 import type { BaseCategoryDto } from '../../../../../types/CategoryType';
 import { CategoryService } from '../../../../../service/CategoryService';
+import { GeminiSuggestWrapper } from '../../../../common/BtnGeminiSuggest';
+import { useGeminiSuggest } from '../../../../../hooks/useSuggest';
 
 interface BasicInforProps {
     isShowQuantity?: boolean;
@@ -32,7 +34,7 @@ interface BasicInforProps {
     categoryIdProps: SelectProps;
     categoryPathProps: AutocompleteProps;
     descriptionProps: TextInputProps;
-    quantityProps: NumberInputProps; 
+    quantityProps: NumberInputProps;
 }
 
 const BasicInfor = memo(({
@@ -49,6 +51,12 @@ const BasicInfor = memo(({
 }: BasicInforProps) => {
     const [collapsed, setCollapsed] = useState(false);
     const [categoriesSuggestions, setCategoriesSuggestions] = useState<BaseCategoryDto[]>([]);
+    const { getGeminiSuggestion } = useGeminiSuggest();
+
+    const getContextData = () => ({
+        "Tên sản phẩm": nameProps.value,
+        "Danh mục": categoryPathProps.value
+    });
 
     const toggleSection = () => {
         setCollapsed(prev => !prev);
@@ -114,14 +122,23 @@ const BasicInfor = memo(({
                         {...nameProps}
                     />
 
-                    <Textarea
-                        label="Mô tả ngắn"
-                        placeholder="Mô tả ngắn về sản phẩm"
-                        required
-                        minRows={3}
-                        maxRows={5}
-                        {...sortDescriptionProps}
-                    />
+                    <GeminiSuggestWrapper
+                        onSuggest={(text) => {
+                            const formOnChange = sortDescriptionProps.onChange as any;
+                            formOnChange?.({ target: { value: text } } as React.ChangeEvent<HTMLTextAreaElement>);
+                        }}
+                        fetchSuggestion={() => getGeminiSuggestion('product', 'shortDescription', getContextData())}
+                        tooltipLabel="Gợi ý mô tả ngắn bằng Gemini AI"
+                    >
+                        <Textarea
+                            label="Mô tả ngắn"
+                            placeholder="Mô tả ngắn về sản phẩm"
+                            required
+                            minRows={3}
+                            maxRows={5}
+                            {...sortDescriptionProps}
+                        />
+                    </GeminiSuggestWrapper>
 
                     <SimpleGrid cols={3} spacing="lg">
                         <NumberInput
@@ -164,14 +181,23 @@ const BasicInfor = memo(({
                         onSearchChange={handleCategorySearchChange}
                     />
 
-                    <RichTextEditor
-                        value={descriptionProps.value as string}
-                        onChange={(val) => {
+                    <GeminiSuggestWrapper
+                        onSuggest={(text) => {
                             const onChangeAny = descriptionProps.onChange as any;
-                            onChangeAny?.(val);
+                            onChangeAny?.(text);
                         }}
-                        error={descriptionProps.error}
-                    />
+                        fetchSuggestion={() => getGeminiSuggestion('product', 'description', getContextData())}
+                        tooltipLabel="Gợi ý mô tả chi tiết bằng Gemini AI"
+                    >
+                        <RichTextEditor
+                            value={descriptionProps.value as string}
+                            onChange={(val) => {
+                                const onChangeAny = descriptionProps.onChange as any;
+                                onChangeAny?.(val);
+                            }}
+                            error={descriptionProps.error}
+                        />
+                    </GeminiSuggestWrapper>
                 </Stack>
             )}
         </Paper>

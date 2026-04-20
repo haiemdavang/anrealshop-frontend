@@ -148,6 +148,7 @@ export const API_ENDPOINTS = {
     INIT_ROOM: '/chat/rooms/init',
     BOT: '/chat/bot',
     BOT_HISTORY: '/chat/bot/history',
+    GEMINI: '/chat/gemini',
   },
 
   TRYON: {
