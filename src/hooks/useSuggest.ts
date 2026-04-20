@@ -54,3 +54,32 @@ export const useSuggest = <T>(type: SuggestType) => {
     clearError
   };
 };
+
+import { ChatService } from '../service/ChatService';
+import { textFromObject } from '../untils/Untils';
+
+export type GeminiSuggestTable = 'product' | 'shop';
+export type GeminiSuggestField = 'description' | 'shortDescription' | 'name';
+
+export const useGeminiSuggest = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getGeminiSuggestion = useCallback(async (
+    tableName: GeminiSuggestTable,
+    fieldName: GeminiSuggestField,
+    contextData: any
+  ): Promise<string> => {
+    setIsLoading(true);
+    try {
+      const contextText = textFromObject(contextData);
+      const res = await ChatService.askGemini(tableName, fieldName, contextText);
+      return res;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return { getGeminiSuggestion, isLoading };
+};

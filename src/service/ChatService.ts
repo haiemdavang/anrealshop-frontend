@@ -55,10 +55,17 @@ const getChatbotHistory = async (
     return response.data;
 };
 
+const askGemini = async (tableName: string, fieldName: string, context: string): Promise<string> => {
+    const payload = { tableName, fieldName, context };
+    const response = await axiosInstance.post(API_ENDPOINTS.CHAT.GEMINI, payload);
+    return response.data;
+};
+
 export const ChatService = {
     getCurrentUserRooms,
     getRoomMessages,
     initRoom,
     askChatbot,
     getChatbotHistory,
+    askGemini,
 };
