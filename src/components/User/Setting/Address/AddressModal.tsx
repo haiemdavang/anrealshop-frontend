@@ -18,9 +18,10 @@ interface AddressModalProps {
     onClose: () => void;
     address: AddressDto | null;
     onSave: (address: AddressRequestDto) => void;
+    isPrimaryAddress?: boolean;
 }
 
-export const AddressModal = ({ opened, onClose, address, onSave }: AddressModalProps) => {
+export const AddressModal = ({ opened, onClose, address, onSave, isPrimaryAddress }: AddressModalProps) => {
     const [provinces, setProvinces] = useState<SingleAddressDto[]>([]);
     const [districts, setDistricts] = useState<SingleAddressDto[]>([]);
     const [wards, setWards] = useState<SingleAddressDto[]>([]);
@@ -78,10 +79,13 @@ export const AddressModal = ({ opened, onClose, address, onSave }: AddressModalP
             }
         } else if (opened) {
             form.reset();
+            if (isPrimaryAddress) {
+                form.setFieldValue('isPrimary', true);
+            }
             setDistricts([]);
             setWards([]);
         }
-    }, [opened, address]);
+    }, [opened, address, isPrimaryAddress]);
 
     const fetchProvinces = async () => {
         setLoading(true);
@@ -235,6 +239,7 @@ export const AddressModal = ({ opened, onClose, address, onSave }: AddressModalP
                     <Switch
                         label="Đặt làm địa chỉ mặc định"
                         {...form.getInputProps('isPrimary', { type: 'checkbox' })}
+                        disabled={isPrimaryAddress && !address}
                     />
 
                     <Group justify="flex-end" mt="sm">

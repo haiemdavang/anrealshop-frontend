@@ -259,6 +259,7 @@ export const AddressPage = () => {
                 onClose={closeModal}
                 address={selectedAddress}
                 onSave={handleSaveAddress}
+                isPrimaryAddress={addresses.length === 0}
             />
 
             <ConfirmDeleteModal
