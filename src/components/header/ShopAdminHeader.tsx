@@ -17,7 +17,6 @@ import {
   FiChevronRight,
   FiHome,
   FiLogOut,
-  FiMessageSquare,
   FiPackage,
   FiPieChart,
   FiPlus,
@@ -53,7 +52,6 @@ const navLinks = [
       { label: 'In phiếu giao hàng', icon: <FiPrinter size={16} />, path: '/myshop/orders/printing' },
     ]
   },
-  { label: 'Tin nhắn', icon: <FiMessageSquare size={16} />, path: '/myshop/messages' },
   { label: 'Cài đặt', icon: <FiSettings size={16} />, path: '/myshop/settings' },
 ];
 

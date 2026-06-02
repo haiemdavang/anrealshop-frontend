@@ -9,7 +9,6 @@ import { fetchCurrentShop } from '../../store/authSlice';
 
 const ShopAdminHeader = lazy(() => import('../../components/header/ShopAdminHeader'));
 const DashboardPage = lazy(() => import('../../components/Myshop/Dashboard/DashboardPage'));
-const MessagePage = lazy(() => import('../../components/Myshop/Message/MessagePage'));
 // const OrderDetailComp = lazy(() => import('../../components/Myshop/Order/OrderDetailPage'));
 const OrderPage = lazy(() => import('../../components/Myshop/Order/OrderPage'));
 const CreateProduct = lazy(() => import('../../components/Myshop/Product/Create/CreateProduct'));
@@ -73,7 +72,6 @@ const MyshopPage = () => {
           {/* <Route path="orders/:shopOrderId" element={<OrderDetailComp />} /> */}
           <Route path="orders/shipping" element={<OrderShippingPage />} />
           <Route path="orders/printing" element={<OrderPrintPage />} />
-          <Route path="messages" element={<MessagePage />} />
           <Route path="settings/*" element={<Setting />} />
 
           <Route path="*" element={<Navigate to={APP_ROUTES.MYSHOP.DASHBOARD} replace />} />
