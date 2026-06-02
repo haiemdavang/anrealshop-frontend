@@ -33,6 +33,7 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/useAppRedux';
 import { APP_ROUTES } from '../../constant';
+import { NoticeModal } from '../noticeModal/NoticeModal';
 
 const navLinks = [
   { label: 'Tổng quan', icon: <FiPieChart size={16} />, path: '/myshop/dashboard' },
@@ -63,7 +64,6 @@ export function ShopAdminHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const [opened, { toggle, close }] = useDisclosure(false);
-  const [hasUnread] = useState(true);
   const [openedSubmenu, setOpenedSubmenu] = useState<string | null>(null);
 
   const { shop } = useAppSelector((state) => state.auth);
@@ -165,66 +165,7 @@ export function ShopAdminHeader() {
           {/* Right section: notifications and user */}
           <Group gap="md">
             {/* Notifications */}
-            <Menu shadow="md" width={320} position="bottom-end">
-              <Menu.Target>
-                <ActionIcon
-                  variant="subtle"
-                  size="lg"
-                  radius="xl"
-                  aria-label="Thông báo"
-                >
-                  <Indicator size={8} offset={4} color="red" withBorder disabled={!hasUnread}>
-                    <FiBell size={20} className="text-gray-700" />
-                  </Indicator>
-                </ActionIcon>
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                <div className="p-2">
-                  <Group justify="space-between" className="mb-2">
-                    <Text fw={500}>Thông báo</Text>
-                    <Text size="xs" c="dimmed" className="cursor-pointer hover:underline">
-                      Đánh dấu tất cả đã đọc
-                    </Text>
-                  </Group>
-
-                  <Divider className="mb-2" />
-
-                  {/* Sample notifications */}
-                  <div className="space-y-1 max-h-[300px] overflow-auto">
-                    <div className="p-2 rounded hover:bg-gray-50 cursor-pointer">
-                      <Text size="sm" fw={500}>
-                        Đơn hàng mới #12345
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        Khách hàng Nguyễn Văn A vừa đặt một đơn hàng mới
-                      </Text>
-                      <Text size="xs" c="dimmed" className="mt-1">
-                        5 phút trước
-                      </Text>
-                    </div>
-
-                    <div className="p-2 rounded hover:bg-gray-50 cursor-pointer">
-                      <Text size="sm" fw={500}>
-                        Cập nhật hệ thống
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        Hệ thống sẽ bảo trì vào ngày 20/05/2025
-                      </Text>
-                      <Text size="xs" c="dimmed" className="mt-1">
-                        2 giờ trước
-                      </Text>
-                    </div>
-                  </div>
-
-                  <Divider className="my-2" />
-
-                  <UnstyledButton className="w-full text-center text-sm text-primary py-1">
-                    Xem tất cả thông báo
-                  </UnstyledButton>
-                </div>
-              </Menu.Dropdown>
-            </Menu>
+            <NoticeModal isShop={true} />
 
             {/* User menu */}
             <Menu shadow="md" width={200} position="bottom-end">

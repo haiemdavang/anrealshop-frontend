@@ -24,9 +24,9 @@ import {
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../hooks/useAppRedux';
 import { useAuth } from '../../../hooks/useAuth';
+import { NoticeModal } from '../../noticeModal/NoticeModal';
 
 const AdminHeader: React.FC<{ toggleSidebar: () => void, sidebarOpened: boolean }> = ({ toggleSidebar, sidebarOpened }) => {
-  const [hasUnread] = useState(true);
   const { user } = useAppSelector((state) => state.auth);
   const { handleLogout } = useAuth();
 
@@ -96,70 +96,7 @@ const AdminHeader: React.FC<{ toggleSidebar: () => void, sidebarOpened: boolean 
             </ActionIcon>
 
             {/* Thông báo */}
-            <Menu shadow="md" width={320} position="bottom-end">
-              <Menu.Target>
-                <ActionIcon
-                  variant="subtle"
-                  size="lg"
-                  radius="xl"
-                  aria-label="Thông báo"
-                >
-                  <Indicator size={8} offset={4} color="red" withBorder disabled={!hasUnread}>
-                    <FiBell size={20} className="text-gray-700" />
-                  </Indicator>
-                </ActionIcon>
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                <div className="p-2">
-                  <Group justify="space-between" className="mb-2">
-                    <Text fw={500}>Thông báo</Text>
-                    <Text size="xs" c="dimmed" className="cursor-pointer hover:underline">
-                      Đánh dấu tất cả đã đọc
-                    </Text>
-                  </Group>
-
-                  <Divider className="mb-2" />
-
-                  {/* Thông báo mẫu */}
-                  <div className="space-y-1 max-h-[300px] overflow-auto">
-                    <div className="p-2 rounded hover:bg-gray-50 cursor-pointer">
-                      <Text size="sm" fw={500}>
-                        Có 5 shop mới đăng ký
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        Cần xem xét và phê duyệt
-                      </Text>
-                      <Text size="xs" c="dimmed" className="mt-1">
-                        5 phút trước
-                      </Text>
-                    </div>
-
-                    <div className="p-2 rounded hover:bg-gray-50 cursor-pointer">
-                      <Text size="sm" fw={500}>
-                        10 sản phẩm đang chờ duyệt
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        Các sản phẩm mới cần xem xét trước khi xuất bản
-                      </Text>
-                      <Text size="xs" c="dimmed" className="mt-1">
-                        1 giờ trước
-                      </Text>
-                    </div>
-                  </div>
-
-                  <Divider className="my-2" />
-
-                  <UnstyledButton
-                    className="w-full text-center text-sm text-primary py-1"
-                    component={Link}
-                    to="/admin/notifications"
-                  >
-                    Xem tất cả thông báo
-                  </UnstyledButton>
-                </div>
-              </Menu.Dropdown>
-            </Menu>
+            <NoticeModal isShop={false} />
 
             {/* Menu người dùng */}
             <Menu shadow="md" width={200} position="bottom-end">

@@ -3,23 +3,50 @@ import {
     Container,
     Group,
     Paper,
-    Tabs,
     Text,
     Title,
+    Grid,
+    NavLink,
 } from '@mantine/core';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
     FiHome,
     FiSettings,
+    FiShoppingBag,
+    FiBell,
+    FiShield,
+    FiCreditCard,
+    FiUsers,
+    FiMessageSquare,
 } from 'react-icons/fi';
+import {
+    Navigate,
+    Route,
+    Routes,
+    useLocation,
+    useNavigate,
+} from "react-router-dom";
 import { BreadcrumbItems } from '../Components/BreadcrumbItems';
 import About from './About';
-import TabControll from './TabControll';
+import Notifications from './Notifications';
 
 interface SettingsProps { }
 
 const Setting: React.FC<SettingsProps> = () => {
-    const [activeTab, setActiveTab] = useState('shop');
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const navItems = [
+        { path: "/shop", icon: <FiShoppingBag size={16} />, label: "Cửa hàng" },
+        { path: "/notifications", icon: <FiBell size={16} />, label: "Thông báo" },
+        { path: "/security", icon: <FiShield size={16} />, label: "Bảo mật" },
+        { path: "/payment", icon: <FiCreditCard size={16} />, label: "Thanh toán" },
+        { path: "/team", icon: <FiUsers size={16} />, label: "Đội ngũ" },
+        { path: "/messaging", icon: <FiMessageSquare size={16} />, label: "Nhắn tin" },
+        { path: "/advanced", icon: <FiSettings size={16} />, label: "Nâng cao" },
+    ];
+
+    const currentTab = location.pathname.split("/").pop() || "shop";
 
     const breadcrumbItems = useMemo(() => {
         const tabNames: Record<string, string> = {
@@ -34,9 +61,13 @@ const Setting: React.FC<SettingsProps> = () => {
         return [
             { title: 'Trang chủ', href: '/', icon: <FiHome size={14} /> },
             { title: 'Cài đặt', href: '/myshop/settings' },
-            { title: tabNames[activeTab] || 'Không xác định' },
+            { title: tabNames[currentTab] || 'Không xác định' },
         ];
-    }, [activeTab]);
+    }, [currentTab]);
+
+    const isActive = (path: string) => {
+        return location.pathname.includes(`/myshop/settings${path}`);
+    };
 
     return (
         <Container fluid px="lg" py="md">
@@ -56,57 +87,55 @@ const Setting: React.FC<SettingsProps> = () => {
                 </Group>
             </Paper>
 
-            <Tabs
-                value={activeTab}
-                onChange={(value) => setActiveTab(value as string)}
-                orientation="vertical"
-                radius="md"
-                variant="pills"
-                styles={{
-                    root: { display: 'flex', gap: 16, alignItems: 'flex-start' },
-                    list: { flexShrink: 0 },
-                    panel: { flex: 1 },
-                }}
-            >
-                {/* Left sidebar */}
-                <Paper
-                    radius="md"
-                    withBorder
-                    p="xs"
-                    style={{
-                        minWidth: 220,
-                        position: 'sticky',
-                        top: 20,
-                        height: 'calc(100vh - 220px)',
-                        overflowY: 'auto'
-                    }}
-                >
-                    <TabControll />
-                </Paper>
+            <Grid gutter={{ base: "sm", md: "md" }} mb="md">
+                <Grid.Col span={{ base: 12, md: 2 }}>
+                    <Paper
+                        radius="md"
+                        withBorder
+                        p="xs"
+                        style={{
+                            position: "sticky",
+                            top: 20,
+                            height: "100%",
+                        }}
+                    >
+                        {navItems.map((item) => (
+                            <NavLink
+                                key={item.path}
+                                label={item.label}
+                                leftSection={item.icon}
+                                active={isActive(item.path)}
+                                onClick={() => navigate(`/myshop/settings${item.path}`)}
+                                className="font-medium rounded-md mb-1"
+                            />
+                        ))}
+                    </Paper>
+                </Grid.Col>
 
-                {/* Right content */}
-                <Paper
-                    radius="md"
-                    withBorder
-                    p="xl"
-                    style={{
-                        flex: 1,
-                        minHeight: 'calc(100vh - 220px)'
-                    }}
-                >
-                    {/* Shop tab */}
-                    <Tabs.Panel value="shop">
-                        <About />
-                    </Tabs.Panel>
-
-                    {/* Other tabs placeholder */}
-                    {['notifications', 'security', 'payment', 'team', 'messaging', 'advanced'].map((tab) => (
-                        <Tabs.Panel key={tab} value={tab}>
-                            <Text size="sm" c="dimmed" className="italic">Tính năng đang được phát triển...</Text>
-                        </Tabs.Panel>
-                    ))}
-                </Paper>
-            </Tabs>
+                <Grid.Col span={{ base: 12, md: 10 }}>
+                    <Paper
+                        radius="md"
+                        withBorder
+                        p="md"
+                        style={{
+                            minHeight: "calc(100vh - 220px)",
+                        }}
+                    >
+                        <Routes>
+                            <Route path="/" element={<Navigate to="shop" replace />} />
+                            <Route path="shop" element={<About />} />
+                            <Route path="notifications" element={<Notifications />} />
+                            {['security', 'payment', 'team', 'messaging', 'advanced'].map((tab) => (
+                                <Route
+                                    key={tab}
+                                    path={tab}
+                                    element={<Text size="sm" c="dimmed" className="italic">Tính năng đang được phát triển...</Text>}
+                                />
+                            ))}
+                        </Routes>
+                    </Paper>
+                </Grid.Col>
+            </Grid>
         </Container>
     );
 };

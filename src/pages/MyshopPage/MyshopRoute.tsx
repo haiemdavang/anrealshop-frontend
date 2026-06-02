@@ -74,7 +74,7 @@ const MyshopPage = () => {
           <Route path="orders/shipping" element={<OrderShippingPage />} />
           <Route path="orders/printing" element={<OrderPrintPage />} />
           <Route path="messages" element={<MessagePage />} />
-          <Route path="settings" element={<Setting />} />
+          <Route path="settings/*" element={<Setting />} />
 
           <Route path="*" element={<Navigate to={APP_ROUTES.MYSHOP.DASHBOARD} replace />} />
         </Routes>

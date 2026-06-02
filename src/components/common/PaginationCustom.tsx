@@ -19,7 +19,7 @@ const PaginationCustom: React.FC<PaginationCustomProps> = ({
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <Group justify="space-between" mt="md" p="sm" style={{ position: 'sticky', bottom: 0 }}>
+    <Group justify="space-between" mt="md" p="sm" style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', zIndex: 1 }}>
       <Text size="sm" c="dimmed">
         Hiển thị {startItem} - {endItem} trong tổng số {totalItems} mục
       </Text>

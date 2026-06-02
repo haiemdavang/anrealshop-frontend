@@ -148,13 +148,36 @@ export const parseDateString = (dateStr: string): Date | null => {
   return null;
 };
 
+
 export const formatRelativeDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   const now = new Date();
-  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-  if (diffDays === 0) return 'Hôm nay';
-  if (diffDays === 1) return 'Hôm qua';
-  if (diffDays < 7) return `${diffDays} ngày trước`;
+  
+  // Tính khoảng chênh lệch theo giây
+  const diffSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  // Trường hợp thời gian ở tương lai (do lệch giờ máy chủ/máy khách)
+  if (diffSeconds < 0) return 'Vừa xong'; 
+
+  // Dưới 1 phút
+  if (diffSeconds < 60) {
+    return diffSeconds < 5 ? 'Vừa xong' : `${diffSeconds} giây trước`;
+  }
+
+  // Dưới 1 giờ
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  if (diffMinutes < 60) {
+    return `${diffMinutes} phút trước`;
+  }
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) {
+    return `${diffHours} giờ trước`;
+  }
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) {
+    if (diffDays === 1) return 'Hôm qua';
+    return `${diffDays} ngày trước`;
+  }
   if (diffDays < 30) return `${Math.floor(diffDays / 7)} tuần trước`;
   return format(date, 'dd/MM/yyyy', { locale: vi });
 };

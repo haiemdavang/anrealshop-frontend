@@ -9,6 +9,7 @@ import type { OrderItemDto, OrderRejectRequest, ProductOrderItemDto, ShopOrderSt
 import { formatPrice } from '../../../../../untils/Untils';
 import RejectModal from '../../../../RejectModal/RejectModal';
 import ModalCreateOrderShip from '../Modal/ModalCreateOrderShip';
+import { showSuccessNotification } from '../../../../Toast/NotificationSuccess';
 
 interface OrderViewProps {
     items: OrderItemDto[];
@@ -239,7 +240,7 @@ const OrderView = ({
                                                     <div className="text-xs text-gray-500">
                                                         {item.reviewed ? "Đã đánh giá" : "Chưa có đánh giá"}
                                                     </div>
-                                                </div>r
+                                                </div>
                                             </div>
 
                                             <div className="col-span-2">
@@ -250,9 +251,17 @@ const OrderView = ({
                                                     <div className="text-xs text-gray-500">
                                                         {order.shippingMethod}
                                                     </div>
-                                                    <div className="text-xs text-gray-600 mt-1">
-                                                        #{order.shippingId}
-                                                    </div>
+                                                    {order.shippingId && (
+                                                        <div className="text-xs text-gray-600 mt-1 hover:text-decoration-underline cursor-pointer"
+                                                            onClick={() => {
+                                                                navigator.clipboard.writeText(order.shippingId);
+                                                                showSuccessNotification({ message: 'Đã sao chép mã vận đơn!' });
+                                                                }}>
+                                                            #{order.shippingId.length > 8 
+                                                            ? `${order.shippingId.slice(0, 8)}...` 
+                                                            : order.shippingId}
+                                                        </div>
+                                                        )}
                                                 </div>
                                             </div>
 
