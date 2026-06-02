@@ -2,16 +2,12 @@ import {
   ActionIcon,
   Avatar,
   Burger,
-  Divider,
   Group,
-  Indicator,
   Menu,
   Text,
   UnstyledButton
 } from '@mantine/core';
-import { useState } from 'react';
 import {
-  FiBell,
   FiChevronDown,
   FiHelpCircle,
   FiHome,

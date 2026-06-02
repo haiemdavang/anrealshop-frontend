@@ -1,12 +1,10 @@
 import {
-  ActionIcon,
   Avatar,
   Burger,
   Collapse,
   Divider,
   Drawer,
   Group,
-  Indicator,
   Menu,
   Stack,
   Text,
@@ -15,7 +13,6 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 import {
-  FiBell,
   FiChevronDown,
   FiChevronRight,
   FiHome,
