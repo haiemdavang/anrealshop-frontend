@@ -53,7 +53,6 @@ const Trending = ({ id }: TrendingProps) => {
         const data = await CategoryService.getPublicCategoriesDisplay(
           "HOMEPAGE"
         );
-        console.log("Fetched categories for Trending:", data);
         setCategories(data);
       } catch (error) {
         console.error("Error fetching categories:", error);

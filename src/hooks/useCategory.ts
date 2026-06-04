@@ -120,8 +120,6 @@ export const useCategory = ({ autoFetch = false }: UseCategoryParams = {}) => {
             const response = mode === 'admin'
                 ? await CategoryService.getCategoriesDisplay(position)
                 : await CategoryService.getPublicCategoriesDisplay(position);
-                
-                console.log(response)
             setCategoriesDisplay(response);
             return response;
         } catch (error) {

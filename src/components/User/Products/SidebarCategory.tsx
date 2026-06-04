@@ -1,13 +1,15 @@
 import { ActionIcon, Text, Transition } from '@mantine/core';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FiChevronDown, FiChevronLeft, FiChevronRight, FiGrid } from 'react-icons/fi';
 import { useCategory } from '../../../hooks/useCategory';
 import type { CategoryDisplayDto } from '../../../types/CategoryType';
 
+type CategoryTreeNode = CategoryDisplayDto & { children: CategoryTreeNode[] };
+
 interface SidebarCategoryProps {
     selectedCategory: string;
-    onCategoryChange: (categorySlug: string) => void;
+    onCategoryChange: (categoryId: string) => void;
     collapsed: boolean;
     onToggleCollapse: () => void;
 }
@@ -52,15 +54,19 @@ const SidebarCategory = ({
         });
     };
 
-    const buildCategoryTree = (categories: CategoryDisplayDto[]): CategoryDisplayDto[] => {
-        const categoryMap = new Map<string, CategoryDisplayDto & { children: CategoryDisplayDto[] }>();
-        const rootCategories: (CategoryDisplayDto & { children: CategoryDisplayDto[] })[] = [];
+    const buildCategoryTree = (categories: CategoryDisplayDto[]): CategoryTreeNode[] => {
+        const sortedCategories = [...categories].sort((a, b) => {
+            if (a.level !== b.level) return a.level - b.level;
+            return a.order - b.order;
+        });
+        const categoryMap = new Map<string, CategoryTreeNode>();
+        const rootCategories: CategoryTreeNode[] = [];
 
-        categories.forEach(cat => {
+        sortedCategories.forEach(cat => {
             categoryMap.set(cat.categoryId, { ...cat, children: [] });
         });
 
-        categories.forEach(cat => {
+        sortedCategories.forEach(cat => {
             const categoryNode = categoryMap.get(cat.categoryId)!;
             if (cat.parentId && categoryMap.has(cat.parentId)) {
                 const parent = categoryMap.get(cat.parentId)!;
@@ -70,38 +76,95 @@ const SidebarCategory = ({
             }
         });
 
+        categoryMap.forEach(category => {
+            category.children.sort((a, b) => {
+                if (a.level !== b.level) return a.level - b.level;
+                return a.order - b.order;
+            });
+        });
+
         return rootCategories;
     };
 
+    const categoryTree = useMemo(() => buildCategoryTree(categoriesDisplay), [categoriesDisplay]);
+
+    useEffect(() => {
+        if (selectedCategory === 'all') return;
+
+        const parentIds = new Set<string>();
+        const findSelectedPath = (categories: CategoryTreeNode[]): boolean => {
+            for (const category of categories) {
+                const isSelected = selectedCategory === category.categoryId || selectedCategory === category.slug;
+                if (isSelected) return true;
+                if (findSelectedPath(category.children)) {
+                    parentIds.add(category.categoryId);
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        findSelectedPath(categoryTree);
+        if (parentIds.size > 0) {
+            setExpandedCategories(prev => new Set([...prev, ...parentIds]));
+        }
+    }, [categoryTree, selectedCategory]);
+
     const renderCategory = (
-        category: CategoryDisplayDto & { children?: CategoryDisplayDto[] },
+        category: CategoryTreeNode,
         index: number,
         level: number = 0
     ) => {
-        const hasChildren = category.children && category.children.length > 0;
-        const isExpanded = expandedCategories.has(category.slug);
-        const isSelected = selectedCategory === category.slug;
+        const hasChildren = category.children.length > 0;
+        const isExpanded = expandedCategories.has(category.categoryId);
+        const isSelected = selectedCategory === category.categoryId || selectedCategory === category.slug;
+        const handleCategoryClick = () => {
+            onCategoryChange(category.categoryId);
+            if (hasChildren && !collapsed) {
+                setExpandedCategories(prev => {
+                    const newSet = new Set(prev);
+                    newSet.add(category.categoryId);
+                    return newSet;
+                });
+            }
+        };
 
         return (
             <div key={category.id} className={level > 0 && !collapsed ? 'ml-4' : ''}>
                 <motion.button
-                    onClick={() => onCategoryChange(category.slug)}
-                    className={`w-full text-left rounded-lg transition-colors mb-1 relative ${collapsed ? 'p-2' : 'p-3'
+                    onClick={handleCategoryClick}
+                    className={`w-full text-left rounded-lg transition-colors mb-1 relative overflow-hidden ${collapsed ? 'p-2' : 'p-3'
                         } ${isSelected && !collapsed
-                            ? 'bg-primary text-white'
+                            ? 'text-white shadow-sm'
                             : 'hover:bg-gray-100 text-gray-700'
                         }`}
+                    style={isSelected && !collapsed && category.thumbnailUrl ? {
+                        backgroundImage: `url(${category.thumbnailUrl})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                    } : undefined}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.2, delay: index * 0.05 }}
                     title={collapsed ? category.categoryName : undefined}
                 >
-                    <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-2'}`}>
+                    {isSelected && !collapsed && category.thumbnailUrl && (
+                        <>
+                            <div className="absolute inset-0 bg-black/35 backdrop-blur-sm" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/20 to-transparent" />
+                        </>
+                    )}
+
+                    {isSelected && !collapsed && !category.thumbnailUrl && (
+                        <div className="absolute inset-0 bg-primary" />
+                    )}
+
+                    <div className={`relative z-10 flex items-center ${collapsed ? 'justify-center' : 'gap-2'}`}>
 
                         {category.thumbnailUrl && (
                             <div className={`flex-shrink-0 rounded-md overflow-hidden bg-gray-100 ${collapsed ? 'w-10 h-10' : 'w-8 h-8'
                                 } ${isSelected && collapsed
-                                    ? 'ring-2 ring-primary ring-offset-2'
+                                    ? 'ring-2 ring-primary ring-offset-2 shadow-sm'
                                     : ''
                                 }`}>
                                 <img
@@ -152,7 +215,7 @@ const SidebarCategory = ({
                         transition={{ duration: 0.2 }}
                         className="mt-1"
                     >
-                        {category.children!.map((child, childIndex) =>
+                        {category.children.map((child, childIndex) =>
                             renderCategory(child, index + childIndex + 1, level + 1)
                         )}
                     </motion.div>
@@ -160,8 +223,6 @@ const SidebarCategory = ({
             </div>
         );
     };
-
-    const categoryTree = buildCategoryTree(categoriesDisplay);
 
     return (
         <div
@@ -212,11 +273,11 @@ const SidebarCategory = ({
                                 <div className="flex justify-center">
                                     <div
                                         className={`w-10 h-10 rounded-md flex items-center justify-center ${selectedCategory === 'all'
-                                                ? 'bg-gray-200 ring-2 ring-primary ring-offset-2'
+                                                ? 'bg-primary ring-2 ring-primary ring-offset-2'
                                                 : 'bg-gray-200'
                                             }`}
                                     >
-                                        <FiGrid size={20} className="text-gray-700" />
+                                        <FiGrid size={20} className={selectedCategory === 'all' ? 'text-white' : 'text-gray-700'} />
                                     </div>
                                 </div>
                             ) : (

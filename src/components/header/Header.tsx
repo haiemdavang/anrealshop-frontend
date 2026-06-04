@@ -35,13 +35,13 @@ import showSuccessNotification from "../Toast/NotificationSuccess";
 
 // Dữ liệu danh mục
 const POPULAR_CATEGORIES = [
-  { name: "Điện thoại", slug: "dien-thoai" },
-  { name: "Laptop", slug: "laptop" },
-  { name: "Thời trang nam", slug: "thoi-trang-nam" },
-  { name: "Thời trang nữ", slug: "thoi-trang-nu" },
-  { name: "Đồng hồ", slug: "dong-ho" },
-  { name: "Đồng hồ", slug: "dong-ho" },
-  { name: "Đồng hồ", slug: "dong-ho" },
+  { name: "Áo thun nam", slug: "/products" },
+  { name: "Chân váy", slug: "/products" },
+  { name: "Quần short nam", slug: "/products" },
+  { name: "Áo hoodie nam", slug: "/products" },
+  { name: "Áo crop top", slug: "/products" },
+  { name: "Chân váy chữ A", slug: "/products" },
+  { name: "Chân váy flared", slug: "/products" },
 ];
 
 const Header: React.FC = () => {
