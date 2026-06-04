@@ -8,12 +8,12 @@ interface BrandProps {
 
 const Brand = ({ id }: BrandProps) => {
     const brands = [
-        { id: 1, name: 'Nike', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/1200px-Logo_NIKE.svg.png' },
+        { id: 1, name: 'Nike', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Logo_NIKE.svg/250px-Logo_NIKE.svg.png' },
         { id: 2, name: 'Adidas', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1280px-Adidas_Logo.svg.png' },
         { id: 3, name: 'Puma', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Puma-logo-%28text%29.svg' },
         { id: 4, name: 'Under Armour', logo: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Under_armour_logo.svg' },
-        { id: 5, name: 'New Balance', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/New_Balance_logo.svg/2560px-New_Balance_logo.svg.png' },
-        { id: 6, name: 'Reebok', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Reebok_red_logo.svg/300px-Reebok_red_logo.svg.png' },
+        { id: 5, name: 'New Balance', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/New_Balance_logo.svg/250px-New_Balance_logo.svg.png' },
+        { id: 6, name: 'Reebok', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Reebok_red_logo.svg/250px-Reebok_red_logo.svg.png' },
         { id: 7, name: 'Converse', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Converse_logo.svg/1280px-Converse_logo.svg.png' },
         { id: 8, name: 'Asics', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Asics_Logo.svg/2560px-Asics_Logo.svg.png' },
     ];
