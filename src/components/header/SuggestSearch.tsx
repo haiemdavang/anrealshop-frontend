@@ -67,7 +67,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
       <Paper
         shadow="md"
         radius="md"
-        className={`absolute mt-1 w-full z-[9999] px-3 py-3 ${blurClass} ${className}`}
+        className={`absolute mt-1 w-full z-30 px-3 py-3 ${blurClass} ${className}`}
       >
         <Box mb="md">
           <Skeleton height={16} mb={8} />
@@ -104,7 +104,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
     <Paper
       shadow="md"
       radius="md"
-      className={`absolute mt-1 w-full z-[9999] px-3 py-3 ${blurClass} ${className}`}
+      className={`absolute mt-1 w-full z-30 px-3 py-3 ${blurClass} ${className}`}
     >
       {/* Categories */}
       {results.categories.length > 0 && (

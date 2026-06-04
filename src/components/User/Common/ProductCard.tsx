@@ -46,7 +46,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact = false }) =
             </div>
           </Link>
 
-          <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+          <div className="absolute top-3 left-3 z-0 flex flex-col gap-1">
             {/* {product.isNew && (
               <Badge
                 color="green"
@@ -69,7 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, compact = false }) =
             )}
           </div>
 
-          <div className={`absolute top-3 right-3 z-10 flex flex-col gap-2 transition-opacity duration-300 ${favorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+          <div className={`absolute top-3 right-3 z-0 flex flex-col gap-2 transition-opacity duration-300 ${favorite ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
             <ActionIcon
               variant="filled"
               color="white"
