@@ -153,6 +153,7 @@ export const API_ENDPOINTS = {
 
   TRYON: {
     DETECT: '/tryon/detect',
+    DETECTHD: '/tryon/detect-v2',
   },
 
   SEARCH: {

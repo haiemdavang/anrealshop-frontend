@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import TryOnService from '../../../../service/TryOnService';
 import showErrorNotification from '../../../Toast/NotificationError';
 import showSuccessNotification from '../../../Toast/NotificationSuccess';
+import ZoomViewModal from '../../../common/ZoomViewModal';
 import CameraPicture from './CameraPicture';
 
 interface TryOnProps {
@@ -14,6 +15,8 @@ const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
   const [userImage, setUserImage] = useState<string>('');
   const [tryOnResult, setTryOnResult] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isVertexAI, setIsVertexAI] = useState(true);
+  const [isZoomOpened, setIsZoomOpened] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,6 +28,13 @@ const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
   const handleImageCapture = (imageData: string) => {
     setUserImage(imageData);
     setTryOnResult('');
+    setIsZoomOpened(false);
+  };
+
+  const handleTryOnModeChange = (nextIsVertexAI: boolean) => {
+    setIsVertexAI(nextIsVertexAI);
+    setTryOnResult('');
+    setIsZoomOpened(false);
   };
 
   const handleTryOn = async () => {
@@ -55,11 +65,14 @@ const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
         reader.readAsDataURL(productImageBlob);
       });
 
-      const response = await TryOnService.tryOn({
+      const payload = {
         personImageBase64,
         productImageBase64,
         baseSteps: 25,
-      });
+      }
+
+      const response = isVertexAI ? await TryOnService.tryOn(payload)
+        : await TryOnService.tryOnv2(payload);
 
       if (response.success && response.resultImageBase64) {
         // Add proper base64 prefix if not present
@@ -90,6 +103,8 @@ const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
             onTryOn={handleTryOn}
             canTryOn={!!userImage && !!productImageUrl && !isLoading}
             onBack={onBack}
+            isVertexAI={isVertexAI}
+            setIsVertexAI={handleTryOnModeChange}
           />
         </Grid.Col>
 
@@ -100,13 +115,20 @@ const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
               <Text fw={600} size="lg">Kết quả</Text>
             </Group>
 
-            <Box 
-              className="relative bg-gray-100 rounded-lg overflow-hidden w-full" 
+            <Box
+              className="relative bg-gray-100 rounded-lg overflow-hidden w-full h-[200px] flex items-center justify-center"
               style={tryOnResult ? { minHeight: '400px' } : { minHeight: '150px' }}
             >
               <LoadingOverlay visible={isLoading} />
               {tryOnResult ? (
-                <img src={tryOnResult} alt="Try On Result" className="w-full h-auto object-contain" />
+                <button
+                  type="button"
+                  className="block h-full w-full cursor-zoom-in border-0 bg-transparent p-0"
+                  onClick={() => setIsZoomOpened(true)}
+                  title="Xem chi tiết kết quả"
+                >
+                  <img src={tryOnResult} alt="Try On Result" className="w-full h-auto object-contain" />
+                </button>
               ) : (
                 <Box className="flex items-center justify-center h-[150px]">
                   <Text c="dimmed">Kết quả sẽ hiển thị ở đây</Text>
@@ -116,8 +138,16 @@ const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
           </Paper>
         </Grid.Col>
       </Grid>
+      <ZoomViewModal
+        opened={isZoomOpened && !!tryOnResult}
+        onClose={() => setIsZoomOpened(false)}
+        images={tryOnResult ? [tryOnResult] : []}
+        selectedIndex={0}
+        onSelectIndex={() => undefined}
+        altPrefix="Kết quả thử đồ"
+      />
     </Container>
   );
 };
 
-export default TryOn;      
+export default TryOn;

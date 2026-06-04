@@ -1,8 +1,10 @@
-import { ActionIcon, Box, Button, Group, Paper, Text } from '@mantine/core';
+import { ActionIcon, Box, Group, Paper, Select, Text } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
-import { FiCamera, FiUpload, FiX, FiArrowLeft } from 'react-icons/fi';
-// import BodyAnalyzer from './BodyAnalyzer';
+import { FiCamera, FiUpload, FiX, FiArrowLeft, FiLoader } from 'react-icons/fi';
+import ZoomViewModal from '../../../common/ZoomViewModal';
 import showErrorNotification from '../../../Toast/NotificationError';
+import { FaAirFreshener } from 'react-icons/fa';
+import { FaCameraRotate } from 'react-icons/fa6';
 
 interface CameraPictureProps {
   onImageCapture: (imageData: string) => void;
@@ -10,9 +12,11 @@ interface CameraPictureProps {
   onTryOn?: () => void;
   canTryOn?: boolean;
   onBack?: () => void;
+  isVertexAI?: boolean;
+  setIsVertexAI?: (isVertexAI: boolean) => void;
 }
 
-const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBack }: CameraPictureProps) => {
+const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBack, isVertexAI, setIsVertexAI }: CameraPictureProps) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -22,6 +26,7 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
   const [isVideoReady, setIsVideoReady] = useState(false);
   const [error, setError] = useState<string>('');
   const [showCamera, setShowCamera] = useState(false);
+  const [isZoomOpened, setIsZoomOpened] = useState(false);
 
   useEffect(() => {
     if (!stream || !videoRef.current) return;
@@ -157,6 +162,7 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
     onImageCapture('');
     if (fileInputRef.current) fileInputRef.current.value = '';
     setError('');
+    setIsZoomOpened(false);
     stopCamera();
     setShowCamera(false);
   };
@@ -181,9 +187,36 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
         )}
 
         <Box className="absolute top-3 right-3 z-20 flex items-center gap-2">
-          <Text fw={600} size="sm" className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md shadow-sm">
-            Ảnh của bạn
-          </Text>
+          {typeof isVertexAI === 'boolean' && setIsVertexAI && (
+            <Select
+              value={isVertexAI ? 'vertexAI' : 'tryonHD'}
+              onChange={(value) => setIsVertexAI(value !== 'tryonHD')}
+              data={[
+                { value: 'vertexAI', label: 'Vertex AI' },
+                { value: 'tryonHD', label: 'Try-on HD' },
+              ]}
+              allowDeselect={false}
+              size="sm"
+              className="w-[140px] shadow-sm [&_input]:bg-white/40 [&_input]:backdrop-blur-md"
+              styles={{
+                dropdown: {
+                  backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                },
+                option: {
+                  '&[data-hovered]': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  },
+                  '&[data-selected]': {
+                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    color: '#000',
+                  }
+                }
+              }}
+            />
+          )}
+
           {capturedImage && (
             <ActionIcon color="red" variant="filled" onClick={resetImage} size="sm" className="bg-red-500 hover:bg-red-600">
               <FiX size={18} />
@@ -211,7 +244,14 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
             )}
           </Box>
         ) : capturedImage ? (
-          <img src={capturedImage} alt="Captured" className="w-full h-full object-cover" />
+          <button
+            type="button"
+            className="block w-full h-full cursor-zoom-in border-0 p-0 bg-transparent"
+            onClick={() => setIsZoomOpened(true)}
+            title="Xem chi tiết ảnh"
+          >
+            <img src={capturedImage} alt="Captured" className="w-full h-full object-cover" />
+          </button>
         ) : (
           <Box className="flex flex-col items-center justify-center h-full p-4">
             <Box className="bg-white p-4 rounded-full mb-3 shadow-sm">
@@ -230,42 +270,42 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
           <Group gap="md" className="bg-white/50 backdrop-blur-md px-4 py-3 rounded-lg shadow-lg border border-white/20">
             {!capturedImage && !isCameraActive && (
               <>
-                <Button leftSection={<FiCamera size={18} />} onClick={startCamera} variant="filled" className="bg-primary hover:bg-primary/90">
-                  Chụp ảnh
-                </Button>
-                <Button leftSection={<FiUpload size={18} />} onClick={() => fileInputRef.current?.click()} variant="outline" className="border-primary text-primary hover:bg-primary/5">
-                  Tải ảnh lên
-                </Button>
+                <ActionIcon size={'lg'} onClick={startCamera} variant="filled" className="bg-primary hover:bg-primary/90">
+                  <FiCamera size={18} />
+                </ActionIcon>
+                <ActionIcon size={'lg'}  onClick={() => fileInputRef.current?.click()} variant="outline" className="border-primary text-primary hover:bg-primary/5">
+                  <FiUpload size={18} />
+                </ActionIcon>
                 <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
               </>
             )}
 
             {isCameraActive && (
               <>
-                <Button leftSection={<FiCamera size={18} />} onClick={capturePhoto} variant="filled" disabled={!isVideoReady} className="bg-primary hover:bg-primary/90">
-                  {isVideoReady ? 'Chụp ngay' : 'Đang tải...'}
-                </Button>
-                <Button leftSection={<FiX size={18} />} onClick={stopCamera} variant="default">
-                  Hủy
-                </Button>
+                <ActionIcon size={'lg'}  onClick={capturePhoto} variant="filled" disabled={!isVideoReady} className="bg-primary hover:bg-primary/90">
+                  {isVideoReady ? <FiCamera size={18} /> : <FiLoader size={18} className="animate-spin" />}
+                </ActionIcon>
+                <ActionIcon size={'lg'} onClick={stopCamera} variant="default">
+                  <FiX size={18} />
+                </ActionIcon>
               </>
             )}
 
             {capturedImage && !isCameraActive && (
               <>
-                <Button leftSection={<FiCamera size={18} />} onClick={startCamera} variant="filled" className="bg-primary hover:bg-primary/90">
-                  Chụp lại
-                </Button>
+                <ActionIcon size={'lg'} onClick={startCamera}  variant="light" className="border-primary text-primary hover:bg-white/50" title="Chụp lại">
+                  <FaCameraRotate size={18} />
+                </ActionIcon>
                 {onTryOn && (
-                  <Button 
-                    leftSection={<FiCamera size={18} />} 
+                  <ActionIcon size={'lg'} 
                     onClick={onTryOn}
                     disabled={!canTryOn}
                     variant="filled"
                     className="bg-primary hover:bg-primary/90 !text-white"
+                    title={canTryOn ? "Thử đồ" : "Vui lòng chụp ảnh và chọn sản phẩm để thử"}
                   >
-                    Thử đồ
-                  </Button>
+                    <FaAirFreshener size={18} />
+                  </ActionIcon>
                 )}
               </>
             )}
@@ -274,6 +314,14 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
       </Box>
 
       <canvas ref={canvasRef} className="hidden" />
+      <ZoomViewModal
+        opened={isZoomOpened && !!capturedImage}
+        onClose={() => setIsZoomOpened(false)}
+        images={capturedImage ? [capturedImage] : []}
+        selectedIndex={0}
+        onSelectIndex={() => undefined}
+        altPrefix="Ảnh của bạn"
+      />
 
     </Paper>
   );
