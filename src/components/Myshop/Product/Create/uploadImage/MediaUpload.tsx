@@ -97,7 +97,7 @@ const MediaUpload = memo(({ media, setMedia, error }: MediaUploadProps) => {
             ref={imageInputRef}
             onChange={handleImageUpload}
             multiple
-            accept="image/png,image/jpeg,image/webp,image/gif"
+            accept="image/png,image/jpeg,image/webp,image/gif,image/avif"
             style={{ display: 'none' }}
           />
           <FileInput

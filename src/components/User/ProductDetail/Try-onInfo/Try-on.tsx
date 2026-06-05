@@ -5,6 +5,7 @@ import showErrorNotification from '../../../Toast/NotificationError';
 import showSuccessNotification from '../../../Toast/NotificationSuccess';
 import ZoomViewModal from '../../../common/ZoomViewModal';
 import CameraPicture from './CameraPicture';
+import { getErrorMessage } from '../../../../untils/ErrorUntils';
 
 interface TryOnProps {
   productImageUrl: string;
@@ -85,9 +86,8 @@ const TryOn = ({ productImageUrl, onBack }: TryOnProps) => {
       } else {
         showErrorNotification('Lỗi', response.message || 'Có lỗi xảy ra khi thử đồ');
       }
-    } catch (error) {
-      console.error('Try-on error:', error);
-      showErrorNotification('Lỗi', 'Có lỗi xảy ra khi thử đồ. Vui lòng thử lại.');
+    } catch (error: any) {
+      showErrorNotification('Lỗi', getErrorMessage(error) || 'Có lỗi xảy ra khi thử đồ');
     } finally {
       setIsLoading(false);
     }
