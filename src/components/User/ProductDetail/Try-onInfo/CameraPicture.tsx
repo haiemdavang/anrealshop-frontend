@@ -4,7 +4,8 @@ import { FiCamera, FiUpload, FiX, FiArrowLeft, FiLoader } from 'react-icons/fi';
 import ZoomViewModal from '../../../common/ZoomViewModal';
 import showErrorNotification from '../../../Toast/NotificationError';
 import { FaAirFreshener } from 'react-icons/fa';
-import { FaCameraRotate } from 'react-icons/fa6';
+import { FaCameraRotate, FaSquarePollHorizontal } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
 
 interface CameraPictureProps {
   onImageCapture: (imageData: string) => void;
@@ -27,6 +28,8 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
   const [error, setError] = useState<string>('');
   const [showCamera, setShowCamera] = useState(false);
   const [isZoomOpened, setIsZoomOpened] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!stream || !videoRef.current) return;
@@ -216,6 +219,10 @@ const CameraPicture = ({ onImageCapture, capturedImage, onTryOn, canTryOn, onBac
               }}
             />
           )}
+
+          <ActionIcon color="gray" variant="filled" onClick={() => {navigate('/policies/try-on')}} size="lg" title="Chính sách thử đồ ảo">
+            <FaSquarePollHorizontal size={18} />
+          </ActionIcon>
 
           {capturedImage && (
             <ActionIcon color="red" variant="filled" onClick={resetImage} size="sm" className="bg-red-500 hover:bg-red-600">
