@@ -16,9 +16,10 @@ import OverlayVoice from './components/common/OverlayVoice';
 import ButtonHome from './components/User/ButtonHome/ButtonHome';
 
 const AuthoPage = lazy(() => import('./pages/Auth/AuthoPage'));
-const MyshopPage = lazy(() => import('./pages/MyshopPage/MyshopRoute'));
-const AdminPage = lazy(() => import('./pages/MyshopPage/AdminRoute'));
-const UserRoute = lazy(() => import('./pages/MyshopPage/UserRoute'));
+const MyshopRoute = lazy(() => import('./pages/Routes/MyshopRoute'));
+const AdminRoute = lazy(() => import('./pages/Routes/AdminRoute'));
+const UserRoute = lazy(() => import('./pages/Routes/UserRoute'));
+const PoliciesRoute = lazy(() => import('./pages/Routes/PoliciesRoute'));
 const RegisterShopPage = lazy(() => import('./components/User/RegisterShopPage/RegisterShopPage'));
 
 function App() {
@@ -117,9 +118,10 @@ function App() {
             <Routes>
               <Route path={APP_ROUTES.LOGIN} element={<AuthoPage />} />
               <Route path={APP_ROUTES.REGISTER} element={<AuthoPage />} />
-              <Route path={APP_ROUTES.ADMIN.BASE} element={<AdminPage />} />
               <Route path={APP_ROUTES.SHOP_REGISTER} element={<RegisterShopPage />} />
-              <Route path={APP_ROUTES.MYSHOP.BASE} element={<MyshopPage />} />
+              <Route path={APP_ROUTES.ADMIN.BASE} element={<AdminRoute />} />
+              <Route path={APP_ROUTES.MYSHOP.BASE} element={<MyshopRoute />} />
+              <Route path={`${APP_ROUTES.POLICIES}/*`} element={<PoliciesRoute />} />
               <Route path="/*" element={<UserRoute />} />
             </Routes>
           </main>

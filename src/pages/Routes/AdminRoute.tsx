@@ -5,17 +5,17 @@ import { FiChevronRight, FiHome } from 'react-icons/fi';
 import { Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { CategoryDisplayPage } from '../../components/Admin/CategoryDisplay/CategoryDisplayPage.tsx';
 import User from '../../components/Admin/User/UserPage.tsx';
-import OverlayLoading from '../../components/common/OverlayLoading';
-import showErrorNotification from '../../components/Toast/NotificationError';
-import { APP_ROUTES } from '../../constant';
-import { useAppSelector } from '../../hooks/useAppRedux';
+import OverlayLoading from '../../components/common/OverlayLoading.tsx';
+import showErrorNotification from '../../components/Toast/NotificationError.tsx';
+import { APP_ROUTES } from '../../constant/index.ts';
+import { useAppSelector } from '../../hooks/useAppRedux.ts';
 
-const CategoryManagement = lazy(() => import('../../components/Admin/Category/CategoryPage'));
-const AdminHeader = lazy(() => import('../../components/Admin/Header/AdminHeader'));
-const AdminSidebar = lazy(() => import('../../components/Admin/Header/AdminSideBar'));
-const ProductApprovalPage = lazy(() => import('../../components/Admin/Product/ProductPage'));
-const ShopApprovalPage = lazy(() => import('../../components/Admin/Shop/ShopPage'));
-const WalletPage = lazy(() => import('../../components/Admin/Wallet/WalletPage'));
+const CategoryManagement = lazy(() => import('../../components/Admin/Category/CategoryPage.tsx'));
+const AdminHeader = lazy(() => import('../../components/Admin/Header/AdminHeader.tsx'));
+const AdminSidebar = lazy(() => import('../../components/Admin/Header/AdminSideBar.tsx'));
+const ProductApprovalPage = lazy(() => import('../../components/Admin/Product/ProductPage.tsx'));
+const ShopApprovalPage = lazy(() => import('../../components/Admin/Shop/ShopPage.tsx'));
+const WalletPage = lazy(() => import('../../components/Admin/Wallet/WalletPage.tsx'));
 
 // const AdminDashboard = lazy(() => import('../../components/Admin/Dashboard/AdminDashboard'));
 // const UserManagement = lazy(() => import('../../components/Admin/User/UserManagement'));

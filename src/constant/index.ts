@@ -214,6 +214,15 @@ export const APP_ROUTES = {
 
   PRODUCTS: '/products',
   SEARCH: '/search',
+  POLICIES: '/policies',
+  POLICY_REFUND: '/policies/refund',
+  POLICY_TRY_ON: '/policies/try-on',
+  POLICY_ORDER: '/policies/order',
+  POLICY_SHIPPING: '/policies/shipping',
+  POLICY_PRIVACY: '/policies/privacy',
+  POLICY_PAYMENT: '/policies/payment',
+  POLICY_COOKIES: '/policies/cookies',
+  POLICY_MEMBERSHIP: '/policies/membership',
   CATEGORY_PAGE: (slug: string) => `/category/${slug}`,
   SHOP_PAGE: (slug: string) => `/shop/${slug}`,
 
@@ -255,6 +264,15 @@ export const APP_ROUTES_PUBLIC = [
   APP_ROUTES.LOGIN,
   APP_ROUTES.REGISTER,
   APP_ROUTES.FORGOT_PASSWORD,
+  APP_ROUTES.POLICIES,
+  APP_ROUTES.POLICY_REFUND,
+  APP_ROUTES.POLICY_TRY_ON,
+  APP_ROUTES.POLICY_ORDER,
+  APP_ROUTES.POLICY_SHIPPING,
+  APP_ROUTES.POLICY_PRIVACY,
+  APP_ROUTES.POLICY_PAYMENT,
+  APP_ROUTES.POLICY_COOKIES,
+  APP_ROUTES.POLICY_MEMBERSHIP,
   APP_ROUTES.PRODUCT_DETAIL.split('/:')[0],
 ]
 

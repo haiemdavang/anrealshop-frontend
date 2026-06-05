@@ -56,7 +56,6 @@ const UserRoute = () => {
       <div className="flex-1 bg-gray-50">
         <Routes>
           <Route index element={<LandingPage />} />
-          {/* <Route path={APP_ROUTES.HOME} element={<HomePage />} /> */}
           <Route path="/products" element={<ProductsPage />} />
           <Route
             path={APP_ROUTES.PRODUCT_DETAIL}
@@ -65,13 +64,8 @@ const UserRoute = () => {
           <Route path={APP_ROUTES.CHECKOUT} element={<CheckoutPage />} />
           <Route path={APP_ROUTES.CART} element={<CartPage />} />
           <Route path={APP_ROUTES.USER_SETTINGS} element={<SettingPage />} />
-          {/* <Route path="/search" element={<FilterProductPage />} /> */}
           <Route path="/shop/:slug" element={<ShopPage />} />
-          <Route
-            path={APP_ROUTES.PAYMENT_RESULT(":orderId")}
-            element={<PaymentResultPage />}
-          />
-
+          <Route path={APP_ROUTES.PAYMENT_RESULT(":orderId")} element={<PaymentResultPage />} />
           <Route path="*" element={<Navigate to={APP_ROUTES.HOME} replace />} />
         </Routes>
       </div>
