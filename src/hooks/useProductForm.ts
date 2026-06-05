@@ -36,7 +36,7 @@ export const useProductForm = (isEditMode = false) => {
         validate: {
             name: (value) => {
                 if (!value.trim()) return 'Tên sản phẩm không được để trống';
-                if (value.trim().length > 255 || value.trim().length < 50) return 'Tên sản phẩm không được nhỏ hơn 50 và vượt quá 255 ký tự';
+                if (value.trim().length > 255 || value.trim().length < 20) return 'Tên sản phẩm không được nhỏ hơn 20 và vượt quá 255 ký tự';
                 return null;
             },
             description: (value) => {
