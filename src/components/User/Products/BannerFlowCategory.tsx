@@ -36,7 +36,7 @@ const BannerFlowCategory = ({ category }: BannerFlowCategoryProps) => {
 
   // Determine banner height based on screen size
   const bannerHeight = isMobile ? "h-32" : isTablet ? "h-36" : "h-40";
-  const bannerMargin = isMobile ? "mx-2 mt-2" : "mx-4 mt-4";
+  const bannerMargin = isMobile ? "mx-2 mt-2" : "mx-4";
   const contentPadding = isMobile ? "px-4 pb-3" : "px-8 pb-4";
 
   return (

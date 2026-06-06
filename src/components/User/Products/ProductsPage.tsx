@@ -119,7 +119,7 @@ const ProductsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <Container className="min-h-screen bg-gray-50" size={"xl"} py="md">
       {/* Main Layout Container */}
       <div className="flex">
         {/* Desktop Sidebar - Hidden on mobile */}
@@ -146,7 +146,7 @@ const ProductsPage = () => {
           <BannerFlowCategory category={selectedCategory} />
 
           {/* Content Container */}
-          <Container size="xl" className={`py-6 ${isMobile ? "px-2" : ""}`}>
+          <Container size={"lg"} className={`py-6 ${isMobile ? "px-2" : ""}`}>
             {/* Filter Bar with initial values */}
             <FilterBar
               totalProducts={products.length}
@@ -192,7 +192,7 @@ const ProductsPage = () => {
                   </SimpleGrid>
                 </motion.div>
               ) : (
-                <div className="py-20 min-h-[60vh] text-center bg-white rounded-lg shadow-sm">
+                <div className="py-20 min-h-[80vh] text-center bg-white rounded-lg shadow-sm">
                   <FiPackage
                     size={isMobile ? 40 : 50}
                     className="mx-auto mb-4 text-gray-400"
@@ -229,7 +229,7 @@ const ProductsPage = () => {
           />
         </Drawer>
       )}
-    </div>
+    </Container>
   );
 };
 
