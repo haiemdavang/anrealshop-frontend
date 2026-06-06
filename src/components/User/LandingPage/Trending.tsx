@@ -18,7 +18,7 @@ const CategoryBox = ({ category, positionClasses }: CategoryBoxProps) => (
   <div
     className={`group absolute w-36 h-36 -rotate-45 overflow-hidden shadow-lg z-10 rounded-md ${positionClasses}`}
   >
-    <Link to={`/products?ct=${category.slug}`} className="block h-full w-full">
+    <Link to={`/products?ct=${category.path}`} className="block h-full w-full">
       <div className="absolute inset-0 rotate-45 scale-[1.5] overflow-hidden">
         {category.thumbnailUrl ? (
           <img
@@ -135,7 +135,7 @@ const Trending = ({ id }: TrendingProps) => {
             whileHover={{ y: -5 }}
           >
             <Link
-              to={`/products?ct=${mainCategory.slug}`}
+              to={`/products?ct=${mainCategory.path}`}
               className="block h-full"
             >
               <div className="absolute inset-0">
@@ -192,7 +192,7 @@ const Trending = ({ id }: TrendingProps) => {
                     className="group relative aspect-square overflow-hidden rounded-lg shadow-md"
                   >
                     <Link
-                      to={`/products?ct=${category.slug}`}
+                      to={`/products?ct=${category.path}`}
                       className="block h-full w-full"
                     >
                       {category.thumbnailUrl ? (
@@ -225,7 +225,7 @@ const Trending = ({ id }: TrendingProps) => {
               viewport={{ once: true }}
             >
               <Link
-                to={`/products?ct=${videoCategory.slug}`}
+                to={`/products?ct=${videoCategory.path}`}
                 className="block h-full"
               >
                 {videoCategory.thumbnailUrl ? (

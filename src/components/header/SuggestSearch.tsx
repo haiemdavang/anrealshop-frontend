@@ -114,7 +114,7 @@ const SuggestSearch: React.FC<SuggestSearchProps> = ({
             {results.categories.map((category) => (
               <Link
                 key={category.id}
-                to={`/products?ct=${category.urlSlug}`}
+                to={`/products?ct=${category.urlPath}`}
                 className="no-underline"
                 onClick={onSelect}
               >

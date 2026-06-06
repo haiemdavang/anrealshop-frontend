@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@mantine/hooks";
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 
 interface BannerData {
   type: "image" | "video";
@@ -17,10 +18,23 @@ const BannerFlowCategory = ({ category }: BannerFlowCategoryProps) => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
+  // Random video URLs
+  const videoUrls = [
+    "https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/Casual-Outer/25FW/MEN/KV-m-Video-pc.mp4",
+    "https://image.uniqlo.com/UQ/ST3/vn/imagesother/TVCM_26SS/Linen_26SS/Linen_PC.mp4",
+    "https://image.uniqlo.com/UQ/CMS/video/jp/2026/HOME/GL_Aseets/Campaign/Tshirts/26SS_CoreT-w-movie-pc-2-1.mp4",
+  ];
+
+  // Random video selection (memoized to prevent re-render changes)
+  const randomVideoSrc = useMemo(
+    () => videoUrls[Math.floor(Math.random() * videoUrls.length)],
+    []
+  );
+
   const categoryBanners: Record<string, BannerData> = {
     all: {
       type: "video",
-      src: "https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/Casual-Outer/25FW/MEN/KV-m-Video-pc.mp4",
+      src: randomVideoSrc,
       title: "Tất cả sản phẩm",
       description: "Khám phá bộ sưu tập đa dạng của chúng tôi",
     },

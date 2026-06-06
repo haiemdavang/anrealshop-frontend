@@ -94,7 +94,7 @@ const SidebarCategory = ({
         const parentIds = new Set<string>();
         const findSelectedPath = (categories: CategoryTreeNode[]): boolean => {
             for (const category of categories) {
-                const isSelected = selectedCategory === category.categoryId || selectedCategory === category.slug;
+                const isSelected = selectedCategory === category.categoryId || selectedCategory === category.path;
                 if (isSelected) return true;
                 if (findSelectedPath(category.children)) {
                     parentIds.add(category.categoryId);
@@ -117,9 +117,9 @@ const SidebarCategory = ({
     ) => {
         const hasChildren = category.children.length > 0;
         const isExpanded = expandedCategories.has(category.categoryId);
-        const isSelected = selectedCategory === category.categoryId || selectedCategory === category.slug;
+        const isSelected = selectedCategory === category.categoryId || selectedCategory === category.path;
         const handleCategoryClick = () => {
-            onCategoryChange(category.categoryId);
+            onCategoryChange(category.path);
             if (hasChildren && !collapsed) {
                 setExpandedCategories(prev => {
                     const newSet = new Set(prev);

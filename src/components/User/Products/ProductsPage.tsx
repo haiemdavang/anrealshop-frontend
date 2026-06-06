@@ -1,7 +1,7 @@
 import { Container, Drawer, SimpleGrid, Text } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiPackage } from "react-icons/fi";
 import {
   useGetProduct,
@@ -14,12 +14,18 @@ import BannerFlowCategory from "./BannerFlowCategory";
 import FilterBar from "./FilterBar";
 import SidebarCategory from "./SidebarCategory";
 
+const LIMIT = 20;
+
 const ProductsPage = () => {
   const { getParam, updateParams } = useURLParams();
   const [products, setProducts] = useState<UserProductDto[]>([]);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [drawerOpened, { open: openDrawer, close: closeDrawer }] =
     useDisclosure(false);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const requestIdRef = useRef(0);
 
   // Responsive breakpoints
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -36,7 +42,9 @@ const ProductsPage = () => {
   const sizes = getParam("sz");
   const origins = getParam("or");
   const rating = getParam("rt");
-  const page = getParam("page", "1");
+
+  // Computed key to detect filter changes
+  const filterKey = [selectedCategory, searchQuery, minPrice, maxPrice, brands, colors, sizes, origins, rating].join("|");
 
   // Parse initial filter values from URL
   const initialFilters = {
@@ -51,20 +59,22 @@ const ProductsPage = () => {
     rating: rating || "",
   };
 
-  const fetchProducts = useCallback(async (params: UseProductParams) => {
-    try {
-      const data = await getListRecommended(params);
-      setProducts(data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      setProducts([]);
-    }
-  }, [getListRecommended]);
-
+  // Reset khi filter thay đổi
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    setPage(0);
+    setProducts([]);
+    setHasMore(true);
+  }, [filterKey]);
+
+  // Fetch products (reset hoặc append tuỳ page)
+  useEffect(() => {
+    const reqId = ++requestIdRef.current;
+    const append = page > 0;
+
     const params: UseProductParams = {
-      page: Number(page) - 1,
-      limit: 20,
+      page,
+      limit: LIMIT,
       search: searchQuery || undefined,
       categoryId: selectedCategory === "all" ? undefined : selectedCategory,
       minPrice: minPrice ? Number(minPrice) : undefined,
@@ -76,20 +86,40 @@ const ProductsPage = () => {
       rating: rating ? Number(rating) : undefined,
     };
 
-    fetchProducts(params);
-  }, [
-    fetchProducts,
-    selectedCategory,
-    searchQuery,
-    minPrice,
-    maxPrice,
-    brands,
-    colors,
-    sizes,
-    origins,
-    rating,
-    page,
-  ]);
+    (async () => {
+      try {
+        const data = await getListRecommended(params);
+        if (reqId !== requestIdRef.current) return;
+        if (append) {
+          setProducts((prev) => [...prev, ...data]);
+        } else {
+          setProducts(data);
+        }
+        setHasMore(data.length >= LIMIT);
+      } catch {
+        if (reqId !== requestIdRef.current) return;
+        setHasMore(false);
+        if (!append) setProducts([]);
+      }
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterKey, page]);
+
+  // IntersectionObserver – load thêm khi gần cuối danh sách
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoading) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, isLoading]);
 
   const handleCategoryChange = (categorySlug: string) => {
     updateParams({
@@ -158,7 +188,7 @@ const ProductsPage = () => {
 
             {/* Products Grid */}
             <div>
-              {isLoading ? (
+              {isLoading && products.length === 0 ? (
                 <div className="py-20 text-center">
                   <Text c="dimmed">Đang tải sản phẩm...</Text>
                 </div>
@@ -190,6 +220,23 @@ const ProductsPage = () => {
                       </motion.div>
                     ))}
                   </SimpleGrid>
+
+                  {/* Sentinel cho IntersectionObserver */}
+                  <div ref={sentinelRef} className="h-4" />
+
+                  {/* Đang tải thêm */}
+                  {isLoading && (
+                    <div className="py-6 text-center">
+                      <Text c="dimmed" size="sm">Đang tải thêm...</Text>
+                    </div>
+                  )}
+
+                  {/* Hết danh sách */}
+                  {!hasMore && (
+                    <div className="py-8 text-center">
+                      <Text c="dimmed" size="sm">— Không còn gì để xem —</Text>
+                    </div>
+                  )}
                 </motion.div>
               ) : (
                 <div className="py-20 min-h-[80vh] text-center bg-white rounded-lg shadow-sm">

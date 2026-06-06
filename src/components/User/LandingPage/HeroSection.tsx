@@ -2,7 +2,7 @@ import { Container } from '@mantine/core';
 import type { EmblaOptionsType } from 'embla-carousel';
 import useEmblaCarousel from 'embla-carousel-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface HeroSlide {
     id: number;
@@ -17,11 +17,24 @@ interface HeroSlide {
 }
 
 export const HeroSection = () => {
+
+    const videoUrls = [
+        "https://image.uniqlo.com/UQ/CMS/video/jp/2025/HOME/GL_Aseets/LWC/women_lwc_home_pc.mp4",
+        "https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/Casual-Outer/25FW/MEN/KV-m-Video-pc.mp4",
+        "https://image.uniqlo.com/UQ/ST3/vn/imagesother/TVCM_26SS/Linen_26SS/Linen_PC.mp4",
+        "https://image.uniqlo.com/UQ/CMS/video/jp/2026/HOME/GL_Aseets/Campaign/Tshirts/26SS_CoreT-w-movie-pc-2-1.mp4",
+    ];
+    
+      // Random video selection (memoized to prevent re-render changes)
+    const randomVideoSrc = useMemo(
+        () => videoUrls[Math.floor(Math.random() * videoUrls.length)],
+        []
+    );
     const heroSlides: HeroSlide[] = [
         {
             id: 3,
             type: 'video',
-            src: 'https://image.uniqlo.com/UQ/CMS/video/jp/2025/HOME/GL_Aseets/LWC/women_lwc_home_pc.mp4',
+            src: randomVideoSrc,
             title: 'New Collection',
             description: 'Experience comfort and style like never before',
             buttonText: 'Watch Collection',
@@ -263,9 +276,11 @@ export const HeroSection = () => {
                                 className="h-full w-full object-cover"
                             />
                         ) : (
-                            <div className="bg-gray-800 h-full w-full flex items-center justify-center text-white text-xs">
-                                Video
-                            </div>
+                            <img
+                                src={'https://im.uniqlo.com/global-cms/spa/res4f41fbe79a19f20d963530569a8383f9fr.jpg'}
+                                alt={`Thumbnail ${index + 1}`}
+                                className="h-full w-full object-cover"
+                            />
                         )}
                     </button>
                 ))}

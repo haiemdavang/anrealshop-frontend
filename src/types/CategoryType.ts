@@ -46,6 +46,7 @@ export interface CategoryDisplayDto {
     position: 'HOMEPAGE' | 'SIDEBAR';
     order: number;
     slug: string;
+    path: string;
     parentId?: string | null;
     level: number;
     thumbnailUrl?: string;
