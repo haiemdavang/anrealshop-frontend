@@ -90,6 +90,7 @@ export const CategoryDisplayPage = () => {
                 position: position,
                 order,
                 slug: category.slug,
+                path: category.slug || '',
                 parentId: category.parentId,
                 level: category.level,
             };
@@ -106,6 +107,7 @@ export const CategoryDisplayPage = () => {
                 position: position,
                 order: currentOrder++,
                 slug: category.slug,
+                path: category.slug || '',
                 parentId: category.parentId,
                 level: category.level,
             });
@@ -121,6 +123,7 @@ export const CategoryDisplayPage = () => {
                             position: position,
                             order: currentOrder++,
                             slug: child.slug,
+                            path: child.slug || '',
                             parentId: child.parentId,
                             level: child.level,
                         });
