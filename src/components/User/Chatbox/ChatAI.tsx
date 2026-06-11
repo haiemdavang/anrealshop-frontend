@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { Input, InputBase, Combobox, useCombobox } from '@mantine/core';
 import { ChatService } from '../../../service/ChatService';
 import type { ChatbotHistoryResponse } from '../../../types/ChatType';
 
@@ -7,7 +8,8 @@ interface Message {
     id: string;
     type: 'user' | 'ai';
     message: string;
-    timestamp: string;
+    timestamp: string; // html / text 
+    contentType?: any;
     imageUrl?: string;
     imageUrls?: string[];
     productLink?: string;
@@ -21,6 +23,7 @@ const formatTime = (dateStr?: string) => {
 const ChatAI = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputValue, setInputValue] = useState('');
+    const [chatModal, setChatModal] = useState<string | null>('RAG');
     const [isTyping, setIsTyping] = useState(false);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -28,6 +31,18 @@ const ChatAI = () => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
     const isFirstLoad = useRef(true);
+
+    const groceries = ['RAG', 'n8n'];
+
+    const combobox = useCombobox({
+        onDropdownClose: () => combobox.resetSelectedOption(),
+    });
+
+    const options = groceries.map((item) => (
+        <Combobox.Option value={item} key={item}>
+            {item}
+        </Combobox.Option>
+    ));
 
     // Convert history item to Message pair (user question + ai answer)
     const historyToMessages = (item: ChatbotHistoryResponse): Message[] => [
@@ -42,6 +57,7 @@ const ChatAI = () => {
             type: 'ai',
             message: item.answer,
             timestamp: formatTime(item.createdAt),
+            contentType: item.type,
             ...(item.imageUrl && { imageUrl: item.imageUrl }),
             ...(item.productLink && { productLink: item.productLink }),
         },
@@ -108,12 +124,15 @@ const ChatAI = () => {
         setIsTyping(true);
 
         try {
-            const response = await ChatService.askChatbot({ chatInput });
+            const response = await (chatModal === 'RAG'
+                ? ChatService.askChatbotV2({ chatInput })
+                : ChatService.askChatbot({ chatInput }));
             const aiMsg: Message = {
                 id: `ai-${Date.now()}`,
                 type: 'ai',
                 message: response.message,
                 timestamp: formatTime(),
+                contentType: chatModal === 'RAG' ? 'html' : 'text',
                 ...(response.imageUrl && { imageUrl: response.imageUrl }),
                 ...(response.imageUrls?.length && { imageUrls: response.imageUrls }),
                 ...(response.productLink && { productLink: response.productLink }),
@@ -130,7 +149,7 @@ const ChatAI = () => {
         } finally {
             setIsTyping(false);
         }
-    }, [isTyping]);
+    }, [isTyping, chatModal]);
 
     const handleSend = () => {
         sendMessage(inputValue);
@@ -196,7 +215,14 @@ const ChatAI = () => {
                                         <img src="/gif/gemini.gif" alt="AI" className="w-full h-full object-cover" />
                                     </div>
                                     <div className="bg-white rounded-2xl rounded-tl-sm px-3 py-2 shadow-sm">
-                                        <p className="text-sm text-gray-800 whitespace-pre-wrap">{msg.message}</p>
+                                        {msg.contentType === 'html' ? (
+                                            <div
+                                                className="text-sm text-gray-800 prose prose-sm max-w-none"
+                                                dangerouslySetInnerHTML={{ __html: msg.message }}
+                                            />
+                                        ) : (
+                                            <p className="text-sm text-gray-800 whitespace-pre-wrap">{msg.message}</p>
+                                        )}
                                         {(msg.imageUrl || msg.imageUrls?.length) && (
                                             <div className="mt-2 flex flex-col gap-2">
                                                 {msg.imageUrl && (
@@ -267,6 +293,32 @@ const ChatAI = () => {
             {/* Input */}
             <div className="p-3 border-t bg-white">
                 <div className="flex gap-2">
+                    <Combobox
+                        store={combobox}
+                        withinPortal={false}
+                        onOptionSubmit={(val) => {
+                            setChatModal(val);
+                            combobox.closeDropdown();
+                        }}
+
+                        >
+                        <Combobox.Target>
+                            <InputBase
+                            component="button"
+                            type="button"
+                            pointer
+                            rightSection={<Combobox.Chevron />}
+                            onClick={() => combobox.toggleDropdown()}
+                            rightSectionPointerEvents="none"
+                            >
+                            {chatModal || <Input.Placeholder>Pick value</Input.Placeholder>}
+                            </InputBase>
+                        </Combobox.Target>
+
+                        <Combobox.Dropdown>
+                            <Combobox.Options>{options}</Combobox.Options>
+                        </Combobox.Dropdown>
+                    </Combobox>
                     <input
                         type="text"
                         value={inputValue}

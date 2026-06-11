@@ -45,6 +45,11 @@ const askChatbot = async (request: ChatbotRequest): Promise<ChatbotResponse> => 
     return response.data;
 };
 
+const askChatbotV2 = async (request: ChatbotRequest): Promise<ChatbotResponse> => {
+    const response = await axiosInstance.post(API_ENDPOINTS.CHAT.BOT_V2, request);
+    return response.data;
+};
+
 const getChatbotHistory = async (
     page: number = 0,
     size: number = 20
@@ -66,6 +71,7 @@ export const ChatService = {
     getRoomMessages,
     initRoom,
     askChatbot,
+    askChatbotV2,
     getChatbotHistory,
     askGemini,
 };
