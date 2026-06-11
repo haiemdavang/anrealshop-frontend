@@ -117,7 +117,7 @@ export const TopProduct = () => {
                             >
                                 <Button
                                     component={Link}
-                                    to="/products?category=fashion"
+                                    to="/products"
                                     size="md"
                                     variant="subtle"
                                     className="px-10 hover:bg-gray-100 border-gray-300"
