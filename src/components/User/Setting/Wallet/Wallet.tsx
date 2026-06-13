@@ -13,8 +13,6 @@ import { FiAlertCircle, FiCheckCircle, FiClock, FiCreditCard } from 'react-icons
 import { WalletService } from '../../../../service/WalletService';
 import type { UserVerificationDto, WalletDto } from '../../../../types/WalletType';
 import { formatDate, formatPrice } from '../../../../untils/Untils';
-import { getErrorMessage } from '../../../../untils/ErrorUntils';
-import showErrorNotification from '../../../Toast/NotificationError';
 import showSuccessNotification from '../../../Toast/NotificationSuccess';
 import Transaction from './History/Transaction';
 import ModalVerifyKYC from './ModalVerifyKYC';
@@ -40,20 +38,12 @@ const Wallet = () => {
 			fetchedWallet = walletData;
 			walletExists = true;
 		} catch (error: any) {
-			const status = error?.response?.status;
-			if (status !== 404) {
-				showErrorNotification('Lỗi', getErrorMessage(error) || 'Không thể tải thông tin ví.');
-			}
 		}
 
 		let fetchedVerification: UserVerificationDto | null = null;
 		try {
 			fetchedVerification = await WalletService.getMyVerification();
 		} catch (error: any) {
-			const status = error?.response?.status;
-			if (status !== 404) {
-				showErrorNotification('Lỗi', getErrorMessage(error) || 'Không thể tải trạng thái xác thực ví.');
-			}
 		}
 
 		setWallet(fetchedWallet);

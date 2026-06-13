@@ -238,6 +238,7 @@ const SettingPage = () => {
         {/* Desktop Sidebar Navigation */}
         <Grid.Col span={{ base: 12, md: 3 }} className="hidden md:block">
           <motion.div
+            className="h-full"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
