@@ -4,7 +4,7 @@ import {
 } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { APP_ROUTES, LOCAL_STORAGE_KEYS } from '../../../constant';
+import { API_ENDPOINTS, APP_ROUTES, BASE_API_URL, LOCAL_STORAGE_KEYS } from '../../../constant';
 import { paymentMethodsDataDefault } from '../../../data/CheckoutData';
 import { useAppSelector } from '../../../hooks/useAppRedux';
 import { CheckoutService, type ItemsCheckoutRequest } from '../../../service/CheckoutService';
@@ -23,6 +23,7 @@ import ListProduct from './ListProductForShop';
 import PaymentMethod from './PaymentMethod';
 import Address from './address/Address';
 import { useURLParams } from '../../../hooks/useURLParams';
+import showSuccessNotification from '../../Toast/NotificationSuccess';
 
 
 const CheckoutPage = () => {
@@ -116,7 +117,8 @@ const CheckoutPage = () => {
       })))
     }
 
-    CheckoutService.createCheckout(request)
+    if(request.items.length !== 1) {
+      CheckoutService.createCheckout(request)
       .then((data: CheckoutResponseDto) => {
         if (data.bankTransfer) {
           window.location.href = data.urlRedirect;
@@ -128,6 +130,44 @@ const CheckoutPage = () => {
         showErrorNotification("Lỗi đặt hàng", getErrorMessage(error));
       })
       .finally(() => setLoading(false));
+    } else {
+      CheckoutService.createCheckoutPolling(request)
+      .then((rs) => {
+        const trackingId = rs.trackingId;
+        showSuccessNotification("Đặt hàng thành công", "Đơn hàng của bạn đang được xử lý. Bạn sẽ sớm nhận được kết quả.");
+
+        const eventSource = new EventSource(`${BASE_API_URL}/${API_ENDPOINTS.CHECKOUT.STREAM(trackingId)}`,
+          { withCredentials: true }
+        );
+
+        eventSource.addEventListener('checkout-result', (event) => {
+            const result = JSON.parse(event.data);
+
+            if (result.status === 'SUCCESS') {
+                eventSource.close(); 
+                setLoading(false)
+                navigate(APP_ROUTES.PAYMENT_RESULT(result.orderId));
+            } 
+            else if (result.status === 'FAILED') {
+                eventSource.close();
+                setLoading(false)
+            }
+            else {
+                eventSource.close();
+                setLoading(false)
+            }
+        });
+        eventSource.onerror = () => {
+            eventSource.close();
+            showErrorNotification("Lỗi đặt hàng", "Đã có lỗi xảy ra trong quá trình xử lý đơn hàng. Vui lòng thử lại sau.");
+        };
+      })
+      .catch(error => {
+        showErrorNotification("Lỗi đặt hàng", getErrorMessage(error));
+      })
+    }
+
+    
   };
 
 

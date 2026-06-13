@@ -16,13 +16,21 @@ const createCheckout = async (CheckoutRequestDto: CheckoutRequestDto): Promise<C
     return response.data;
 };
 
+const createCheckoutPolling = async (CheckoutRequestDto: CheckoutRequestDto) => {
+    const response = await axiosInstance.post(API_ENDPOINTS.CHECKOUT.CREATE_POLLING, CheckoutRequestDto);
+    return response.data;
+};
+
 const getOrderResult = async (orderId: string): Promise<PaymentResultData> => {
     const response = await axiosInstance.get(API_ENDPOINTS.PAYMENT.RESULT(orderId));
     return response.data;
 };
 
+
+
 export const CheckoutService = {
     getCheckoutInfo,
     createCheckout,
+    createCheckoutPolling,
     getOrderResult,
 }

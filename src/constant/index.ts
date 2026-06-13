@@ -121,7 +121,9 @@ export const API_ENDPOINTS = {
 
   CHECKOUT: {
     GET: 'checkout/items',
-    CREATE: 'checkout'
+    CREATE: 'checkout',
+    CREATE_POLLING: 'checkout/polling',
+    STREAM: (trackingId: string) => `checkout/stream/${trackingId}`,
   },
 
   PAYMENT: {
