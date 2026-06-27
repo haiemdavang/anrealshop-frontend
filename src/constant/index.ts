@@ -134,6 +134,7 @@ export const API_ENDPOINTS = {
     BASE: '/orders',
     MYSHOP_META_DATA: '/my-shop/orders/meta-data',
     MYSHOP_ORDERS: '/my-shop/orders',
+    MYSHOP_EXPORT: '/my-shop/orders/export',
     MYSHOP_APPROVALS: '/my-shop/orders/approvals',
     MYSHOP_APPROVAL: (shopOrderId: string) => `/my-shop/orders/approve/${shopOrderId}`,
     MYSHOP_REJECT: (orderItemId: string) => `/my-shop/orders/reject-id/${orderItemId}`,

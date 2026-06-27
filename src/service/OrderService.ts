@@ -3,6 +3,17 @@ import type { UseOrderParams } from "../hooks/useOrder";
 import type { MyShopOrderListResponse, OrderRejectRequest, OrderStatusDto, UserOrderDetailDto, UserOrderListResponse } from "../types/OrderType";
 import { axiosInstance } from "./AxiosInstant";
 
+export interface ExportOrdersParams {
+    preparingStatus: 'all' | 'PREPARING' | 'CONFIRMED';
+    startDate: string;
+    endDate: string;
+}
+
+interface ExportOrdersResult {
+    file: Blob;
+    filename?: string;
+}
+
 const getOrderMetaData = async (): Promise<OrderStatusDto[]> => {
     const response = await axiosInstance.get(API_ENDPOINTS.ORDERS.MYSHOP_META_DATA);
     return response.data;
@@ -12,6 +23,25 @@ const getMyShopOrders = async (params?: UseOrderParams): Promise<MyShopOrderList
     const response = await axiosInstance.get(API_ENDPOINTS.ORDERS.MYSHOP_ORDERS, { params });
     return response.data;
 }; 
+
+const exportMyShopOrders = async (params: ExportOrdersParams): Promise<ExportOrdersResult> => {
+    const response = await axiosInstance.get<Blob>(API_ENDPOINTS.ORDERS.MYSHOP_EXPORT, {
+        params,
+        responseType: 'blob',
+    });
+
+    const contentDisposition = response.headers['content-disposition'] as string | undefined;
+    const encodedFilename = contentDisposition?.match(/filename\*=UTF-8''([^;]+)/i)?.[1];
+    const fallbackFilename = contentDisposition?.match(/filename="?([^";]+)"?/i)?.[1];
+    const filename = encodedFilename
+        ? decodeURIComponent(encodedFilename)
+        : fallbackFilename;
+
+    return {
+        file: response.data,
+        filename,
+    };
+};
 
 const getOrderDetail = async (orderId: string): Promise<UserOrderDetailDto> => {
     const response = await axiosInstance.get(`${API_ENDPOINTS.ORDERS.USER_ORDER_DETAILS(orderId)}`);
@@ -52,6 +82,7 @@ const rejectShopOrder = async (shopOrderId: string, reason: string): Promise<voi
 export const OrderService = {
     getOrderMetaData,
     getMyShopOrders,
+    exportMyShopOrders,
     getOrderDetail,
     approveOrder,
     approveOrders,

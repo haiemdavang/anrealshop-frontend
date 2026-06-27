@@ -232,6 +232,7 @@ const OrderFilter = ({
       <ModalExport
         opened={exportModalOpened}
         onClose={() => setExportModalOpened(false)}
+        preparingStatus={currentStatus === 'PREPARING' ? statusFilter as PreparingStatus : 'all'}
       />
 
       <HistoryExport
