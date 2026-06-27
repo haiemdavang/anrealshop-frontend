@@ -1,7 +1,6 @@
 import { ActionIcon, Box, Divider, Drawer, Group, NavLink, ScrollArea, Text, ThemeIcon, Tooltip } from '@mantine/core';
 import React, { useState } from 'react';
 import {
-  FiBarChart2,
   FiCheckSquare,
   FiChevronLeft,
   FiChevronRight,
@@ -12,7 +11,6 @@ import {
   FiLogOut,
   FiPlusCircle,
   FiSettings,
-  FiShoppingCart,
   FiUsers
 } from 'react-icons/fi';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -156,16 +154,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ opened, onClose }) => {
       icon: <FiCreditCard size={16} />,
       label: 'Quản lý ví',
       path: '/admin/wallets'
-    },
-    {
-      icon: <FiShoppingCart size={16} />,
-      label: 'Đơn hàng',
-      path: '/admin/orders'
-    },
-    {
-      icon: <FiBarChart2 size={16} />,
-      label: 'Báo cáo & Thống kê',
-      path: '/admin/reports'
     },
     {
       icon: <FiSettings size={16} />,

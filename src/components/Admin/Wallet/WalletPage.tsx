@@ -5,7 +5,6 @@ import {
     Box,
     Group,
     Loader,
-    Paper,
     Table,
     Text,
     Tooltip,
@@ -139,7 +138,6 @@ const WalletPage = () => {
 
     return (
         <Box>
-            <Paper shadow="none" p="md">
                 <Filter
                     searchTerm={searchTerm}
                     activeTab={activeTab}
@@ -268,14 +266,13 @@ const WalletPage = () => {
                     </Table>
                 )}
 
-                <PaginationCustom
+                {wallets.length !== 0 && <PaginationCustom
                     currentPage={currentPage}
                     totalPages={totalPages}
                     totalItems={totalCount}
                     itemsPerPage={ITEMS_PER_PAGE}
                     onPageChange={handlePageChange}
-                />
-            </Paper>
+                />}
 
             <RejectModal
                 data={getRejectReasons('wallet')}

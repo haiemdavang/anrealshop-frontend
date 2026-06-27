@@ -4,6 +4,8 @@ import React, { Suspense, lazy } from 'react';
 import { FiChevronRight, FiHome } from 'react-icons/fi';
 import { Link, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { CategoryDisplayPage } from '../../components/Admin/CategoryDisplay/CategoryDisplayPage.tsx';
+import AdminDashboard from '../../components/Admin/Dashboard/AdminDashboard.tsx';
+import SystemSettings from '../../components/Admin/Setting/SystemSettings.tsx';
 import User from '../../components/Admin/User/UserPage.tsx';
 import OverlayLoading from '../../components/common/OverlayLoading.tsx';
 import showErrorNotification from '../../components/Toast/NotificationError.tsx';
@@ -17,16 +19,12 @@ const ProductApprovalPage = lazy(() => import('../../components/Admin/Product/Pr
 const ShopApprovalPage = lazy(() => import('../../components/Admin/Shop/ShopPage.tsx'));
 const WalletPage = lazy(() => import('../../components/Admin/Wallet/WalletPage.tsx'));
 
-// const AdminDashboard = lazy(() => import('../../components/Admin/Dashboard/AdminDashboard'));
 // const UserManagement = lazy(() => import('../../components/Admin/User/UserManagement'));
 // const OrderManagement = lazy(() => import('../../components/Admin/Order/OrderManagement'));
 // const ReportManagement = lazy(() => import('../../components/Admin/Report/ReportManagement'));
-// const SystemSettings = lazy(() => import('../../components/Admin/Setting/SystemSettings'));
 const UserManagement = () => <User />;
-const AdminDashboard = () => <div>Quản lý người dùng</div>;
 const OrderManagement = () => <div>Quản lý đơn hàng</div>;
 const ReportManagement = () => <div>Báo cáo và thống kê</div>;
-const SystemSettings = () => <div>Cài đặt hệ thống</div>;
 
 
 
@@ -110,7 +108,7 @@ const AdminPage: React.FC = () => {
             </Breadcrumbs>
           </Paper>
 
-          <Paper p="md" radius="md" shadow="xs" className='min-h-[76vh]'>
+          <Paper p="md" radius="md" shadow="xs" className='min-h-[84vh]'>
             <Routes>
               <Route index element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="dashboard" element={<AdminDashboard />} />

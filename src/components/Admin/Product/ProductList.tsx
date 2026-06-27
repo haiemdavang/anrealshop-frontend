@@ -44,7 +44,7 @@ const ProductList: React.FC<ProductListProps> = ({
                     {products.length === 0 ? (
                         <Table.Tr>
                             <Table.Td colSpan={7} style={{ textAlign: 'center', padding: '20px' }}>
-                                <Text my={'70px'} fw={500} c="dimmed">Không có sản phẩm nào</Text>
+                                <Text my={'70px'} fw={500} >Không có sản phẩm nào</Text>
                             </Table.Td>
                         </Table.Tr>
                     ) : (

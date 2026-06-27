@@ -1,4 +1,4 @@
-import { Box, Group, Pagination, Paper } from '@mantine/core';
+import { Box, Group, Pagination } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useEffect, useState } from 'react';
 import { useProduct, useProductApproval } from '../../../hooks/useProduct';
@@ -204,8 +204,7 @@ const ProductApprovalPage = () => {
     };
 
     return (
-        <Box>
-            <Paper p="md" radius="md" withBorder mb="md">
+        <Box >
                 <Filter
                     date={date}
                     searchTerm={searchTerm}
@@ -240,7 +239,6 @@ const ProductApprovalPage = () => {
                         size="sm"
                     />
                 </Group>
-            </Paper>
 
             <ProductReviewModal
                 opened={reviewModalOpened}
