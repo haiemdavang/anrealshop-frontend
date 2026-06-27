@@ -18,6 +18,7 @@ import PageNotFound from '../../common/PageNotFound';
 import Breadcrumbs from './Breadcrumbs';
 import ImageProduct from './ImageProduct';
 import InforProduct from './productInfo/InforProduct';
+import ProductListSuggest from './ProductListSuggest';
 import ProductRate from './ProductRate';
 import TryOn from './Try-onInfo/Try-on';
 
@@ -239,6 +240,11 @@ const ProductDetailPage = () => {
       <ProductRate
         reviews={product.reviews ?? []}
         reviewSummary={product.reviewSummary ?? { totalReviews: 0, averageRating: 0, fiveStar: 0, fourStar: 0, threeStar: 0, twoStar: 0, oneStar: 0 }}
+      />
+
+      <ProductListSuggest
+        categoryPath={product.categoryPath}
+        currentProductId={product.id}
       />
     </Container>
   );
