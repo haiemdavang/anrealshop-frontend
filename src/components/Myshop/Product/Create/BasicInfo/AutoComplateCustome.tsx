@@ -43,7 +43,7 @@ const AutoComplateCustome = ({
         const selectedOption = categories.find(option => option.id === selectedValue);
         if (selectedOption) {
             onChange(selectedOption.id);
-            setSearchValue(selectedOption.urlPath || selectedOption.name);
+            setSearchValue(selectedOption.urlSlug || selectedOption.name);
         }
     }, [categories, onChange]);
 
@@ -65,7 +65,7 @@ const AutoComplateCustome = ({
     const autocompleteData = useMemo(() => {
         return categories.map(option => ({
             value: option.id,
-            label: option.urlPath || option.name
+            label: option.urlSlug || option.name
         }));
     }, [categories]);
 
@@ -76,7 +76,7 @@ const AutoComplateCustome = ({
         return (
             <Box>
                 <Text size="sm" className="text-contentText">
-                    {categoryOption.urlPath || categoryOption.name}
+                    {categoryOption.urlSlug || categoryOption.name}
                 </Text>
             </Box>
         );

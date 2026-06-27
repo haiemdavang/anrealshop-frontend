@@ -1,6 +1,6 @@
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import showErrorNotification from '../components/Toast/NotificationError';
 import showSuccessNotification from '../components/Toast/NotificationSuccess';
 import { defaultProductDescriptionHtml } from '../data/InitData';
@@ -16,6 +16,7 @@ const defaultInitialValues: ProductCreateRequest = {
     discountPrice: 0,
     quantity: 0,
     categoryId: '',
+    categorySlug: '',
     categoryPath: '',
     weight: 0,
     height: 0,
@@ -29,6 +30,7 @@ const defaultInitialValues: ProductCreateRequest = {
 export const useProductForm = (isEditMode = false) => {
 
     const { id } = useParams();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<ProductCreateRequest>({
@@ -182,7 +184,7 @@ export const useProductForm = (isEditMode = false) => {
             } else {  
                 await ProductsService.create(request);
                 showSuccessNotification('Thành công', 'Sản phẩm đã được tạo thành công.');
-                // clearForm();
+                navigate('/myshop/products?page=1&view=grid&status=PENDING&sortBy=newest');
             }
         } catch (err: any) {
             let notificationMessage = err.message || 'Có trường chưa được nhập.';

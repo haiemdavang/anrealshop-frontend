@@ -32,6 +32,7 @@ interface BasicInforProps {
     priceProps: NumberInputProps;
     discountPriceProps: NumberInputProps;
     categoryIdProps: SelectProps;
+    categorySlugProps: AutocompleteProps;
     categoryPathProps: AutocompleteProps;
     descriptionProps: TextInputProps;
     quantityProps: NumberInputProps;
@@ -45,6 +46,7 @@ const BasicInfor = memo(({
     priceProps,
     discountPriceProps,
     categoryIdProps,
+    categorySlugProps,
     categoryPathProps,
     descriptionProps,
     quantityProps,
@@ -72,14 +74,20 @@ const BasicInfor = memo(({
                     const formOnChange = categoryIdProps.onChange as (value: string | null) => void;
                     formOnChange?.(data[0].id);
                 }
-                if (categoryPathProps.onChange && data.length > 0) {
+                if (categorySlugProps.onChange && data.length > 0) {
                     const cateSelected = data[0];
+                    const slugValue = cateSelected.urlSlug || cateSelected.name;
+                    const slugOnChange = categorySlugProps.onChange as (value: string) => void;
+                    slugOnChange(slugValue);
+
                     const pathValue = cateSelected.urlPath || cateSelected.name;
                     const pathOnChange = categoryPathProps.onChange as (value: string) => void;
-                    pathOnChange(pathValue);
-                } else if (categoryPathProps.onChange && !categoryIdProps.value) {
+                    pathOnChange?.(pathValue);
+                } else if (categorySlugProps.onChange && !categoryIdProps.value) {
+                    const slugOnChange = categorySlugProps.onChange as (value: string) => void;
+                    slugOnChange('');
                     const pathOnChange = categoryPathProps.onChange as (value: string) => void;
-                    pathOnChange('');
+                    pathOnChange?.('');
                 }
             } catch (err) {
                 console.error("Lỗi lấy category:", err);
@@ -172,6 +180,10 @@ const BasicInfor = memo(({
                         categoryIdProps={{
                             ...categoryIdProps,
                             value: categoryIdProps.value ?? undefined
+                        } as AutocompleteProps}
+                        categorySlugProps={{
+                            ...categorySlugProps,
+                            value: categorySlugProps.value ?? undefined
                         } as AutocompleteProps}
                         categoryPathProps={{
                             ...categoryPathProps,

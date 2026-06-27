@@ -14,17 +14,29 @@ import ModalCategorySelected from './ModalCategorySelected';
 interface CategoryInfoProps {
     categoryIdProps: AutocompleteProps;
     categories: BaseCategoryDto[];
+    categorySlugProps: AutocompleteProps;
     categoryPathProps: AutocompleteProps;
     onSearchChange?: (searchValue: string) => void;
 }
 
-const CategoryInfo = memo(({ categoryIdProps, categories, categoryPathProps, onSearchChange }: CategoryInfoProps) => {
+const CategoryInfo = memo(({
+    categoryIdProps,
+    categories,
+    categorySlugProps,
+    categoryPathProps,
+    onSearchChange
+}: CategoryInfoProps) => {
     const [modalOpened, setModalOpened] = useState(false);
 
-    const handleModalSelect = (categoryIdValue: string, path: string) => {
+    const handleModalSelect = (categoryIdValue: string, slug: string, path: string) => {
         const formOnChange = categoryIdProps.onChange as (value: string | null) => void;
         if (formOnChange) {
             formOnChange(categoryIdValue);
+        }
+
+        if (categorySlugProps.onChange && slug) {
+            const slugOnChange = categorySlugProps.onChange as (value: string) => void;
+            slugOnChange(slug);
         }
 
         if (categoryPathProps.onChange && path) {
@@ -42,13 +54,19 @@ const CategoryInfo = memo(({ categoryIdProps, categories, categoryPathProps, onS
             formOnChange(categoryIdValue);
         }
 
-        if (categoryPathProps.onChange && cateSelected) {
+        if (categorySlugProps.onChange && cateSelected) {
+            const slugValue = cateSelected.urlSlug || cateSelected.name;
+            const slugOnChange = categorySlugProps.onChange as (value: string) => void;
+            slugOnChange(slugValue);
+
             const pathValue = cateSelected.urlPath || cateSelected.name;
             const pathOnChange = categoryPathProps.onChange as (value: string) => void;
-            pathOnChange(pathValue);
-        } else if (categoryPathProps.onChange && !categoryIdValue) {
+            pathOnChange?.(pathValue);
+        } else if (categorySlugProps.onChange && !categoryIdValue) {
+            const slugOnChange = categorySlugProps.onChange as (value: string) => void;
+            slugOnChange('');
             const pathOnChange = categoryPathProps.onChange as (value: string) => void;
-            pathOnChange('');
+            pathOnChange?.('');
         }
     };
 
@@ -70,7 +88,7 @@ const CategoryInfo = memo(({ categoryIdProps, categories, categoryPathProps, onS
 
             <AutoComplateCustome
                 categories={categories}
-                value={categoryPathProps.value as string || ''}
+                value={categorySlugProps.value as string || ''}
                 onChange={handleCateSelectedChange}
                 onSearchChange={onSearchChange}
                 error={categoryIdProps.error}
@@ -79,6 +97,10 @@ const CategoryInfo = memo(({ categoryIdProps, categories, categoryPathProps, onS
                 onClear={() => {
                     const formOnChange = categoryIdProps.onChange as (value: string | null) => void;
                     if (formOnChange) formOnChange('');
+                    if (categorySlugProps.onChange) {
+                        const slugOnChange = categorySlugProps.onChange as (value: string) => void;
+                        slugOnChange('');
+                    }
                     if (categoryPathProps.onChange) {
                         const pathOnChange = categoryPathProps.onChange as (value: string) => void;
                         pathOnChange('');

@@ -11,6 +11,7 @@ export interface ProductCreateRequest {
   discountPrice: number;
   quantity: number;
   categoryId: string;
+  categorySlug: string;
   categoryPath: string;
   weight: number;
   height: number;

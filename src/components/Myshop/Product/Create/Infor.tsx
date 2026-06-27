@@ -105,6 +105,7 @@ const Infor = memo(({ form, isEditMode = false, isLoadingData = false }: InforPr
         priceProps={{ ...form.getInputProps('price') }}
         discountPriceProps={{ ...form.getInputProps('discountPrice') }}
         categoryIdProps={{ ...form.getInputProps('categoryId') }}
+        categorySlugProps={{ ...form.getInputProps('categorySlug') }}
         categoryPathProps={{ ...form.getInputProps('categoryPath') }}
         descriptionProps={{ ...form.getInputProps('description') }}
         quantityProps={{ ...form.getInputProps('quantity') }}

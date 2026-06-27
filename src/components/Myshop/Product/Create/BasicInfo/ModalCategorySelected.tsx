@@ -16,7 +16,7 @@ import { CategoryService } from '../../../../../service/CategoryService';
 interface ModalCategorySelectedProps {
     opened: boolean;
     onClose: () => void;
-    onSelect: (categoryId: string, path: string) => void;
+    onSelect: (categoryId: string, slug: string, path: string) => void;
     selectedCategoryId?: string;
 }
 
@@ -65,8 +65,9 @@ const ModalCategorySelected = memo(({ opened, onClose, onSelect, selectedCategor
         if (selectedPath.length > 0) {
             const lastSelected = selectedPath[selectedPath.length - 1];
             const selectedCategory = categories.find(cat => cat.id === lastSelected);
+            const slug = selectedCategory ? selectedCategory.urlSlug || selectedCategory.name : '';
             const path = selectedCategory ? selectedCategory.urlPath || selectedCategory.name : '';
-            onSelect(lastSelected, path);
+            onSelect(lastSelected, slug, path);
         }
         handleClose();
     };
