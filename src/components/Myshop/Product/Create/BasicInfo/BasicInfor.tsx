@@ -125,7 +125,7 @@ const BasicInfor = memo(({
                     <GeminiSuggestWrapper
                         onSuggest={(text) => {
                             const formOnChange = sortDescriptionProps.onChange as any;
-                            formOnChange?.({ target: { value: text } } as React.ChangeEvent<HTMLTextAreaElement>);
+                            formOnChange?.(text);
                         }}
                         fetchSuggestion={() => getGeminiSuggestion('product', 'shortDescription', getContextData())}
                         tooltipLabel="Gợi ý mô tả ngắn bằng Gemini AI"
