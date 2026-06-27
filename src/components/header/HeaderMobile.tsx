@@ -36,6 +36,9 @@ const HeaderMobile: React.FC = () => {
     const { handleLogout } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const loginRedirectUrl = APP_ROUTES.LOGIN_REDIRECT(
+        location.pathname + location.search + location.hash
+    );
 
     const [searchValue, setSearchValue] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -258,7 +261,7 @@ const HeaderMobile: React.FC = () => {
                             <UnstyledButton
                                 className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg"
                                 component={Link}
-                                to={APP_ROUTES.LOGIN}
+                                to={loginRedirectUrl}
                                 onClick={closeDrawer}
                             >
                                 <FiLogIn size={20} />

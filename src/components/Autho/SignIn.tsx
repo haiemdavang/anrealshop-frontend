@@ -30,11 +30,32 @@ interface SignInFormValues {
   password: string;
 }
 
+const OAUTH_REDIRECT_KEY = 'oauth-login-redirect';
+
+const getSafeReturnUrl = (redirectUrl: string | null) => {
+  if (!redirectUrl || !redirectUrl.startsWith('/') || redirectUrl.startsWith('//')) {
+    return APP_ROUTES.HOME;
+  }
+
+  const pathname = redirectUrl.split(/[?#]/)[0];
+  if (pathname === APP_ROUTES.LOGIN || pathname === APP_ROUTES.REGISTER) {
+    return APP_ROUTES.HOME;
+  }
+
+  return redirectUrl;
+};
+
 export function SignIn() {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const returnUrl = searchParams.get('redirect') || '/';
+  const oauthRedirect =
+    searchParams.has('success')
+      ? sessionStorage.getItem(OAUTH_REDIRECT_KEY)
+      : null;
+  const returnUrl = getSafeReturnUrl(
+    searchParams.get('redirect') || oauthRedirect
+  );
 
   const dispatch = useAppDispatch();
   const { status, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -65,10 +86,12 @@ export function SignIn() {
       const user: UserDto = resultAction.user;
 
       showSuccessNotification('Đăng nhập thành công!', `Chào mừng ${user.fullName || user.username} trở lại!`);
-      navigate(returnUrl);
-      if (returnUrl === '/' && user.role === 'ADMIN') {
-        navigate(APP_ROUTES.ADMIN.DASHBOARD);
-      }
+      const destination =
+        returnUrl === APP_ROUTES.HOME && user.role === 'ADMIN'
+          ? APP_ROUTES.ADMIN.DASHBOARD
+          : returnUrl;
+      sessionStorage.removeItem(OAUTH_REDIRECT_KEY);
+      navigate(destination, { replace: true });
     } catch (err: any) {
       let notificationMessage = err.message || 'Email hoặc mật khẩu không chính xác.';
 
@@ -89,14 +112,17 @@ export function SignIn() {
   };
 
   const handleGoogleLogin = () => {
+    sessionStorage.setItem(OAUTH_REDIRECT_KEY, returnUrl);
     window.location.href = GOOGLE_LOGIN_URL;
   }
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(returnUrl);
+      navigate(returnUrl, { replace: true });
     }
+  }, [isAuthenticated, navigate, returnUrl]);
 
+  useEffect(() => {
     const handleOAuthLogin = async () => {
       if (hasNotifiedRef.current) return;
 
@@ -106,8 +132,12 @@ export function SignIn() {
 
       hasNotifiedRef.current = true;
       if (successMessage) {
+        const oauthReturnUrl = getSafeReturnUrl(
+          params.get('redirect') || sessionStorage.getItem(OAUTH_REDIRECT_KEY)
+        );
+        sessionStorage.removeItem(OAUTH_REDIRECT_KEY);
         showSuccessNotification('Đăng nhập thành công!', `Chào mừng bạn đến với hệ thống!`);
-        navigate(returnUrl);
+        navigate(oauthReturnUrl, { replace: true });
       } else if (errorMessage) {
         const timeoutId = setTimeout(() => {
           params.delete('error');
@@ -119,7 +149,7 @@ export function SignIn() {
     };
 
     handleOAuthLogin();
-  }, []);
+  }, [navigate]);
 
   return (
     <motion.div

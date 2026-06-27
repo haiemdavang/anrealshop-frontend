@@ -1,7 +1,7 @@
 import type { EnhancedStore } from '@reduxjs/toolkit';
 import axios, { type AxiosRequestConfig } from 'axios';
 import showErrorNotification from '../components/Toast/NotificationError';
-import { APP_ROUTES_PUBLIC, BASE_API_URL } from '../constant';
+import { APP_ROUTES, APP_ROUTES_PUBLIC, BASE_API_URL } from '../constant';
 import type { ErrorResponseDto } from '../types/CommonType';
 import authService from './AuthService';
 
@@ -58,12 +58,13 @@ export const setupAxiosInterceptors = (
       return;
     }
 
-    const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+    const returnUrl =
+      window.location.pathname + window.location.search + window.location.hash;
 
     showErrorNotification("Thông báo", "Phiên đăng nhập của bạn đã hết hạn. Đăng nhập lại trong giây lát...");
 
     setTimeout(() => {
-      window.location.href = `/login?redirect=${returnUrl}`;
+      window.location.href = APP_ROUTES.LOGIN_REDIRECT(returnUrl);
     }, 3000);
   };
   axiosInstance.interceptors.response.use(

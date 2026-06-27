@@ -50,6 +50,9 @@ const Header: React.FC = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const loginRedirectUrl = APP_ROUTES.LOGIN_REDIRECT(
+    location.pathname + location.search + location.hash
+  );
   const [searchValue, setSearchValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -358,7 +361,7 @@ const Header: React.FC = () => {
                                 <Menu.Item
                                   leftSection={<FiLogIn size={16} />}
                                   component={Link}
-                                  to={APP_ROUTES.LOGIN}
+                                  to={loginRedirectUrl}
                                 >
                                   <Text size="sm">Đăng nhập</Text>
                                 </Menu.Item>

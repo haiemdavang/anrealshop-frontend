@@ -201,7 +201,8 @@ export const API_ENDPOINTS = {
 export const APP_ROUTES = {
   HOME: '/',
   LOGIN: '/login',
-  LOGIN_REDIRECT: (redirectPath: string) => `/login?redirect=${redirectPath}`,
+  LOGIN_REDIRECT: (redirectPath: string) =>
+    `/login?redirect=${encodeURIComponent(redirectPath)}`,
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
   CART: '/carts',

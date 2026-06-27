@@ -4,19 +4,13 @@ import { Button } from '@mantine/core';
 import { FiArrowLeft } from 'react-icons/fi';
 import { SignIn } from '../../components/Autho/SignIn';
 import { SignUp } from '../../components/Autho/SignUp';
-import { useAppSelector } from '../../hooks/useAppRedux';
 import { APP_ROUTES } from '../../constant';
 
 export function AuthoPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate(APP_ROUTES.HOME);
-    }
     if (location.pathname !== APP_ROUTES.LOGIN && location.pathname !== APP_ROUTES.REGISTER) {
       navigate(APP_ROUTES.LOGIN);
     }
