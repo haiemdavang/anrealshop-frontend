@@ -3,6 +3,7 @@ import type { EmblaOptionsType } from 'embla-carousel';
 import useEmblaCarousel from 'embla-carousel-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import showSuccessNotification from '../../Toast/NotificationSuccess';
 
 interface HeroSlide {
     id: number;
@@ -35,9 +36,9 @@ export const HeroSection = () => {
             id: 3,
             type: 'video',
             src: randomVideoSrc,
-            title: 'New Collection',
-            description: 'Experience comfort and style like never before',
-            buttonText: 'Watch Collection',
+            title: 'Bộ Sưu Tập Mới',
+            description: 'Trải nghiệm sự thoải mái và phong cách theo một cách hoàn toàn mới',
+            buttonText: 'Xem Bộ Sưu Tập',
             buttonStyle: 'primary',
             buttonLink: '/collections/new'
         },
@@ -45,10 +46,10 @@ export const HeroSection = () => {
             id: 1,
             type: 'image',
             src: 'https://im.uniqlo.com/global-cms/spa/res079bc9b36d900bb2dacb3a052d3d1958fr.jpg',
-            alt: 'Uniqlo Collection',
-            title: 'Spring Collection',
-            description: 'Discover the latest trends and styles for this season',
-            buttonText: 'Shop Now',
+            alt: 'Bộ sưu tập thời trang mùa xuân',
+            title: 'Bộ Sưu Tập Xuân',
+            description: 'Khám phá những xu hướng và phong cách mới nhất trong mùa này',
+            buttonText: 'Mua Sắm Ngay',
             buttonStyle: 'white',
             buttonLink: '/collections/spring'
         },
@@ -56,10 +57,10 @@ export const HeroSection = () => {
             id: 2,
             type: 'image',
             src: 'https://im.uniqlo.com/global-cms/spa/rese6d2888ea872107f7df787bb9097232ffr.jpg',
-            alt: 'Uniqlo Fashion',
-            title: 'Summer Essentials',
-            description: 'Light and comfortable clothes for your everyday needs',
-            buttonText: 'Explore',
+            alt: 'Thời trang mùa hè',
+            title: 'Trang Phục Mùa Hè',
+            description: 'Những trang phục nhẹ nhàng, thoải mái cho nhu cầu hằng ngày',
+            buttonText: 'Khám Phá',
             buttonStyle: 'white',
             buttonLink: '/collections/summer'
         },
@@ -183,7 +184,7 @@ export const HeroSection = () => {
                     preload='metadata'
                 >
                     <source src={slide.src} type="video/mp4" />
-                    Your browser does not support the video tag.
+                    Trình duyệt của bạn không hỗ trợ phát video.
                 </video>
             );
         }
@@ -227,6 +228,11 @@ export const HeroSection = () => {
                                 </h2>
                                 <p className="text-xl mb-6 font-medium">{slide.description}</p>
                                 <button
+                                    type="button"
+                                    onClick={() => showSuccessNotification(
+                                        'Thông báo',
+                                        'Chức năng đang được phát triển'
+                                    )}
                                     className={`${slide.buttonStyle === 'primary'
                                         ? 'bg-primary text-white hover:bg-primary/90'
                                         : 'bg-white text-gray-900 hover:bg-gray-100'
@@ -243,7 +249,7 @@ export const HeroSection = () => {
             {/* Visual indicator for scroll navigation */}
             <div className="absolute bottom-8 left-8 z-20 flex flex-col items-center">
                 <span className="text-white text-sm mb-2">
-                    {isLastSlide ? 'Scroll to continue' : 'Scroll to navigate'}
+                    {isLastSlide ? 'Cuộn để tiếp tục' : 'Cuộn để chuyển nội dung'}
                 </span>
                 <div className="h-16 w-1 bg-white/30 rounded-full overflow-hidden">
                     <motion.div
@@ -267,18 +273,18 @@ export const HeroSection = () => {
                             ? 'border-white scale-110 opacity-100'
                             : 'border-transparent opacity-70 hover:opacity-90'
                             }`}
-                        aria-label={`Go to slide ${index + 1}`}
+                        aria-label={`Chuyển đến nội dung ${index + 1}`}
                     >
                         {slide.type === 'image' ? (
                             <img
                                 src={slide.src}
-                                alt={`Thumbnail ${index + 1}`}
+                                alt={`Ảnh thu nhỏ ${index + 1}`}
                                 className="h-full w-full object-cover"
                             />
                         ) : (
                             <img
                                 src={'https://im.uniqlo.com/global-cms/spa/res4f41fbe79a19f20d963530569a8383f9fr.jpg'}
-                                alt={`Thumbnail ${index + 1}`}
+                                alt={`Ảnh thu nhỏ ${index + 1}`}
                                 className="h-full w-full object-cover"
                             />
                         )}
