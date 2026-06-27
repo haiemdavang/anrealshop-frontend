@@ -214,6 +214,7 @@ export const APP_ROUTES = {
   USER_SECURITY: '/settings/security',
   USER_ADDRESSES: '/settings/addresses',
   USER_ORDERS: '/settings/orders',
+  USER_ORDER_STATUS: (status: string) => `/settings/orders?status=${status}`,
   USER_WISHLIST: '/settings/wishlist',
 
   PRODUCTS: '/products',

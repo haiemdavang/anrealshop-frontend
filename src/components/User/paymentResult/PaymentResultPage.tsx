@@ -75,7 +75,7 @@ const PaymentResultPage = () => {
                             </Button>
                             <Button
                                 component={Link}
-                                to={APP_ROUTES.USER_ORDERS}
+                                to={APP_ROUTES.USER_ORDER_STATUS("PENDING_CONFIRMATION")}
                                 leftSection={<FiPackage size={16} />}
                                 color="blue"
                                 className="bg-primary"

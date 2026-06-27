@@ -88,7 +88,7 @@ const PaymentPendingView = ({ paymentResult }: PaymentPendingProps) => {
             </Button>
             <Button 
               component={Link} 
-              to={`/settings/orders`}
+              to={`/settings/orders?status=PENDING_CONFIRMATION`}
               leftSection={<FiPackage size={16} />}
               color="blue" 
               className="bg-primary"
