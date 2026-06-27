@@ -1,5 +1,7 @@
 import {
+    ActionIcon,
     Box,
+    Button,
     Container,
     Group,
     Paper,
@@ -7,12 +9,19 @@ import {
     SimpleGrid,
     Text,
     Title,
+    Tooltip,
 } from '@mantine/core';
 import '@mantine/charts/styles.css';
+import { DatePickerInput } from '@mantine/dates';
+import '@mantine/dates/styles.css';
 import showSuccessNotification from '../../Toast/NotificationSuccess';
+import { useState } from 'react';
 import {
+    FiCalendar,
+    FiCheck,
     FiGrid,
     FiHome,
+    FiRefreshCw,
 } from 'react-icons/fi';
 import { BreadcrumbItems } from '../Components/BreadcrumbItems';
 import { CampaignCard } from './components/CampaignCard';
@@ -39,11 +48,27 @@ const showDevelopingNotice = () => {
 // ─── Main component ──────────────────────────────────────────────────────────
 
 const DashboardPage = () => {
+    const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+    const [appliedDateRange, setAppliedDateRange] = useState<[Date | null, Date | null]>([null, null]);
+
     const breadcrumbItems = [
         { title: 'Trang chủ', href: '/', icon: <FiHome size={14} /> },
         { title: 'Quản lý cửa hàng', href: '/myshop' },
         { title: 'Tổng quan' },
     ];
+
+    const hasIncompleteRange = Boolean(dateRange[0]) !== Boolean(dateRange[1]);
+    const hasDateFilter = Boolean(appliedDateRange[0] && appliedDateRange[1]);
+
+    const handleApplyDateFilter = () => {
+        if (hasIncompleteRange) return;
+        setAppliedDateRange(dateRange);
+    };
+
+    const handleResetDateFilter = () => {
+        setDateRange([null, null]);
+        setAppliedDateRange([null, null]);
+    };
 
     return (
         <Container fluid px="lg" py="md">
@@ -52,17 +77,53 @@ const DashboardPage = () => {
                 <Box mb="xs">
                     <BreadcrumbItems items={breadcrumbItems} />
                 </Box>
-                <Group justify="space-between" align="center">
+                <Group justify="space-between" align="center" wrap="wrap">
                     <Group>
                         <FiGrid size={24} className="text-primary" />
                         <Title order={2} size="h3">
                             Tổng quan cửa hàng
                         </Title>
                     </Group>
-                    <Text c="dimmed" size="sm">
-                        Xem nhanh tình hình kinh doanh của bạn hôm nay
-                    </Text>
+                    <Group gap="xs" wrap="wrap">
+                        <DatePickerInput
+                            type="range"
+                            value={dateRange}
+                            onChange={setDateRange}
+                            placeholder="Từ ngày — Đến ngày"
+                            valueFormat="DD/MM/YYYY"
+                            locale="vi"
+                            clearable
+                            maxDate={new Date()}
+                            leftSection={<FiCalendar size={16} />}
+                            aria-label="Lọc dashboard theo khoảng ngày"
+                            className="w-full sm:w-[280px]"
+                        />
+                        <Button
+                            variant="light"
+                            leftSection={<FiCheck size={16} />}
+                            onClick={handleApplyDateFilter}
+                            disabled={hasIncompleteRange}
+                        >
+                            Áp dụng
+                        </Button>
+                        <Tooltip label="Đặt lại bộ lọc ngày">
+                            <ActionIcon
+                                variant="default"
+                                size="lg"
+                                onClick={handleResetDateFilter}
+                                disabled={!dateRange[0] && !dateRange[1] && !hasDateFilter}
+                                aria-label="Đặt lại bộ lọc ngày"
+                            >
+                                <FiRefreshCw size={16} />
+                            </ActionIcon>
+                        </Tooltip>
+                    </Group>
                 </Group>
+                <Text c="dimmed" size="sm" mt="xs">
+                    {hasDateFilter
+                        ? 'Số liệu đang được lọc theo khoảng thời gian đã chọn'
+                        : 'Xem nhanh tình hình kinh doanh trong 7 ngày gần nhất'}
+                </Text>
             </Paper>
 
             {/* ── 2-column layout ── */}
@@ -130,7 +191,7 @@ const DashboardPage = () => {
                     </Paper>
 
                     {/* Group 3 — Bar chart */}
-                    <OrderBarChart />
+                    <OrderBarChart dateRange={appliedDateRange} />
 
                     {/* Group 4 — Campaigns */}
                     <Paper radius="md" p="md" withBorder>
