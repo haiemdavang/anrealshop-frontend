@@ -17,7 +17,7 @@ const NewsletterSignup = () => {
         <Title order={3} className="!mb-4 text-slate-900">Đăng ký nhận tin</Title>
         
         <Text size="md" className="!mb-8 !max-w-lg !mx-auto text-gray-600">
-          Đăng ký để nhận thông tin về sản phẩm mới, khuyến mãi và ưu đãi đặc biệt từ AnrealShop.
+          Đăng ký để nhận thông tin về sản phẩm mới, khuyến mãi và ưu đãi đặc biệt từ Hai Lee.
         </Text>
         
         <Box className="max-w-xl mx-auto">

@@ -105,7 +105,7 @@ export const NEWS = [
     id: 1,
     tag: 'Chính sách',
     tagColor: 'blue' as const,
-    title: 'AnrealShop cập nhật chính sách phí vận chuyển mới từ tháng 5/2026',
+    title: 'Hai Lee cập nhật chính sách phí vận chuyển mới từ tháng 5/2026',
     desc: 'Từ ngày 01/05/2026, phí vận chuyển sẽ được tính dựa trên khối lượng thực tế thay vì khối lượng quy đổi, giúp tối ưu chi phí cho người bán.',
     date: '14/04/2026',
     icon: FiBell,

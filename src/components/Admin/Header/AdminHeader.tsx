@@ -59,7 +59,7 @@ const AdminHeader: React.FC<{ toggleSidebar: () => void, sidebarOpened: boolean 
               className="mr-2 md:hidden"
             />
             <Link to="/admin/dashboard" className="flex items-center gap-2">
-              <img src="/images/logo.jfif" alt="AnrealShop" className="h-8 w-auto" />
+              <img src="/images/logo.jfif" alt="Hai Lee" className="h-8 w-auto" />
               <div className="font-semibold text-xl">
                 <span className="text-primary">Admin</span>
                 <span className="text-slate-700">System</span>

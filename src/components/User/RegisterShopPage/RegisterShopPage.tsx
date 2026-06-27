@@ -129,7 +129,7 @@ const RegisterShopPage = () => {
                                                 animate={{ opacity: 1, x: 0 }}
                                                 transition={{ duration: 0.5, delay: 0.4 }}
                                             >
-                                                Anreal
+                                                Hai
                                             </motion.span>
                                             <motion.span
                                                 className="text-black"
@@ -137,7 +137,7 @@ const RegisterShopPage = () => {
                                                 animate={{ opacity: 1, x: 0 }}
                                                 transition={{ duration: 0.5, delay: 0.5 }}
                                             >
-                                                Shop
+                                                Lee
                                             </motion.span>
                                         </h1>
                                         <Text size="lg" c="dimmed" className="mb-6">

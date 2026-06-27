@@ -104,7 +104,7 @@ export const Header = () => {
                     {/* Logo */}
                     <Link to="/" className="flex items-center">
                         <h1 className={`text-2xl font-bold ${scrolled ? 'text-primary' : 'text-white'}`}>
-                            AnrealShop
+                            Hai Lee
                         </h1>
                     </Link>
 

@@ -151,8 +151,8 @@ const Header: React.FC = () => {
               className="flex items-center gap-2 no-underline transition-transform duration-300 hover:scale-105"
             >
               <div className={`font-bold ${isMobile ? "text-lg" : "text-2xl"}`}>
-                <span className="text-primary">Anreal</span>
-                <span className="text-contentText">Shop</span>
+                <span className="text-primary">Hai</span>
+                <span className="text-contentText"> Lee</span>
               </div>
             </Link>
           </motion.div>

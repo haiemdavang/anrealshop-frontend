@@ -11,7 +11,7 @@ const MembershipPolicy = () => {
       </Title>
       <Text className="!mt-4 !leading-7">
         Chính sách thành viên quy định quyền lợi, trách nhiệm và điều kiện sử dụng tài khoản trên
-        AnrealShop. Chính sách này áp dụng cho khách hàng mua sắm, người dùng có tài khoản, thành
+        Hai Lee. Chính sách này áp dụng cho khách hàng mua sắm, người dùng có tài khoản, thành
         viên tham gia chương trình ưu đãi và người bán sử dụng các tính năng liên quan.
       </Text>
 
@@ -24,7 +24,7 @@ const MembershipPolicy = () => {
         <List.Item>Người dùng cần cung cấp thông tin chính xác khi đăng ký, bao gồm họ tên, email, số điện thoại và thông tin xác minh nếu có.</List.Item>
         <List.Item>Mỗi người dùng nên sử dụng một tài khoản chính để quản lý đơn hàng, địa chỉ, ưu đãi và lịch sử giao dịch.</List.Item>
         <List.Item>Người dùng chịu trách nhiệm bảo mật mật khẩu, mã OTP, thiết bị đăng nhập và mọi hoạt động phát sinh từ tài khoản của mình.</List.Item>
-        <List.Item>AnrealShop có thể yêu cầu xác minh thêm khi tài khoản có dấu hiệu bất thường hoặc cần bảo vệ quyền lợi giao dịch.</List.Item>
+        <List.Item>Hai Lee có thể yêu cầu xác minh thêm khi tài khoản có dấu hiệu bất thường hoặc cần bảo vệ quyền lợi giao dịch.</List.Item>
       </List>
 
       <Title order={3} className="!mt-7 !text-xl !font-semibold !text-gray-900">
@@ -65,7 +65,7 @@ const MembershipPolicy = () => {
       <List className="!mt-3 !leading-7" spacing="xs">
         <List.Item>Mã giảm giá, điểm thưởng, voucher hoặc quyền lợi thành viên chỉ áp dụng theo điều kiện của từng chương trình.</List.Item>
         <List.Item>Ưu đãi có thể giới hạn theo thời gian, ngành hàng, shop, giá trị đơn, phương thức thanh toán hoặc khu vực giao hàng.</List.Item>
-        <List.Item>AnrealShop có thể thu hồi ưu đãi nếu phát hiện đơn hàng bị hủy, hoàn trả, lạm dụng hoặc không đáp ứng điều kiện.</List.Item>
+        <List.Item>Hai Lee có thể thu hồi ưu đãi nếu phát hiện đơn hàng bị hủy, hoàn trả, lạm dụng hoặc không đáp ứng điều kiện.</List.Item>
         <List.Item>Ưu đãi không được mua bán, chuyển nhượng hoặc sử dụng cho mục đích gian lận.</List.Item>
       </List>
 
@@ -83,7 +83,7 @@ const MembershipPolicy = () => {
         5. Tạm khóa, giới hạn hoặc chấm dứt tài khoản
       </Title>
       <Text className="!mt-3 !leading-7">
-        AnrealShop có thể tạm khóa, giới hạn tính năng, thu hồi ưu đãi hoặc chấm dứt tài khoản nếu
+        Hai Lee có thể tạm khóa, giới hạn tính năng, thu hồi ưu đãi hoặc chấm dứt tài khoản nếu
         phát hiện vi phạm chính sách, rủi ro bảo mật, tranh chấp nghiêm trọng hoặc yêu cầu từ cơ
         quan có thẩm quyền. Trong trường hợp phù hợp, người dùng có thể được yêu cầu cung cấp thêm
         thông tin để xác minh và khôi phục quyền sử dụng.

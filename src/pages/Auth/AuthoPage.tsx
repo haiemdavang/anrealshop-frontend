@@ -42,10 +42,10 @@ export function AuthoPage() {
           location.pathname === "/login" ? "rounded-l-[200px]" : "rounded-r-[200px]"
         }`}>
           <div className="flex gap-3 items-center text-primary">
-            <img src="/images/logo.png" alt="AnrealShop Logo" className="h-16 w-auto" />
+            <img src="/images/logo.png" alt="Hai Lee Logo" className="h-16 w-auto" />
             <div className='text-4xl font-semibold'>
-              <span className="text-primary">Anreal</span>
-              <span className="text-slate-700">Shop</span>
+              <span className="text-primary">Hai</span>
+              <span className="text-slate-700"> Lee</span>
             </div>
           </div>
           <div className="text-2xl font-semibold text-slate-700">

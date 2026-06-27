@@ -236,7 +236,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ opened, onClose }) => {
       size="xs"
       title={
         <div className="flex items-center gap-2">
-          <img src="/images/logo.jfif" alt="AnrealShop" className="h-8 w-auto" />
+          <img src="/images/logo.jfif" alt="Hai Lee" className="h-8 w-auto" />
           <div className="font-semibold text-lg">
             <span className="text-primary">Admin</span>
             <span className="text-slate-700">System</span>

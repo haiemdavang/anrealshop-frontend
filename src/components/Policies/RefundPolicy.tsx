@@ -11,7 +11,7 @@ const RefundPolicy = () => {
       </Title>
       <Text className="!mt-4 !leading-7">
         Chính sách này quy định các trường hợp khách hàng có thể yêu cầu đổi trả, hoàn tiền hoặc
-        khiếu nại sau khi mua hàng trên AnrealShop. Mục tiêu là bảo vệ quyền lợi chính đáng của
+        khiếu nại sau khi mua hàng trên Hai Lee. Mục tiêu là bảo vệ quyền lợi chính đáng của
         khách hàng, đồng thời đảm bảo người bán có đủ căn cứ để xử lý minh bạch.
       </Text>
 
@@ -79,7 +79,7 @@ const RefundPolicy = () => {
             </Table.Tr>
             <Table.Tr>
               <Table.Td>2</Table.Td>
-              <Table.Td>AnrealShop và người bán kiểm tra bằng chứng.</Table.Td>
+              <Table.Td>Hai Lee và người bán kiểm tra bằng chứng.</Table.Td>
               <Table.Td>Ảnh sản phẩm, ảnh bao bì, video mở gói nếu có.</Table.Td>
             </Table.Tr>
             <Table.Tr>
@@ -110,7 +110,7 @@ const RefundPolicy = () => {
       </Title>
       <Text className="!mt-3 !leading-7">
         Khoản hoàn tiền thường được trả về phương thức thanh toán ban đầu hoặc ví/số dư tài khoản
-        trên AnrealShop tùy trạng thái giao dịch. Thời gian ghi nhận phụ thuộc vào cổng thanh toán,
+        trên Hai Lee tùy trạng thái giao dịch. Thời gian ghi nhận phụ thuộc vào cổng thanh toán,
         ngân hàng, ví điện tử và lịch làm việc của các bên liên quan. Nếu đơn hàng có sử dụng mã
         giảm giá, điểm thưởng hoặc ưu đãi, giá trị hoàn có thể được tính theo số tiền thực thanh
         toán sau khuyến mãi.
@@ -120,7 +120,7 @@ const RefundPolicy = () => {
         8. Hoàn tiền một phần
       </Title>
       <Text className="!mt-3 !leading-7">
-        Với đơn hàng gồm nhiều sản phẩm, AnrealShop có thể hỗ trợ hoàn tiền một phần cho sản phẩm
+        Với đơn hàng gồm nhiều sản phẩm, Hai Lee có thể hỗ trợ hoàn tiền một phần cho sản phẩm
         lỗi, thiếu hoặc không đúng mô tả mà không cần hủy toàn bộ đơn. Phí vận chuyển, mã giảm giá
         và ưu đãi đi kèm sẽ được phân bổ theo quy định hệ thống tại thời điểm xử lý.
       </Text>
@@ -129,7 +129,7 @@ const RefundPolicy = () => {
         9. Gian lận và lạm dụng chính sách
       </Title>
       <Text className="!mt-3 !leading-7">
-        AnrealShop có quyền từ chối hỗ trợ, tạm khóa tính năng hoặc chuyển thông tin cho bên có
+        Hai Lee có quyền từ chối hỗ trợ, tạm khóa tính năng hoặc chuyển thông tin cho bên có
         thẩm quyền nếu phát hiện hành vi tráo hàng, cố ý làm hư hỏng sản phẩm, gửi bằng chứng
         giả, tạo nhiều tài khoản để trục lợi hoặc lợi dụng quy trình hoàn tiền.
       </Text>

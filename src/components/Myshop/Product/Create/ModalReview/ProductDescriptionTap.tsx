@@ -44,7 +44,7 @@
 //             <div className="bg-gray-50 p-4 rounded-lg">
 //               <Group justify="apart" className="py-3">
 //                 <Text fw={600} size="md">Thương hiệu</Text>
-//                 <Text size="md" className="text-blue-600 font-semibold">Anreal Shop</Text>
+//                 <Text size="md" className="text-blue-600 font-semibold">Hai Lee</Text>
 //               </Group>
 //               <Divider />
 

@@ -48,14 +48,14 @@ const Footer: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <img src="/images/logo.jfif" alt="AnrealShop" className="h-8 w-auto" />
+                  <img src="/images/logo.jfif" alt="Hai Lee" className="h-8 w-auto" />
                   <div className="text-xl font-bold">
-                    <span className="text-primary">Anreal</span>
-                    <span className="text-contentText">Shop</span>
+                    <span className="text-primary">Hai</span>
+                    <span className="text-contentText"> Lee</span>
                   </div>
                 </motion.div>
                 <Text size="sm" className="!text-gray-500 !mb-2">
-                  AnrealShop - Điểm đến mua sắm trực tuyến đáng tin cậy của bạn với các sản phẩm chất lượng và giá cả phải chăng.
+                  Hai Lee - Điểm đến mua sắm trực tuyến đáng tin cậy của bạn với các sản phẩm chất lượng và giá cả phải chăng.
                 </Text>
                 <div className="flex flex-col gap-2">
                   <motion.div
@@ -85,7 +85,7 @@ const Footer: React.FC = () => {
                   >
                     <FiMail className="!text-gray-500 group-hover:text-primary" size={16} />
                     <Text size="sm" className="!text-gray-500">
-                      lienhe@anrealshop.com
+                      lienhe@hailee.com
                     </Text>
                   </motion.div>
                 </div>
@@ -223,7 +223,7 @@ const Footer: React.FC = () => {
         <Container size="xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <Text size="sm" className="!text-gray-500 ">
-              © {currentYear} AnrealShop. Tất cả các quyền được bảo lưu.
+              © {currentYear} Hai Lee. Tất cả các quyền được bảo lưu.
             </Text>
 
             {/* Social links */}

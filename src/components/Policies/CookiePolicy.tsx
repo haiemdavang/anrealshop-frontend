@@ -10,7 +10,7 @@ const CookiePolicy = () => {
         Chính sách cookie
       </Title>
       <Text className="!mt-4 !leading-7">
-        Chính sách cookie giải thích cách AnrealShop sử dụng cookie, bộ nhớ cục bộ và các công
+        Chính sách cookie giải thích cách Hai Lee sử dụng cookie, bộ nhớ cục bộ và các công
         nghệ tương tự để duy trì phiên đăng nhập, ghi nhớ lựa chọn của người dùng, cải thiện hiệu
         năng, đo lường hoạt động và bảo vệ hệ thống khỏi hành vi gian lận.
       </Text>
@@ -22,7 +22,7 @@ const CookiePolicy = () => {
       </Title>
       <Text className="!mt-3 !leading-7">
         Cookie là tệp dữ liệu nhỏ được trình duyệt lưu trên thiết bị khi người dùng truy cập
-        website. Ngoài cookie, AnrealShop có thể sử dụng local storage, session storage, token
+        website. Ngoài cookie, Hai Lee có thể sử dụng local storage, session storage, token
         trình duyệt hoặc mã nhận diện kỹ thuật tương tự để cung cấp trải nghiệm ổn định và an toàn.
       </Text>
 
@@ -81,7 +81,7 @@ const CookiePolicy = () => {
         Một số đối tác như cổng thanh toán, dịch vụ đăng nhập, công cụ phân tích hoặc nhà cung cấp
         hạ tầng có thể đặt cookie riêng khi người dùng sử dụng tính năng liên quan. Việc sử dụng
         cookie của các bên này chịu sự điều chỉnh bởi chính sách riêng của họ và chỉ được tích hợp
-        trong phạm vi cần thiết cho hoạt động của AnrealShop.
+        trong phạm vi cần thiết cho hoạt động của Hai Lee.
       </Text>
 
       <Title order={3} className="!mt-7 !text-xl !font-semibold !text-gray-900">
@@ -99,7 +99,7 @@ const CookiePolicy = () => {
       <Text className="!mt-3 !leading-7">
         Cookie phiên thường hết hạn khi người dùng đóng trình duyệt hoặc đăng xuất. Cookie lâu dài
         có thể được lưu trong một khoảng thời gian nhất định để ghi nhớ tùy chọn và nâng cao bảo
-        mật. AnrealShop có thể thay đổi thời gian lưu trữ theo nhu cầu vận hành và yêu cầu pháp lý.
+        mật. Hai Lee có thể thay đổi thời gian lưu trữ theo nhu cầu vận hành và yêu cầu pháp lý.
       </Text>
     </div>
   );

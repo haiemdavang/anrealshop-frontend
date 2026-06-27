@@ -75,7 +75,7 @@ const PoliciesPage = () => {
           >
             <Anchor component={Link} to={APP_ROUTES.HOME} underline="never" className="flex items-center gap-3">
               <span className="text-xl font-semibold text-gray-900">
-                <span className="text-primary">Anreal</span> Shop
+                <span className="text-primary">Hai</span> Lee
               </span>
             </Anchor>
 
@@ -90,14 +90,14 @@ const PoliciesPage = () => {
 
           <motion.div variants={itemVariants} className="mb-8">
             <Text size="sm" className="!text-gray-500 !mb-2">
-              Trung tâm chính sách AnrealShop
+              Trung tâm chính sách Hai Lee
             </Text>
             <Title order={1} className="!text-3xl md:!text-4xl !font-semibold !text-gray-900">
               Chính sách mua sắm
             </Title>
             <Text className="!mt-3 !text-gray-600 !leading-7 max-w-3xl">
               Các chính sách dưới đây giúp khách hàng và người bán hiểu rõ quy trình đặt hàng,
-              thử đồ ảo, đổi trả và hoàn tiền khi sử dụng AnrealShop.
+              thử đồ ảo, đổi trả và hoàn tiền khi sử dụng Hai Lee.
             </Text>
           </motion.div>
 

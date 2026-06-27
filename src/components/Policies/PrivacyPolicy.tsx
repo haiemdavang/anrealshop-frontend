@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
         Chính sách bảo mật thông tin
       </Title>
       <Text className="!mt-4 !leading-7">
-        Chính sách bảo mật giải thích cách AnrealShop thu thập, sử dụng, lưu trữ và bảo vệ thông
+        Chính sách bảo mật giải thích cách Hai Lee thu thập, sử dụng, lưu trữ và bảo vệ thông
         tin cá nhân khi khách hàng tạo tài khoản, đặt hàng, thanh toán, sử dụng thử đồ ảo, trao
         đổi với người bán hoặc liên hệ bộ phận hỗ trợ.
       </Text>
@@ -44,10 +44,10 @@ const PrivacyPolicy = () => {
         3. Chia sẻ thông tin với bên thứ ba
       </Title>
       <Text className="!mt-3 !leading-7">
-        AnrealShop chỉ chia sẻ thông tin trong phạm vi cần thiết để vận hành dịch vụ, ví dụ chia
+        Hai Lee chỉ chia sẻ thông tin trong phạm vi cần thiết để vận hành dịch vụ, ví dụ chia
         sẻ địa chỉ và số điện thoại cho người bán hoặc đơn vị vận chuyển để giao hàng, chia sẻ dữ
         liệu giao dịch với cổng thanh toán để đối soát, hoặc cung cấp thông tin theo yêu cầu hợp
-        pháp của cơ quan có thẩm quyền. AnrealShop không bán thông tin cá nhân của khách hàng.
+        pháp của cơ quan có thẩm quyền. Hai Lee không bán thông tin cá nhân của khách hàng.
       </Text>
 
       <Title order={3} className="!mt-7 !text-xl !font-semibold !text-gray-900">
@@ -55,7 +55,7 @@ const PrivacyPolicy = () => {
       </Title>
       <Text className="!mt-3 !leading-7">
         Thông tin được lưu trữ trong thời gian cần thiết để cung cấp dịch vụ, xử lý nghĩa vụ pháp
-        lý, giải quyết tranh chấp và bảo vệ quyền lợi của các bên. AnrealShop áp dụng các biện
+        lý, giải quyết tranh chấp và bảo vệ quyền lợi của các bên. Hai Lee áp dụng các biện
         pháp kỹ thuật và tổ chức phù hợp như phân quyền truy cập, mã hóa mật khẩu, kiểm soát log
         và giám sát bất thường. Tuy nhiên, không có hệ thống trực tuyến nào có thể đảm bảo an toàn
         tuyệt đối trong mọi tình huống.
@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
         7. Thay đổi chính sách
       </Title>
       <Text className="!mt-3 !leading-7">
-        AnrealShop có thể cập nhật chính sách bảo mật để phù hợp với thay đổi sản phẩm, công nghệ,
+        Hai Lee có thể cập nhật chính sách bảo mật để phù hợp với thay đổi sản phẩm, công nghệ,
         quy trình vận hành hoặc yêu cầu pháp luật. Phiên bản mới sẽ được đăng trên trang chính
         sách và có hiệu lực từ thời điểm công bố, trừ khi có thông báo khác.
       </Text>

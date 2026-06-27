@@ -10,7 +10,7 @@ const OrderPolicy = () => {
         Chính sách đặt hàng, thanh toán và giao nhận
       </Title>
       <Text className="!mt-4 !leading-7">
-        Chính sách này áp dụng cho mọi đơn hàng được tạo trên AnrealShop. Khi đặt hàng, khách
+        Chính sách này áp dụng cho mọi đơn hàng được tạo trên Hai Lee. Khi đặt hàng, khách
         hàng xác nhận đã kiểm tra thông tin sản phẩm, giá bán, phí vận chuyển, phương thức thanh
         toán và địa chỉ nhận hàng trước khi hoàn tất giao dịch.
       </Text>
@@ -24,7 +24,7 @@ const OrderPolicy = () => {
         <List.Item>Khách hàng cần cung cấp họ tên, số điện thoại, địa chỉ nhận hàng và email chính xác.</List.Item>
         <List.Item>Sản phẩm phải còn hàng tại thời điểm hệ thống ghi nhận đơn.</List.Item>
         <List.Item>Thông tin phân loại như màu sắc, kích thước, số lượng phải được chọn trước khi thanh toán.</List.Item>
-        <List.Item>AnrealShop có quyền yêu cầu xác minh thêm nếu đơn hàng có dấu hiệu bất thường hoặc thông tin giao nhận không đầy đủ.</List.Item>
+        <List.Item>Hai Lee có quyền yêu cầu xác minh thêm nếu đơn hàng có dấu hiệu bất thường hoặc thông tin giao nhận không đầy đủ.</List.Item>
       </List>
 
       <Title order={3} className="!mt-7 !text-xl !font-semibold !text-gray-900">
@@ -44,7 +44,7 @@ const OrderPolicy = () => {
         <List.Item>Giá hiển thị trên trang sản phẩm là giá bán tại thời điểm khách hàng xem sản phẩm.</List.Item>
         <List.Item>Tổng tiền đơn hàng có thể bao gồm giá sản phẩm, phí vận chuyển, phụ phí dịch vụ và khoản giảm giá nếu có.</List.Item>
         <List.Item>Mã giảm giá hoặc chương trình khuyến mãi chỉ áp dụng theo điều kiện hiển thị tại thời điểm đặt hàng.</List.Item>
-        <List.Item>Nếu phát sinh sai lệch giá nghiêm trọng do lỗi hệ thống, AnrealShop sẽ thông báo cho khách hàng trước khi tiếp tục xử lý.</List.Item>
+        <List.Item>Nếu phát sinh sai lệch giá nghiêm trọng do lỗi hệ thống, Hai Lee sẽ thông báo cho khách hàng trước khi tiếp tục xử lý.</List.Item>
       </List>
 
       <Title order={3} className="!mt-7 !text-xl !font-semibold !text-gray-900">
@@ -122,7 +122,7 @@ const OrderPolicy = () => {
       <Text className="!mt-3 !leading-7">
         Khi phát sinh vấn đề về thiếu hàng, sai hàng, hàng hư hỏng hoặc trạng thái giao nhận không
         đúng thực tế, khách hàng nên gửi yêu cầu hỗ trợ kèm mã đơn hàng, hình ảnh/video mở gói và
-        mô tả sự việc. AnrealShop sẽ phối hợp với người bán, đơn vị vận chuyển và cổng thanh toán
+        mô tả sự việc. Hai Lee sẽ phối hợp với người bán, đơn vị vận chuyển và cổng thanh toán
         để kiểm tra trong thời gian hợp lý.
       </Text>
     </div>

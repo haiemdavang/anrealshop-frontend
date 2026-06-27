@@ -1,7 +1,7 @@
-# 🛍️ AnrealShop - Frontend
+# 🛍️ Hai Lee - Frontend
 
 <div align="center">
-  <img src="https://res.cloudinary.com/dqogp38jb/image/upload/v1762293614/Screenshot_from_2025-11-05_03-43-28_pcty2g.png" alt="AnrealShop Banner" width="100%">
+  <img src="https://res.cloudinary.com/dqogp38jb/image/upload/v1762293614/Screenshot_from_2025-11-05_03-43-28_pcty2g.png" alt="Hai Lee Banner" width="100%">
   
   ### Ứng dụng thương mại điện tử hiện đại được xây dựng với React, TypeScript, và Mantine UI
   
@@ -53,7 +53,7 @@
 
 ## 🎯 Giới thiệu
 
-AnrealShop là một nền tảng thương mại điện tử đa người bán (marketplace) với giao diện người dùng hiện đại và tính năng quản trị mạnh mẽ. Dự án tập trung vào:
+Hai Lee là một nền tảng thương mại điện tử đa người bán (marketplace) với giao diện người dùng hiện đại và tính năng quản trị mạnh mẽ. Dự án tập trung vào:
 
 - ✨ Trải nghiệm người dùng mượt mà với animations
 - 🚀 Hiệu suất cao với React 19 và Vite
@@ -138,8 +138,8 @@ AnrealShop là một nền tảng thương mại điện tử đa người bán 
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/anrealshop-frontend.git
-cd anrealshop-frontend
+git clone https://github.com/your-username/hai-lee-frontend.git
+cd hai-lee-frontend
 
 # Cài đặt dependencies
 npm install
@@ -179,7 +179,7 @@ npm run dev
 ## 📁 Cấu trúc dự án
 
 ```
-anrealshop-frontend/
+hai-lee-frontend/
 ├── public/                 # Static assets
 │   ├── banner.png         # Header image
 │   └── ...
@@ -382,7 +382,7 @@ Dự án này được phân phối dưới giấy phép **MIT License**.
 - 📚 [API Documentation](https://api.haiemdavang.id.vn/docs)
 - 🎨 [Design System](https://mantine.dev)
 - 💬 [Discord Community](#)
-- 🐛 [Report Bug](https://github.com/your-username/anrealshop-frontend/issues)
+- 🐛 [Report Bug](https://github.com/your-username/hai-lee-frontend/issues)
 
 ## 📸 Screenshots
 
@@ -406,7 +406,7 @@ Dự án này được phân phối dưới giấy phép **MIT License**.
 ---
 
 <div align="center">
-  <p>Made with ❤️ by AnrealShop Team</p>
+  <p>Made with ❤️ by Hai Lee Team</p>
   <p>
     <a href="https://shop.haiemdavang.id.vn">Demo</a> •
     <a href="#tính-năng">Features</a> •

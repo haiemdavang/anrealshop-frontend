@@ -91,7 +91,7 @@ export function ShopAdminHeader() {
           <div className="flex items-center">
             <Burger opened={opened} onClick={toggle} className="mr-2 lg:hidden" />
             <Link to="/shop-admin/dashboard" className="flex items-center gap-2">
-              <img src="/images/logo.jfif" alt="AnrealShop" className="h-8 w-auto" />
+              <img src="/images/logo.jfif" alt="Hai Lee" className="h-8 w-auto" />
               <div className="font-semibold text-xl hidden sm:block">
                 <span className="text-primary">Admin</span>
                 <span className="text-slate-700">Panel</span>
@@ -208,7 +208,7 @@ export function ShopAdminHeader() {
         withCloseButton
         title={
           <div className="flex items-center gap-2">
-            <img src="/images/logo.jfif" alt="AnrealShop" className="h-8 w-auto" />
+            <img src="/images/logo.jfif" alt="Hai Lee" className="h-8 w-auto" />
             <div className="font-semibold text-lg">
               <span className="text-primary">Admin</span>
               <span className="text-slate-700">Panel</span>

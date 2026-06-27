@@ -10,7 +10,7 @@ const ShippingPolicy = () => {
         Chính sách vận chuyển và giao nhận
       </Title>
       <Text className="!mt-4 !leading-7">
-        Chính sách vận chuyển quy định cách AnrealShop phối hợp với người bán và đơn vị giao hàng
+        Chính sách vận chuyển quy định cách Hai Lee phối hợp với người bán và đơn vị giao hàng
         để xử lý đơn, bàn giao sản phẩm và hỗ trợ khách hàng trong quá trình nhận hàng. Thời gian
         và phí vận chuyển có thể thay đổi theo địa chỉ, khối lượng, kích thước kiện hàng và năng
         lực phục vụ của từng đơn vị vận chuyển.
@@ -22,7 +22,7 @@ const ShippingPolicy = () => {
         1. Phạm vi giao hàng
       </Title>
       <Text className="!mt-3 !leading-7">
-        AnrealShop hỗ trợ giao hàng tới các khu vực mà đối tác vận chuyển có thể phục vụ. Một số
+        Hai Lee hỗ trợ giao hàng tới các khu vực mà đối tác vận chuyển có thể phục vụ. Một số
         địa chỉ vùng sâu, vùng xa, khu vực hạn chế giao nhận, tòa nhà yêu cầu quy định riêng hoặc
         khu vực bị ảnh hưởng bởi thời tiết, dịch bệnh, thiên tai có thể cần thêm thời gian xử lý.
       </Text>
@@ -95,7 +95,7 @@ const ShippingPolicy = () => {
       <Text className="!mt-3 !leading-7">
         Nếu trạng thái hiển thị đã giao nhưng khách hàng chưa nhận được hàng, hoặc kiện hàng bị
         hư hỏng trong quá trình vận chuyển, khách hàng nên liên hệ hỗ trợ càng sớm càng tốt kèm
-        mã đơn, mã vận đơn, hình ảnh gói hàng và mô tả sự việc. AnrealShop sẽ phối hợp với người
+        mã đơn, mã vận đơn, hình ảnh gói hàng và mô tả sự việc. Hai Lee sẽ phối hợp với người
         bán và đơn vị vận chuyển để đối soát.
       </Text>
     </div>

@@ -10,7 +10,7 @@ const TryOnPolicy = () => {
         Chính sách sử dụng tính năng thử đồ ảo
       </Title>
       <Text className="!mt-4 !leading-7">
-        Tính năng thử đồ ảo của AnrealShop giúp khách hàng hình dung sản phẩm khi mặc hoặc phối
+        Tính năng thử đồ ảo của Hai Lee giúp khách hàng hình dung sản phẩm khi mặc hoặc phối
         trên ảnh/camera. Kết quả hiển thị chỉ mang tính tham khảo, không thay thế việc đọc kỹ mô
         tả sản phẩm, bảng kích thước, chất liệu và đánh giá thực tế trước khi mua.
       </Text>
@@ -22,7 +22,7 @@ const TryOnPolicy = () => {
       </Title>
       <Text className="!mt-3 !leading-7">
         Chính sách này áp dụng cho mọi thao tác tải ảnh, chụp ảnh, sử dụng camera, phân tích dáng
-        người, ghép thử sản phẩm và xem kết quả thử đồ ảo trên AnrealShop. Một số sản phẩm có thể
+        người, ghép thử sản phẩm và xem kết quả thử đồ ảo trên Hai Lee. Một số sản phẩm có thể
         chưa hỗ trợ thử đồ ảo nếu thiếu dữ liệu hình ảnh, kiểu dáng hoặc thông số phù hợp.
       </Text>
 
@@ -42,7 +42,7 @@ const TryOnPolicy = () => {
       <Text className="!mt-3 !leading-7">
         Kết quả thử đồ ảo có thể khác với sản phẩm thực tế do ánh sáng, màu màn hình, góc chụp,
         chất liệu, độ rũ vải, phom dáng, kích thước cơ thể và dữ liệu hình ảnh của sản phẩm.
-        AnrealShop không cam kết kết quả ghép thử phản ánh tuyệt đối màu sắc, độ vừa vặn, độ dài,
+        Hai Lee không cam kết kết quả ghép thử phản ánh tuyệt đối màu sắc, độ vừa vặn, độ dài,
         độ rộng hoặc cảm giác mặc thực tế.
       </Text>
 
@@ -52,7 +52,7 @@ const TryOnPolicy = () => {
       <List className="!mt-3 !leading-7" spacing="xs">
         <List.Item>Người dùng chỉ nên sử dụng ảnh của chính mình hoặc ảnh đã có quyền sử dụng hợp pháp.</List.Item>
         <List.Item>Ảnh/camera được dùng để tạo kết quả thử đồ và cải thiện trải nghiệm theo phạm vi hệ thống cho phép.</List.Item>
-        <List.Item>AnrealShop không yêu cầu người dùng cung cấp ảnh nhạy cảm để sử dụng tính năng thử đồ.</List.Item>
+        <List.Item>Hai Lee không yêu cầu người dùng cung cấp ảnh nhạy cảm để sử dụng tính năng thử đồ.</List.Item>
         <List.Item>Người dùng không nên tải lên giấy tờ tùy thân, thông tin tài chính, địa chỉ riêng tư hoặc dữ liệu không cần thiết trong ảnh thử đồ.</List.Item>
         <List.Item>Nếu người dùng muốn xóa dữ liệu liên quan, vui lòng gửi yêu cầu hỗ trợ kèm thông tin tài khoản và thời điểm sử dụng tính năng.</List.Item>
       </List>
@@ -82,7 +82,7 @@ const TryOnPolicy = () => {
       </Title>
       <Text className="!mt-3 !leading-7">
         Tính năng thử đồ ảo có thể tạm thời không khả dụng do bảo trì, giới hạn thiết bị, trình
-        duyệt, quyền camera, tốc độ mạng hoặc lỗi xử lý hình ảnh. AnrealShop có thể cập nhật,
+        duyệt, quyền camera, tốc độ mạng hoặc lỗi xử lý hình ảnh. Hai Lee có thể cập nhật,
         thay đổi hoặc tạm ngừng tính năng để cải thiện chất lượng mà không ảnh hưởng đến quyền
         lợi mua hàng cơ bản của khách hàng.
       </Text>

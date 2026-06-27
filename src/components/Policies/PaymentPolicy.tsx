@@ -10,7 +10,7 @@ const PaymentPolicy = () => {
         Chính sách thanh toán
       </Title>
       <Text className="!mt-4 !leading-7">
-        Chính sách thanh toán mô tả các hình thức thanh toán được hỗ trợ trên AnrealShop, cách ghi
+        Chính sách thanh toán mô tả các hình thức thanh toán được hỗ trợ trên Hai Lee, cách ghi
         nhận giao dịch, nguyên tắc bảo vệ thông tin thanh toán và hướng xử lý khi giao dịch lỗi,
         bị hủy hoặc cần hoàn tiền.
       </Text>
@@ -55,7 +55,7 @@ const PaymentPolicy = () => {
       <List className="!mt-3 !leading-7" spacing="xs">
         <List.Item>Khách hàng cần kiểm tra tổng tiền, phí vận chuyển, ưu đãi và địa chỉ nhận hàng trước khi thanh toán.</List.Item>
         <List.Item>Giao dịch trực tuyến chỉ được xem là thành công khi hệ thống hoặc cổng thanh toán xác nhận thành công.</List.Item>
-        <List.Item>Nếu khách hàng bị trừ tiền nhưng đơn chưa cập nhật, AnrealShop sẽ đối soát với cổng thanh toán trước khi xác nhận hoặc hoàn tiền.</List.Item>
+        <List.Item>Nếu khách hàng bị trừ tiền nhưng đơn chưa cập nhật, Hai Lee sẽ đối soát với cổng thanh toán trước khi xác nhận hoặc hoàn tiền.</List.Item>
         <List.Item>Khách hàng không nên chuyển khoản ngoài hệ thống, thanh toán vào tài khoản cá nhân hoặc làm theo hướng dẫn không thuộc kênh chính thức.</List.Item>
       </List>
 
@@ -63,7 +63,7 @@ const PaymentPolicy = () => {
         3. Bảo mật khi thanh toán
       </Title>
       <Text className="!mt-3 !leading-7">
-        AnrealShop không yêu cầu khách hàng cung cấp mật khẩu ngân hàng, mã OTP, mã PIN, mã CVV
+        Hai Lee không yêu cầu khách hàng cung cấp mật khẩu ngân hàng, mã OTP, mã PIN, mã CVV
         hoặc thông tin đăng nhập ví điện tử qua chat, điện thoại hay email. Khách hàng cần tự bảo
         vệ thiết bị, tài khoản và thông tin xác thực cá nhân. Mọi yêu cầu thanh toán đáng ngờ nên
         được báo cho bộ phận hỗ trợ trước khi thực hiện.
@@ -93,7 +93,7 @@ const PaymentPolicy = () => {
         6. Phòng chống gian lận
       </Title>
       <Text className="!mt-3 !leading-7">
-        AnrealShop có thể tạm giữ đơn hàng, yêu cầu xác minh hoặc từ chối giao dịch nếu phát hiện
+        Hai Lee có thể tạm giữ đơn hàng, yêu cầu xác minh hoặc từ chối giao dịch nếu phát hiện
         dấu hiệu bất thường như thanh toán từ nguồn không hợp lệ, lạm dụng khuyến mãi, giao dịch
         nhiều lần bất thường, tranh chấp không có căn cứ hoặc hành vi cố ý trục lợi.
       </Text>

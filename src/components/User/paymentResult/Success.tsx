@@ -27,7 +27,7 @@ const PaymentSuccessView = ({ paymentResult }: PaymentSuccessProps) => {
           <FiCheckCircle size={64} className="mx-auto mb-4 text-green-500" />
           <Title order={2} className="text-green-600">Thanh toán thành công!</Title>
           <Text size="lg" className="mt-2 text-slate-600">
-            Cảm ơn bạn đã mua sắm tại ANReal Shop
+            Cảm ơn bạn đã mua sắm tại Hai Lee
           </Text>
         </Box>
 
