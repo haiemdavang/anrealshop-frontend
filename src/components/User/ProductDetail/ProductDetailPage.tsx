@@ -184,7 +184,7 @@ const ProductDetailPage = () => {
       <PageNotFound
         title="Sản phẩm không tồn tại"
         description="Sản phẩm bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
-        redirectLink={APP_ROUTES.HOME}
+        redirectLink={APP_ROUTES.PRODUCTS}
         redirectLabel="Xem sản phẩm khác"
       />
     );
