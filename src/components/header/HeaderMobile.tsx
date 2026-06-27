@@ -94,7 +94,7 @@ const HeaderMobile: React.FC = () => {
             </Group>
 
             {/* Mobile Search Bar */}
-            <Box mt="md">
+            <Box mt="md" className="w-full basis-full">
                 <form onSubmit={handleSearchSubmit}>
                     <Input
                         size="sm"
@@ -117,6 +117,7 @@ const HeaderMobile: React.FC = () => {
                         searchTerm={searchValue}
                         visible={showSuggestions}
                         onSelect={() => setShowSuggestions(false)}
+                        className="!left-1/2 !w-screen !max-w-none !-translate-x-1/2"
                     />
                 </div>
             </Box>

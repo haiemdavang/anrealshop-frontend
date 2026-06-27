@@ -173,7 +173,7 @@ const ProductsPage = () => {
         {/* Right Content Area */}
         <main className="flex-1 min-w-0">
           {/* Banner Section */}
-          <BannerFlowCategory category={selectedCategory} />
+          <BannerFlowCategory />
 
           {/* Content Container */}
           <Container size={"lg"} className={`py-6 ${isMobile ? "px-2" : ""}`}>

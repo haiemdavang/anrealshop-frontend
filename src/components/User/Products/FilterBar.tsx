@@ -160,7 +160,7 @@ const FilterBar = ({
   return (
     <div
       ref={filterBarRef}
-      className={`sticky top-0 z-0 mb-6 rounded-lg shadow-sm py-2 px-4 transition-all duration-300 ${
+      className={`sticky top-0 z-10 mb-6 rounded-lg shadow-sm py-2 px-4 transition-all duration-300 ${
         scrolled ? "bg-white/90 backdrop-blur-lg" : "bg-white"
       }`}
     >

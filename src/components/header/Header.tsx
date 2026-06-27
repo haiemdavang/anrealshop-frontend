@@ -128,18 +128,22 @@ const Header: React.FC = () => {
 
   return (
     <motion.header
-      className="bg-white shadow-sm py-3 backdrop-blur-md"
+      className="bg-white shadow-sm py-3 backdrop-blur-md z-50"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{
         duration: 0.5,
         ease: "easeOut",
       }}
-      style={{zIndex: 1}}
+      // style={{zIndex: 1}}
     >
       <Container size="xl">
         {/* Main header row */}
-        <div className="flex items-center justify-between gap-2 md:gap-4">
+        <div
+          className={`flex items-center justify-between gap-2 md:gap-4 ${
+            isMobile ? "flex-wrap" : ""
+          }`}
+        >
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}

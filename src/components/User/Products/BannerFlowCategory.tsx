@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@mantine/hooks";
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface BannerData {
   type: "image" | "video";
@@ -9,33 +10,44 @@ interface BannerData {
   description: string;
 }
 
-interface BannerFlowCategoryProps {
-  category: string;
-}
+const VIDEO_URLS = [
+  "https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/Casual-Outer/25FW/MEN/KV-m-Video-pc.mp4",
+  "https://image.uniqlo.com/UQ/ST3/vn/imagesother/TVCM_26SS/Linen_26SS/Linen_PC.mp4",
+  "https://image.uniqlo.com/UQ/CMS/video/jp/2026/HOME/GL_Aseets/Campaign/Tshirts/26SS_CoreT-w-movie-pc-2-1.mp4",
+  "https://image.uniqlo.com/UQ/ST3/vn/imagesother/26SS_CoreT/CoreT_PC.mp4",
+  "https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/Knit/26SS/JP/women/kv-w-knit-hero-video-0331-pc-jp.mp4"
+];
 
-const BannerFlowCategory = ({ category }: BannerFlowCategoryProps) => {
+const getRandomVideo = (currentVideo?: string) => {
+  const availableVideos = currentVideo
+    ? VIDEO_URLS.filter((video) => video !== currentVideo)
+    : VIDEO_URLS;
+
+  return availableVideos[Math.floor(Math.random() * availableVideos.length)];
+};
+
+const BannerFlowCategory = () => {
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("ct") || "all";
+  const previousCategory = useRef(category);
+  const [randomVideoSrc, setRandomVideoSrc] = useState(() => getRandomVideo());
+
   // Responsive breakpoints
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isTablet = useMediaQuery("(max-width: 1024px)");
 
-  // Random video URLs
-  const videoUrls = [
-    "https://image.uniqlo.com/UQ/ST3/jp/imagesother/000_PLP/Casual-Outer/25FW/MEN/KV-m-Video-pc.mp4",
-    "https://image.uniqlo.com/UQ/ST3/vn/imagesother/TVCM_26SS/Linen_26SS/Linen_PC.mp4",
-    "https://image.uniqlo.com/UQ/CMS/video/jp/2026/HOME/GL_Aseets/Campaign/Tshirts/26SS_CoreT-w-movie-pc-2-1.mp4",
-  ];
+  useEffect(() => {
+    if (previousCategory.current === category) return;
 
-  // Random video selection (memoized to prevent re-render changes)
-  const randomVideoSrc = useMemo(
-    () => videoUrls[Math.floor(Math.random() * videoUrls.length)],
-    []
-  );
+    previousCategory.current = category;
+    setRandomVideoSrc((currentVideo) => getRandomVideo(currentVideo));
+  }, [category]);
 
   const categoryBanners: Record<string, BannerData> = {
     all: {
       type: "video",
       src: randomVideoSrc,
-      title: "Tất cả sản phẩm",
+      title: "Thoả sức khám phá",
       description: "Khám phá bộ sưu tập đa dạng của chúng tôi",
     },
     fashion: {
@@ -59,6 +71,7 @@ const BannerFlowCategory = ({ category }: BannerFlowCategoryProps) => {
     >
       {banner.type === "video" ? (
         <video
+          key={banner.src}
           autoPlay
           muted
           loop
