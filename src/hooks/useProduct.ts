@@ -32,7 +32,7 @@ export interface UseProductParams {
     sizes?: string[];
     origins?: string[];
     genders?: string[];
-    
+
 }
 interface UseProductOptions {
     mode?: TypeMode;
@@ -316,8 +316,6 @@ export const useGetProduct = () => {
             const result = await ProductsService.getProductById(id, isReview);
             return result;
         } catch (err: any) {
-            const errorMessage = getErrorMessage(err);
-            showErrorNotification('Lỗi tải sản phẩm', errorMessage);
             throw err;
         } finally {
             setIsLoading(false);

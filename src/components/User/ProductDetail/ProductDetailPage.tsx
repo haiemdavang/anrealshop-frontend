@@ -21,6 +21,7 @@ import InforProduct from './productInfo/InforProduct';
 import ProductListSuggest from './ProductListSuggest';
 import ProductRate from './ProductRate';
 import TryOn from './Try-onInfo/Try-on';
+import showErrorNotification from '../../Toast/NotificationError';
 
 
 
@@ -66,6 +67,11 @@ const ProductDetailPage = () => {
           if (Object.keys(attributesFromURL).length > 0) {
             setSelectedAttributes(attributesFromURL);
           }
+        })
+        .catch((err: any) => {
+          const errString = err.response?.data?.message || 'Không tìm thấy sản phẩm';
+          showErrorNotification("Lỗi tải sản phẩm", errString)
+          setProduct(null)
         })
     }
   }, [slug, getProductById]);
@@ -219,7 +225,7 @@ const ProductDetailPage = () => {
           <Paper radius="md" className="!mb-8 !bg-white !shadow-sm">
             <div className="p-4">
               {showTryOn ? (
-                <TryOn 
+                <TryOn
                   productImageUrl={media[selectedImage] || product.thumbnailUrl}
                   onBack={() => setShowTryOn(false)}
                 />
